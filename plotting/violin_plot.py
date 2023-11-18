@@ -2,6 +2,7 @@ from collections import defaultdict
 import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
 
+
 def plot_subpopulation(sample_subpopulations,
                        sub_to_super,
                        super_to_sub,
@@ -40,6 +41,7 @@ def plot_subpopulation(sample_subpopulations,
                          png_dir)
     pass
 
+
 def plot_violin_plot(population_data,
                      sub_to_super,
                      super_to_sub,
@@ -50,6 +52,7 @@ def plot_violin_plot(population_data,
                                'EAS': '#eb4690',
                                'EUR': '#728eff',
                                'SAS': '#f7d06b'}
+    subpop_full_names = get_subpop_full_names()
 
     subpop_codes = []
     subpop_colors = []
@@ -69,11 +72,12 @@ def plot_violin_plot(population_data,
                         violin_data.append(population_data[sub_pop])
                     except KeyError:
                         violin_data.append([0])
-                else: # ignore None
+                else:  # ignore None
                     pass
-        else: # ignore None
+        else:  # ignore None
             pass
-    # dont show cbars
+
+    # plot!
     parts = ax.violinplot(violin_data, showextrema=False, showmeans=True)
 
     # add labels
@@ -82,10 +86,10 @@ def plot_violin_plot(population_data,
     ax.set_ylabel('KNN popcount scores', fontsize=20)
 
     # add title
-    subpop_title = "Query Subpopulation: " + subpop_name
+    subpop_title = "Query Subpopulation:\n" + subpop_full_names[subpop_name]
     ax.set_title(subpop_title, fontsize=30, fontweight='bold')
 
-   # color each x violin plot with superpopulation color
+    # color each x violin plot with superpopulation color
     for i in range(len(subpop_codes)):
         ax.get_xticklabels()[i].set_color(subpop_colors[i])
     parts['cmeans'].set_color(subpop_colors)
@@ -111,3 +115,32 @@ def plot_violin_plot(population_data,
     png_name = png_dir + subpop_name + '.png'
     plt.savefig(png_name)
     plt.close()
+
+
+def get_subpop_full_names():
+    return {'ACB': 'African Caribbean in Barbados',
+            'ASW': 'Americans of African Ancestry in SW USA',
+            'BEB': 'Bengali in Bangladesh',
+            'CDX': 'Chinese Dai in Xishuangbanna, China',
+            'CEU': 'Utah Residents (CEPH) with Northern and Western European Ancestry',
+            'CHB': 'Han Chinese in Bejing, China',
+            'CHS': 'Southern Han Chinese',
+            'CLM': 'Colombians from Medellin, Colombia',
+            'ESN': 'Esan in Nigeria',
+            'FIN': 'Finnish in Finland',
+            'GBR': 'British in England and Scotland',
+            'GIH': 'Gujarati Indian in Houston, TX',
+            'GWD': 'Gambian in Western Divisions in the Gambia',
+            'IBS': 'Iberian Population in Spain',
+            'ITU': 'Indian Telugu in the UK',
+            'JPT': 'Japanese in Tokyo, Japan',
+            'KHV': 'Kinh in Ho Chi Minh City, Vietnam',
+            'LWK': 'Luhya in Webuye, Kenya',
+            'MSL': 'Mende in Sierra Leone',
+            'MXL': 'Mexican Ancestry from Los Angeles USA',
+            'PEL': 'Peruvians from Lima, Peru',
+            'PJL': 'Punjabi in Lahore, Pakistan',
+            'PUR': 'Puerto Ricans from Puerto Rico',
+            'STU': 'Sri Lankan Tamil in the UK',
+            'TSI': 'Toscani in Italia',
+            'YRI': 'Yoruba in Ibadan, Nigeria'}
