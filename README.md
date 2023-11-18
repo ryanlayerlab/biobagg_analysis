@@ -12,7 +12,7 @@ Example Run:
 python plotting/evaluate_ancestry.py \
   --pop population.txt \
   --knn top_hits.txt \
-  --png sub_population_violin
+  --png population_violin_plots
 ```
 
 Example PNGs:<br>
