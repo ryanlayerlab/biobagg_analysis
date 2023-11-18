@@ -1,6 +1,7 @@
 from collections import defaultdict
 import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
+import plotting.ancestry_helpers as ah
 
 
 def plot_subpopulation(sample_subpopulations,
@@ -47,19 +48,33 @@ def plot_violin_plot(population_data,
                      super_to_sub,
                      subpop_name,
                      png_dir):
+    """
+    Plot violin plot for a subpopulation
+
+    :param population_data: counts for knn results
+    :param sub_to_super: mapping of subpopulation to superpopulation
+    :param super_to_sub: mapping of superpopulation to subpopulations
+    :param subpop_name: name of subpopulation that is being plotted
+    :param png_dir: directory to write png files
+    :return:
+    """
+    # colors to match current slide deck
     super_population_colors = {'AFR': '#fe9d57',
                                'AMR': '#ba75ff',
                                'EAS': '#eb4690',
                                'EUR': '#728eff',
                                'SAS': '#f7d06b'}
-    subpop_full_names = get_subpop_full_names()
+    # get full names
+    subpop_full_names = ah.get_subpop_full_names()
 
     subpop_codes = []
     subpop_colors = []
+
     # make violin plot
     fig, ax = plt.subplots()
     fig.set_size_inches(20, 10)
     violin_data = []
+
     for super_pop in super_to_sub:
         if super_pop is not None:
             # sort in alphabetical order
@@ -116,31 +131,3 @@ def plot_violin_plot(population_data,
     plt.savefig(png_name)
     plt.close()
 
-
-def get_subpop_full_names():
-    return {'ACB': 'African Caribbean in Barbados',
-            'ASW': 'Americans of African Ancestry in SW USA',
-            'BEB': 'Bengali in Bangladesh',
-            'CDX': 'Chinese Dai in Xishuangbanna, China',
-            'CEU': 'Utah Residents (CEPH) with Northern and Western European Ancestry',
-            'CHB': 'Han Chinese in Bejing, China',
-            'CHS': 'Southern Han Chinese',
-            'CLM': 'Colombians from Medellin, Colombia',
-            'ESN': 'Esan in Nigeria',
-            'FIN': 'Finnish in Finland',
-            'GBR': 'British in England and Scotland',
-            'GIH': 'Gujarati Indian in Houston, TX',
-            'GWD': 'Gambian in Western Divisions in the Gambia',
-            'IBS': 'Iberian Population in Spain',
-            'ITU': 'Indian Telugu in the UK',
-            'JPT': 'Japanese in Tokyo, Japan',
-            'KHV': 'Kinh in Ho Chi Minh City, Vietnam',
-            'LWK': 'Luhya in Webuye, Kenya',
-            'MSL': 'Mende in Sierra Leone',
-            'MXL': 'Mexican Ancestry from Los Angeles USA',
-            'PEL': 'Peruvians from Lima, Peru',
-            'PJL': 'Punjabi in Lahore, Pakistan',
-            'PUR': 'Puerto Ricans from Puerto Rico',
-            'STU': 'Sri Lankan Tamil in the UK',
-            'TSI': 'Toscani in Italia',
-            'YRI': 'Yoruba in Ibadan, Nigeria'}

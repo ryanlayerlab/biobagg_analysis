@@ -76,3 +76,35 @@ def find_superpop_code(sample_list):
     for superpop in superpop_options:
         if superpop in sample_list:
             return superpop
+
+def get_subpop_full_names():
+    """
+    Get full subpopulation names
+    :return: mapping of subpopulation codes to full names
+    """
+    return {'ACB': 'African Caribbean in Barbados',
+            'ASW': 'Americans of African Ancestry in SW USA',
+            'BEB': 'Bengali in Bangladesh',
+            'CDX': 'Chinese Dai in Xishuangbanna, China',
+            'CEU': 'Utah Residents (CEPH) with Northern and Western European Ancestry',
+            'CHB': 'Han Chinese in Bejing, China',
+            'CHS': 'Southern Han Chinese',
+            'CLM': 'Colombians from Medellin, Colombia',
+            'ESN': 'Esan in Nigeria',
+            'FIN': 'Finnish in Finland',
+            'GBR': 'British in England and Scotland',
+            'GIH': 'Gujarati Indian in Houston, TX',
+            'GWD': 'Gambian in Western Divisions in the Gambia',
+            'IBS': 'Iberian Population in Spain',
+            'ITU': 'Indian Telugu in the UK',
+            'JPT': 'Japanese in Tokyo, Japan',
+            'KHV': 'Kinh in Ho Chi Minh City, Vietnam',
+            'LWK': 'Luhya in Webuye, Kenya',
+            'MSL': 'Mende in Sierra Leone',
+            'MXL': 'Mexican Ancestry from Los Angeles USA',
+            'PEL': 'Peruvians from Lima, Peru',
+            'PJL': 'Punjabi in Lahore, Pakistan',
+            'PUR': 'Puerto Ricans from Puerto Rico',
+            'STU': 'Sri Lankan Tamil in the UK',
+            'TSI': 'Toscani in Italia',
+            'YRI': 'Yoruba in Ibadan, Nigeria'}
