@@ -21,7 +21,6 @@ def main():
     # get KNN results
     sample_knn = ah.get_knn_results(knn_results)
 
-    # plot violin plots for each superpopulation
     # plot violin plots for each subpopulation
     vp.plot_subpopulation(sample_subpopulations,
                           sub_to_super,
