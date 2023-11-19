@@ -21,3 +21,26 @@ Example PNGs:<br>
 [EAS: Japanese](https://github.com/ryanlayerlab/biobagg_analysis/tree/main/population_violin_plots/JPT.png)<br>
 [EUR: Finnish](https://github.com/ryanlayerlab/biobagg_analysis/tree/main/population_violin_plots/FIN.png)<br>
 [SAS: Bengali](https://github.com/ryanlayerlab/biobagg_analysis/tree/main/population_violin_plots/BEB.png)<br>
+
+## Generate search time plot for 1K
+
+Arguments:
+- search.log: contains the timing in seconds for each segment query, which includes all samples 
+- 3202: the number of samples, so we can get a per sample time
+
+Example Run:
+```
+python plotting/search_time.py 
+  --num_samples 3202 
+  --in_file data/search.log \
+  --out_file time_plots/1kg_search_time_histo.png \
+  --height 4 \
+  --width 8
+per sample per segment median (ms) 1.6923797626483446
+per sample per segment mean (ms) 1.7311439951686394
+per sample per segment stdev (ms) 0.2026710271379037
+per sample mean run time (s) 6.0624662710805755
+```
+
+Eample PNG:<br>
+[](time_plots/1kg_search_time_histo.png)
