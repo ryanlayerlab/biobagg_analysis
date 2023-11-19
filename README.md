@@ -15,12 +15,16 @@ python plotting/evaluate_ancestry.py \
   --png population_violin_plots
 ```
 
-Example PNGs:<br>
-[AFR: Esan](https://github.com/ryanlayerlab/biobagg_analysis/tree/main/population_violin_plots/ESN.png)<br>
-[AMR: Puerto Rican](https://github.com/ryanlayerlab/biobagg_analysis/tree/main/population_violin_plots/PUR.png)<br>
-[EAS: Japanese](https://github.com/ryanlayerlab/biobagg_analysis/tree/main/population_violin_plots/JPT.png)<br>
-[EUR: Finnish](https://github.com/ryanlayerlab/biobagg_analysis/tree/main/population_violin_plots/FIN.png)<br>
-[SAS: Bengali](https://github.com/ryanlayerlab/biobagg_analysis/tree/main/population_violin_plots/BEB.png)<br>
+<details>
+<summary>Example PNGs:</summary>
+  
+![AFR: Esan](population_violin_plots/ESN.png)<br>
+![AMR: Puerto Rican](population_violin_plots/PUR.png)<br>
+![EAS: Japanese](population_violin_plots/JPT.png)<br>
+![EUR: Finnish](population_violin_plots/FIN.png)<br>
+![SAS: Bengali](population_violin_plots/BEB.png)<br>
+
+</details>
 
 ## Generate search time plot for 1K
 
@@ -41,9 +45,12 @@ per sample per segment mean (ms) 1.7311439951686394
 per sample per segment stdev (ms) 0.2026710271379037
 per sample mean run time (s) 6.0624662710805755
 ```
+<details>
+<summary>Example PNG:</summary>
 
-Eample PNG:<br>
-[](time_plots/1kg_search_time_histo.png)
+![](doc/1kg_search_time_histo.png)
+
+</details>
 
 ## Look at the distribution of SVS scores
 
@@ -62,7 +69,16 @@ Example Run:
 ```
 python plotting/svs_scores.py \
     --in_file data/svs_results_chrm15-20.scores.gz \
-    --out_file svs_results_chrm15-20.scores.png \
+    --out_file doc/svs_results_chrm15-20.scores.png \
     --height 8 \
     --width 5
 ```
+
+<details>
+<summary>Example PNG:</summary>
+
+![](doc/svs_results_chrm15-20.scores.png)
+
+</details>
+
+
