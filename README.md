@@ -44,3 +44,25 @@ per sample mean run time (s) 6.0624662710805755
 
 Eample PNG:<br>
 [](time_plots/1kg_search_time_histo.png)
+
+## Look at the distribution of SVS scores
+
+Arguments:
+- chrm15-20.scores.gz: a comppress files where each line is a segment and all the top scores found for that segment
+
+To get the scores file we condense scores to just one with:
+```
+for f in $( ls svs_results_chrm15-20/chrm*knn); do
+    scores=$(cat $f | grep "_" | grep -v Query | cut -f2 | paste -sd " " -)
+    echo -e "$f\t$scores"
+done
+```
+
+Example Run:
+```
+python plotting/svs_scores.py \
+    --in_file data/svs_results_chrm15-20.scores.gz \
+    --out_file svs_results_chrm15-20.scores.png \
+    --height 8 \
+    --width 5
+```
