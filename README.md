@@ -88,3 +88,40 @@ python plotting/svs_scores.py \
 </details>
 
 
+## Look at populaiton structure just from top k
+
+Arguments:
+- 1kg_chr1-22_top_hits.txt: gives the top hist for each query 
+- igsr-1000 genomes 30x on grch38.tsv: mapping from id to populations
+
+
+```
+python plotting/top_hits_umap.py \
+  --in_file data/1kg_chr1-22_top_hits.txt \
+  --label_file data/igsr-1000\ genomes\ 30x\ on\ grch38.tsv \
+  --out_file doc/top_hit_umap.png
+```
+
+<details>
+<summary>Example PNG:</summary>
+
+![](doc/top_hit_umap.png)
+
+</details>
+
+
+```
+python plotting/top_hits_pca.py \
+  --in_file data/1kg_chr1-22_top_hits.txt \
+  --label_file data/igsr-1000\ genomes\ 30x\ on\ grch38.tsv \
+  --out_file doc/top_hit_pca.png
+```
+
+
+<details>
+<summary>Example PNG:</summary>
+
+![](doc/top_hit_pca.png)
+
+</details>
+
