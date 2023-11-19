@@ -35,8 +35,8 @@ def main():
 
     scores = read_score_file(args.in_file) 
 
-    chrms = sorted(list(set([score[0] for score in scores])))
 
+    chrms = sorted(list(set([score[0] for score in scores])))
 
     fig = plt.figure(figsize=(args.width, args.height))
 
@@ -56,6 +56,9 @@ def main():
 
         ax.plot([score[1] for score in sorted_scores],
                     [score[2] for score in sorted_scores])
+
+        sorted_scores = sorted(chrm_scores, key=lambda x: x[2])
+        print(chrm, sorted_scores[-5:])
         ax_i += 1
 
 
@@ -73,8 +76,6 @@ def main():
             ax.set_xlabel('Pos.')
         else:
             ax.set_xticklabels([])
-
-
 
     plt.tight_layout()
     plt.savefig(args.out_file, dpi=300)
