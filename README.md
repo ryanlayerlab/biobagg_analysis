@@ -207,6 +207,8 @@ cat data/iLASH.pairs.txt | cut -f 3 \
 
 Look at the similarity score distributions for different groups using different scores:
 
+<details>
+<summary>Commands</summary>
 ```
 python plotting/plot_distros.py \
     --topk_file data/1kg_chr1-22_top_hits.txt \
@@ -247,8 +249,10 @@ python plotting/plot_distros.py \
     --ped_file data/1kGP.3202_samples.pedigree_info.txt \
     --x_label "iLASH IBD"
 ```
+</details>
+
 <details>
-<summary>Example PNG:</summary>
+<summary>Results:</summary>
 
 ![](doc/distros_plink2-kin.png)
 
@@ -260,6 +264,9 @@ python plotting/plot_distros.py \
 
 
 ## Compare rank of top k by different metrics
+
+<details>
+<summary>Commands</summary>
 
 ```
 plot_ranks.py \
@@ -281,15 +288,49 @@ plot_ranks.py \
     --y_label "Plink PI_HAT rank"
 ```
 
+</details>
+
 
 <details>
-<summary>Example PNG:</summary>
+<summary>Results:</summary>
 
 ![](doc/ranks_plink2-kin.png)
 
 ![](doc/doc/ranks_plink-genome.png)
 
 </details>
+
+
+## Look at the popcount scores distribution
+
+```
+python plotting/plot_topk_score_distro.py \
+    --topk_file data/1kg_chr1-22_top_hits.txt \
+    --label_file data/igsr-1000\ genomes\ 30x\ on\ grch38.tsv \
+    --out_file doc/topk_score_distro.png  \
+    --height 2 \
+    --width 8 \
+    --bins 100 \
+
+python plotting/plot_topk_score_distro.py \
+    --topk_file data/1kg_chr1-22_top_hits.txt \
+    --label_file data/igsr-1000\ genomes\ 30x\ on\ grch38.tsv \
+    --out_file doc/topk_score_distro.log.png  \
+    --height 2 \
+    --width 8 \
+    --bins 100 \
+    --log
+```
+
+<details>
+<summary>Results:</summary>
+
+![](doc/topk_score_distro.png)
+
+![](doc/topk_score_distro.log.png)
+
+</details>
+
 
 
 
