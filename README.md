@@ -259,5 +259,37 @@ python plotting/plot_distros.py \
 </details>
 
 
+## Compare rank of top k by different metrics
+
+```
+plot_ranks.py \
+    --topk_file data/1kg_chr1-22_top_hits.txt \
+    --label_file data/igsr-1000\ genomes\ 30x\ on\ grch38.tsv \
+    --pairs_file data/plink2.kin.pairs.txt \
+    --out_file doc/ranks_plink2-kin.png \
+    --height 2 \
+    --width 8 \
+    --y_label "Plink kinship rank"
+
+~/src/biobagg_analysis$ python plotting/plot_ranks.py \
+    --topk_file data/1kg_chr1-22_top_hits.txt \
+    --label_file data/igsr-1000\ genomes\ 30x\ on\ grch38.tsv \
+    --pairs_file data/plink-genome.pairs.txt \
+    --out_file doc/ranks_plink-genome.png \
+    --height 2 \
+    --width 8 \
+    --y_label "Plink PI_HAT rank"
+```
+
+
+<details>
+<summary>Example PNG:</summary>
+
+![](doc/ranks_plink2-kin.png)
+
+![](doc/doc/ranks_plink-genome.png)
+
+</details>
+
 
 

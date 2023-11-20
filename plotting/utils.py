@@ -1,7 +1,7 @@
 from scipy.stats import gaussian_kde
 import numpy as np
 
-def get_top_hits(file, integerize=False):
+def get_top_hits(file, integerize=False, get_scores=False):
     str_hits = {}
     ids = {}
 
@@ -10,7 +10,11 @@ def get_top_hits(file, integerize=False):
             A = line.rstrip().split()
             q = A[0]
             ids[q] = len(ids)
-            str_hits[q] = [a.split(',')[0] for a in A[1:]]
+            if get_scores:
+                str_hits[q] = \
+                    [(a.split(',')[0], float(a.split(',')[1])) for a in A[1:]]
+            else:
+                str_hits[q] = [a.split(',')[0] for a in A[1:]]
 
     if integerize:
         hits = {}
