@@ -209,6 +209,7 @@ Look at the similarity score distributions for different groups using different 
 
 <details>
 <summary>Commands</summary>
+
 ```
 python plotting/plot_distros.py \
     --topk_file data/1kg_chr1-22_top_hits.txt \
@@ -249,6 +250,7 @@ python plotting/plot_distros.py \
     --ped_file data/1kGP.3202_samples.pedigree_info.txt \
     --x_label "iLASH IBD"
 ```
+
 </details>
 
 <details>
