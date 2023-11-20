@@ -290,7 +290,6 @@ plot_ranks.py \
 
 </details>
 
-
 <details>
 <summary>Results:</summary>
 
