@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import cm
 from sklearn.decomposition import PCA
+import utils
 
 def get_args():
     parser = argparse.ArgumentParser()
@@ -11,51 +12,17 @@ def get_args():
     parser.add_argument('--out_file', type=str, required=True)
     return parser.parse_args()
 
-def get_top_hits(file):
-    str_hits = {}
-    ids = {}
-
-    with open(file) as lines:
-        for line in lines:
-            A = line.rstrip().split()
-            q = A[0]
-            ids[q] = len(ids)
-            str_hits[q] = [a.split(',')[0] for a in A[1:]]
-
-    hits = {}
-
-    for str_h in str_hits:
-        hits[ str_h ]  = [ids[i] for i in str_hits[str_h]]
-
-    return hits
-
-def get_label_map(file_name):
-    labels = {}
-    header = None
-    with open(file_name) as lines:
-        for line in lines:
-            A = line.rstrip().split('\t')
-
-            if header is None:
-                header = A
-                continue
-
-            sample = A[0]
-            label = A[5]
-            labels[sample] = label
-    return labels
-
 def main():
     args = get_args()
 
-    top_hits = get_top_hits(args.in_file)
+    top_hits = utils.get_top_hits(args.in_file)
     ids = sorted(top_hits.keys())
 
     D = []
     for i in ids:
         D.append(top_hits[i])
 
-    label_map = get_label_map(args.label_file)
+    label_map = utils.get_label_map(args.label_file, 'Superpopulation code')
    
     labels = [label_map[i] for i in ids]
 

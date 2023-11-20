@@ -125,3 +125,139 @@ python plotting/top_hits_pca.py \
 
 </details>
 
+## Compare the similarity of different groups using different metrics
+
+Quick look at the distribution of scores from plink:
+```
+cat data/plink2.kin0 \
+| tail -n +2 \
+| cut -f 6 \
+| python plotting/hist.py \
+    -o doc/plink2.kin0.hist.png 
+    --height 2 \
+    --width 4 \
+    -y Freq \
+    -x "Plink2 Kinship" \
+    -b 50 \
+    -l
+```
+
+<details>
+<summary>Example PNG:</summary>
+
+![](doc/plink2.kin0.hist.png)
+
+</details>
+
+```
+cat data/plink-genome.genome \
+| tail -n +2 \
+| awk '{print $10;}' \
+| python plotting/hist.py \
+    -o doc/plink-genome.genome.pi_hat.png \
+    --height 2 \
+    --width 4 \
+    -y Freq \
+    -x "Plink PI_HAT" \
+    -b 50 \
+    -l
+```
+
+<details>
+<summary>Example PNG:</summary>
+
+![](doc/plink-genome.genome.pi_hat.png)
+
+</details>
+
+Make pair files so the plotting is a little more uniform:
+```
+python src/sum_ilash.py \
+    --data_dir data/iLASH/ \
+    --out_file data/iLASH.pairs.txt
+
+cat data/plink-genome.genome \
+| tail -n +2 \
+| awk '{OFS="\t"; print $2,$4,$10;}' \
+> data/plink-genome.pairs.txt
+
+cat data/plink2.kin0 \
+| tail -n +2 \
+| awk '{OFS="\t"; print $1,$2,$6;}' \
+> data/plink2.kin.pairs.txt
+
+cat data/iLASH.pairs.txt | cut -f 3 \
+| python plotting/hist.py \
+    -o doc/iLASH.pairs.png \
+    --height 2 \
+    --width 4 \
+    -y Freq \
+    -x "iLASH IBD sum" \
+    -b 50 \
+    -l
+```
+
+<details>
+<summary>Example PNG:</summary>
+
+![](doc/iLASH.pairs.png)
+
+</details>
+
+
+Look at the similarity score distributions for different groups using different scores:
+
+```
+python plotting/plot_distros.py \
+    --topk_file data/1kg_chr1-22_top_hits.txt \
+    --pairs_file data/plink2.kin.pairs.txt \
+    --label_file data/igsr-1000\ genomes\ 30x\ on\ grch38.tsv \
+    --out_file doc/distros_plink2-kin.png \
+    --width 2 \
+    --height 3 \
+    --bins 50 \
+    --alpha 1 \
+    --outlier 0.2 \
+    --ped_file data/1kGP.3202_samples.pedigree_info.txt \
+    --x_label "Plink kinship"
+
+python plotting/plot_distros.py \
+    --topk_file data/1kg_chr1-22_top_hits.txt \
+    --pairs_file data/plink-genome.pairs.txt \
+    --label_file data/igsr-1000\ genomes\ 30x\ on\ grch38.tsv \
+    --out_file doc/distros_plink-genome.png \
+    --width 2 \
+    --height 3 \
+    --bins 50 \
+    --alpha 1 \
+    --outlier 0.45 \
+    --ped_file data/1kGP.3202_samples.pedigree_info.txt \
+    --x_label "Plink PI_HAT"
+
+python plotting/plot_distros.py \
+    --topk_file data/1kg_chr1-22_top_hits.txt \
+    --pairs_file data/iLASH.pairs.txt \
+    --label_file data/igsr-1000\ genomes\ 30x\ on\ grch38.tsv \
+    --out_file doc/distros_iLASH.png \
+    --width 2 \
+    --height 3 \
+    --bins 50 \
+    --alpha 1 \
+    --outlier 0.45 \
+    --ped_file data/1kGP.3202_samples.pedigree_info.txt \
+    --x_label "iLASH IBD"
+```
+<details>
+<summary>Example PNG:</summary>
+
+![](doc/distros_plink2-kin.png)
+
+![](doc/distros_plink-genome.png)
+
+![](doc/distros_iLASH.png)
+
+</details>
+
+
+
+
