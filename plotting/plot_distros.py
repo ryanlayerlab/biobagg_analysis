@@ -30,30 +30,6 @@ def add_outlier(O, spop, group, value, i, j, outlier):
         if value >= outlier:
             O[spop][group].append((i,j))
 
-def get_related_map(ped_file):
-    if ped_file is None: return None
-
-    related = {}
-    
-    with open(ped_file) as lines:
-        for line in lines:
-            sid, fid, mid, sex = line.rstrip().split()
-            if fid != '0':
-                if sid not in related:
-                    related[sid] = {}
-                if fid not in related:
-                    related[fid] = {}
-                related[sid][fid] = 1
-                related[fid][sid] = 1
-            if mid != '0':
-                if sid not in related:
-                    related[sid] = {}
-                if mid not in related:
-                    related[mid] = {}
-                related[sid][mid] = 1
-                related[mid][sid] = 1
-    return related
-
 def summarize_related(O, spop, group, related):
     are_related = 0
     not_related = 0
@@ -74,7 +50,7 @@ def main():
     pop_map = utils.get_label_map(args.label_file, 'Population code')
     spop_map = utils.get_label_map(args.label_file, 'Superpopulation code')
 
-    related = get_related_map(args.ped_file)
+    related = utils.get_related_map(args.ped_file)
 
     D = {}
     O = {}

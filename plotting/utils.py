@@ -1,6 +1,30 @@
 from scipy.stats import gaussian_kde
 import numpy as np
 
+def get_related_map(ped_file):
+    if ped_file is None: return None
+
+    related = {}
+    
+    with open(ped_file) as lines:
+        for line in lines:
+            sid, fid, mid, sex = line.rstrip().split()
+            if fid != '0':
+                if sid not in related:
+                    related[sid] = {}
+                if fid not in related:
+                    related[fid] = {}
+                related[sid][fid] = 1
+                related[fid][sid] = 1
+            if mid != '0':
+                if sid not in related:
+                    related[sid] = {}
+                if mid not in related:
+                    related[mid] = {}
+                related[sid][mid] = 1
+                related[mid][sid] = 1
+    return related
+
 def get_top_hits(file, integerize=False, get_scores=False):
     str_hits = {}
     ids = {}

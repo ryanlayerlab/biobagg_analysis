@@ -312,6 +312,7 @@ python plotting/plot_topk_score_distro.py \
     --height 2 \
     --width 8 \
     --bins 100 \
+    --ped_file data/1kGP.3202_samples.pedigree_info.txt
 
 python plotting/plot_topk_score_distro.py \
     --topk_file data/1kg_chr1-22_top_hits.txt \
@@ -320,6 +321,7 @@ python plotting/plot_topk_score_distro.py \
     --height 2 \
     --width 8 \
     --bins 100 \
+    --ped_file data/1kGP.3202_samples.pedigree_info.txt \
     --log
 ```
 
