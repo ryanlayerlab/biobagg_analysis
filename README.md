@@ -296,7 +296,7 @@ plot_ranks.py \
 
 ![](doc/ranks_plink2-kin.png)
 
-![](doc/doc/ranks_plink-genome.png)
+![](doc/ranks_plink-genome.png)
 
 </details>
 
