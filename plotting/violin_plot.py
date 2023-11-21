@@ -1,7 +1,7 @@
 from collections import defaultdict
 import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
-import plotting.ancestry_helpers as ah
+import ancestry_helpers as ah
 
 
 def plot_subpopulation(sample_subpopulations,
@@ -72,7 +72,7 @@ def plot_violin_plot(population_data,
 
     # make violin plot
     fig, ax = plt.subplots()
-    fig.set_size_inches(20, 10)
+    fig.set_size_inches(20, 13)
     violin_data = []
 
     for super_pop in super_to_sub:
@@ -101,8 +101,8 @@ def plot_violin_plot(population_data,
     ax.set_ylabel('KNN popcount scores', fontsize=20)
 
     # add title
-    subpop_title = "Query Subpopulation:\n" + subpop_full_names[subpop_name]
-    ax.set_title(subpop_title, fontsize=30, fontweight='bold')
+    subpop_title = "Query Subpopulation:\n" + subpop_full_names[subpop_name] + "\n(" + subpop_name + ")"
+    ax.set_title(subpop_title, fontsize=25, fontweight='bold')
 
     # color each x violin plot with superpopulation color
     for i in range(len(subpop_codes)):

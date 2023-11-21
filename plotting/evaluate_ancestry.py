@@ -16,12 +16,15 @@ def main():
     png_dir = args.png
 
     # get population mappings
+    print('...reading population data')
     sample_subpopulations, sub_to_super, super_to_sub = ah.get_population_maps(population_file)
 
     # get KNN results
+    print('...reading top hits')
     sample_knn = ah.get_knn_results(knn_results)
 
     # plot violin plots for each subpopulation
+    print('...plotting population top hits')
     vp.plot_subpopulation(sample_subpopulations,
                           sub_to_super,
                           super_to_sub,
