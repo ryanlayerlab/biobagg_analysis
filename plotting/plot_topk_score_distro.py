@@ -67,13 +67,14 @@ def main():
                 #print(i_spop, j_spop, value)
                 P[i_spop]['out_spop'].append(value)
             else:
-                P[i_spop]['in_spop'].append(value)
+                if i in related and  j in related[i]:
+                    P[i_spop]['in_fam'].append(value)
+                elif j_pop == i_pop:
+                    P[i_spop]['in_pop'].append(value)
+                else:
+                    P[i_spop]['in_spop'].append(value)
 
-            if j_pop == i_pop:
-                P[i_spop]['in_pop'].append(value)
 
-            if i in related and  j in related[i]:
-                P[i_spop]['in_fam'].append(value)
 
     spops = ['EUR', 'EAS', 'AMR', 'SAS', 'AFR']
     samples = ['out_spop', 'in_spop', 'in_pop','in_fam']
@@ -99,7 +100,7 @@ def main():
                                      vert=False)
         for partname in ('cbars', 'cmins', 'cmaxes', 'cmeans'):
             vp_part = vp[partname]
-            vp_part.set_linewidth(0.5)
+            vp_part.set_linewidth(0.25)
         ax_i += 1
 
     for i in range(len(spops)):
