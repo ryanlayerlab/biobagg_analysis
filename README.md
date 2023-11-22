@@ -364,33 +364,37 @@ python plotting/evaluate_ancestry.py \
     --png plink2_kin_population_violin_plots/
 ```
 
-|  BIOBAG | Plink genome | Plink2 kinship|
-|---------|---------------|---------------|
-|![](population_violin_plots/ACB.png) |![](plink_genome_population_violin_plots/ACB.png) |![](plink2_kin_population_violin_plots/ACB.png) |
-|![](population_violin_plots/ASW.png) |![](plink_genome_population_violin_plots/ASW.png) |![](plink2_kin_population_violin_plots/ASW.png) |
-|![](population_violin_plots/BEB.png) |![](plink_genome_population_violin_plots/BEB.png) |![](plink2_kin_population_violin_plots/BEB.png) |
-|![](population_violin_plots/CDX.png) |![](plink_genome_population_violin_plots/CDX.png) |![](plink2_kin_population_violin_plots/CDX.png) |
-|![](population_violin_plots/CEU.png) |![](plink_genome_population_violin_plots/CEU.png) |![](plink2_kin_population_violin_plots/CEU.png) |
-|![](population_violin_plots/CHB.png) |![](plink_genome_population_violin_plots/CHB.png) |![](plink2_kin_population_violin_plots/CHB.png) |
-|![](population_violin_plots/CHS.png) |![](plink_genome_population_violin_plots/CHS.png) |![](plink2_kin_population_violin_plots/CHS.png) |
-|![](population_violin_plots/CLM.png) |![](plink_genome_population_violin_plots/CLM.png) |![](plink2_kin_population_violin_plots/CLM.png) |
-|![](population_violin_plots/ESN.png) |![](plink_genome_population_violin_plots/ESN.png) |![](plink2_kin_population_violin_plots/ESN.png) |
-|![](population_violin_plots/FIN.png) |![](plink_genome_population_violin_plots/FIN.png) |![](plink2_kin_population_violin_plots/FIN.png) |
-|![](population_violin_plots/GBR.png) |![](plink_genome_population_violin_plots/GBR.png) |![](plink2_kin_population_violin_plots/GBR.png) |
-|![](population_violin_plots/GIH.png) |![](plink_genome_population_violin_plots/GIH.png) |![](plink2_kin_population_violin_plots/GIH.png) |
-|![](population_violin_plots/GWD.png) |![](plink_genome_population_violin_plots/GWD.png) |![](plink2_kin_population_violin_plots/GWD.png) |
-|![](population_violin_plots/IBS.png) |![](plink_genome_population_violin_plots/IBS.png) |![](plink2_kin_population_violin_plots/IBS.png) |
-|![](population_violin_plots/ITU.png) |![](plink_genome_population_violin_plots/ITU.png) |![](plink2_kin_population_violin_plots/ITU.png) |
-|![](population_violin_plots/JPT.png) |![](plink_genome_population_violin_plots/JPT.png) |![](plink2_kin_population_violin_plots/JPT.png) |
-|![](population_violin_plots/KHV.png) |![](plink_genome_population_violin_plots/KHV.png) |![](plink2_kin_population_violin_plots/KHV.png) |
-|![](population_violin_plots/LWK.png) |![](plink_genome_population_violin_plots/LWK.png) |![](plink2_kin_population_violin_plots/LWK.png) |
-|![](population_violin_plots/MSL.png) |![](plink_genome_population_violin_plots/MSL.png) |![](plink2_kin_population_violin_plots/MSL.png) |
-|![](population_violin_plots/MXL.png) |![](plink_genome_population_violin_plots/MXL.png) |![](plink2_kin_population_violin_plots/MXL.png) |
-|![](population_violin_plots/PEL.png) |![](plink_genome_population_violin_plots/PEL.png) |![](plink2_kin_population_violin_plots/PEL.png) |
-|![](population_violin_plots/PJL.png) |![](plink_genome_population_violin_plots/PJL.png) |![](plink2_kin_population_violin_plots/PJL.png) |
-|![](population_violin_plots/PUR.png) |![](plink_genome_population_violin_plots/PUR.png) |![](plink2_kin_population_violin_plots/PUR.png) |
-|![](population_violin_plots/STU.png) |![](plink_genome_population_violin_plots/STU.png) |![](plink2_kin_population_violin_plots/STU.png) |
-|![](population_violin_plots/TSI.png) |![](plink_genome_population_violin_plots/TSI.png) |![](plink2_kin_population_violin_plots/TSI.png) |
-|![](population_violin_plots/YRI.png) |![](plink_genome_population_violin_plots/YRI.png) |![](plink2_kin_population_violin_plots/YRI.png) |
+<details>
+<summary>Results:</summary>
 
 
+| Pop. |  BIOBAG | Plink genome | Plink2 kinship|
+|------|---------|---------------|---------------|
+|  ACB  | ![](population_violin_plots/ACB.png) |![](plink_genome_population_violin_plots/ACB.png) |![](plink2_kin_population_violin_plots/ACB.png) |
+|  ASW  | ![](population_violin_plots/ASW.png) |![](plink_genome_population_violin_plots/ASW.png) |![](plink2_kin_population_violin_plots/ASW.png) |
+|  BEB  | ![](population_violin_plots/BEB.png) |![](plink_genome_population_violin_plots/BEB.png) |![](plink2_kin_population_violin_plots/BEB.png) |
+|  CDX  | ![](population_violin_plots/CDX.png) |![](plink_genome_population_violin_plots/CDX.png) |![](plink2_kin_population_violin_plots/CDX.png) |
+|  CEU  | ![](population_violin_plots/CEU.png) |![](plink_genome_population_violin_plots/CEU.png) |![](plink2_kin_population_violin_plots/CEU.png) |
+|  CHB  | ![](population_violin_plots/CHB.png) |![](plink_genome_population_violin_plots/CHB.png) |![](plink2_kin_population_violin_plots/CHB.png) |
+|  CHS  | ![](population_violin_plots/CHS.png) |![](plink_genome_population_violin_plots/CHS.png) |![](plink2_kin_population_violin_plots/CHS.png) |
+|  CLM  | ![](population_violin_plots/CLM.png) |![](plink_genome_population_violin_plots/CLM.png) |![](plink2_kin_population_violin_plots/CLM.png) |
+|  ESN  | ![](population_violin_plots/ESN.png) |![](plink_genome_population_violin_plots/ESN.png) |![](plink2_kin_population_violin_plots/ESN.png) |
+|  FIN  | ![](population_violin_plots/FIN.png) |![](plink_genome_population_violin_plots/FIN.png) |![](plink2_kin_population_violin_plots/FIN.png) |
+|  GBR  | ![](population_violin_plots/GBR.png) |![](plink_genome_population_violin_plots/GBR.png) |![](plink2_kin_population_violin_plots/GBR.png) |
+|  GIH  | ![](population_violin_plots/GIH.png) |![](plink_genome_population_violin_plots/GIH.png) |![](plink2_kin_population_violin_plots/GIH.png) |
+|  GWD  | ![](population_violin_plots/GWD.png) |![](plink_genome_population_violin_plots/GWD.png) |![](plink2_kin_population_violin_plots/GWD.png) |
+|  IBS  | ![](population_violin_plots/IBS.png) |![](plink_genome_population_violin_plots/IBS.png) |![](plink2_kin_population_violin_plots/IBS.png) |
+|  ITU  | ![](population_violin_plots/ITU.png) |![](plink_genome_population_violin_plots/ITU.png) |![](plink2_kin_population_violin_plots/ITU.png) |
+|  JPT  | ![](population_violin_plots/JPT.png) |![](plink_genome_population_violin_plots/JPT.png) |![](plink2_kin_population_violin_plots/JPT.png) |
+|  KHV  | ![](population_violin_plots/KHV.png) |![](plink_genome_population_violin_plots/KHV.png) |![](plink2_kin_population_violin_plots/KHV.png) |
+|  LWK  | ![](population_violin_plots/LWK.png) |![](plink_genome_population_violin_plots/LWK.png) |![](plink2_kin_population_violin_plots/LWK.png) |
+|  MSL  | ![](population_violin_plots/MSL.png) |![](plink_genome_population_violin_plots/MSL.png) |![](plink2_kin_population_violin_plots/MSL.png) |
+|  MXL  | ![](population_violin_plots/MXL.png) |![](plink_genome_population_violin_plots/MXL.png) |![](plink2_kin_population_violin_plots/MXL.png) |
+|  PEL  | ![](population_violin_plots/PEL.png) |![](plink_genome_population_violin_plots/PEL.png) |![](plink2_kin_population_violin_plots/PEL.png) |
+|  PJL  | ![](population_violin_plots/PJL.png) |![](plink_genome_population_violin_plots/PJL.png) |![](plink2_kin_population_violin_plots/PJL.png) |
+|  PUR  | ![](population_violin_plots/PUR.png) |![](plink_genome_population_violin_plots/PUR.png) |![](plink2_kin_population_violin_plots/PUR.png) |
+|  STU  | ![](population_violin_plots/STU.png) |![](plink_genome_population_violin_plots/STU.png) |![](plink2_kin_population_violin_plots/STU.png) |
+|  TSI  | ![](population_violin_plots/TSI.png) |![](plink_genome_population_violin_plots/TSI.png) |![](plink2_kin_population_violin_plots/TSI.png) |
+|  YRI  | ![](population_violin_plots/YRI.png) |![](plink_genome_population_violin_plots/YRI.png) |![](plink2_kin_population_violin_plots/YRI.png) |
+
+</details>
