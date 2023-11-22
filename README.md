@@ -10,9 +10,9 @@ Arguments:
 Example Run:
 ```
 python plotting/evaluate_ancestry.py \
-  --pop population.txt \
-  --knn top_hits.txt \
-  --png population_violin_plots
+  --pop data/population.txt \
+  --knn data/1kg_chr1-22_top_hits.txt \
+  --png population_violin_plots/
 ```
 
 <details>
@@ -112,7 +112,7 @@ python plotting/top_hits_umap.py \
 
 ```
 python plotting/top_hits_pca.py \
-  --in_file data/1kg_chr1-22_top_hits.txt \
+  --in_file data/1kg_chr1-22_top_hits-100.txt \
   --label_file data/igsr-1000\ genomes\ 30x\ on\ grch38.tsv \
   --out_file doc/top_hit_pca.png
 ```
@@ -212,7 +212,7 @@ Look at the similarity score distributions for different groups using different 
 
 ```
 python plotting/plot_distros.py \
-    --topk_file data/1kg_chr1-22_top_hits.txt \
+    --topk_file data/1kg_chr1-22_top_hits-100.txt \
     --pairs_file data/plink2.kin.pairs.txt \
     --label_file data/igsr-1000\ genomes\ 30x\ on\ grch38.tsv \
     --out_file doc/distros_plink2-kin.png \
@@ -225,7 +225,7 @@ python plotting/plot_distros.py \
     --x_label "Plink kinship"
 
 python plotting/plot_distros.py \
-    --topk_file data/1kg_chr1-22_top_hits.txt \
+    --topk_file data/1kg_chr1-22_top_hits-100.txt \
     --pairs_file data/plink-genome.pairs.txt \
     --label_file data/igsr-1000\ genomes\ 30x\ on\ grch38.tsv \
     --out_file doc/distros_plink-genome.png \
@@ -238,7 +238,7 @@ python plotting/plot_distros.py \
     --x_label "Plink PI_HAT"
 
 python plotting/plot_distros.py \
-    --topk_file data/1kg_chr1-22_top_hits.txt \
+    --topk_file data/1kg_chr1-22_top_hits-100.txt \
     --pairs_file data/iLASH.pairs.txt \
     --label_file data/igsr-1000\ genomes\ 30x\ on\ grch38.tsv \
     --out_file doc/distros_iLASH.png \
@@ -340,13 +340,13 @@ First coverst pairs files to top N files
 ```
 python src/make_pairs_top_k.py \
     --pairs_file data/plink-genome.pairs.txt \
-    --out_file data/plink-genome.top_100.txt \
-    --N 100
+    --out_file data/plink-genome.top_20.txt \
+    --N 20
 
 python src/make_pairs_top_k.py \
     --pairs_file data/plink2.kin.pairs.txt \
-    --out_file data/plink2.kin.top_100.txt \
-    --N 100
+    --out_file data/plink2.kin.top_20.txt \
+    --N 20
 ```
 
 Now make the violin plots
@@ -354,13 +354,13 @@ Now make the violin plots
 mkdir plink_genome_population_violin_plots/
 python plotting/evaluate_ancestry.py \
     --pop data/population.txt \
-    --knn data/plink-genome.top_100.txt \
+    --knn data/plink-genome.top_20.txt \
     --png plink_genome_population_violin_plots/
 
 mkdir plink2_kin_population_violin_plots/
 python plotting/evaluate_ancestry.py \
     --pop data/population.txt \
-    --knn data/plink2.kin.top_100.txt \
+    --knn data/plink2.kin.top_20.txt \
     --png plink2_kin_population_violin_plots/
 ```
 
