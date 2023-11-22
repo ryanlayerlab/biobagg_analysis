@@ -264,6 +264,36 @@ python plotting/plot_distros.py \
 
 </details>
 
+And as violin plots
+
+```
+python plotting/plot_distro_as_violins.py \
+    --topk data/1kg_chr1-22_top_hits.txt \
+    --pairs_file data/plink-genome.pairs.txt \
+    --label_file data/igsr-1000\ genomes\ 30x\ on\ grch38.tsv \
+    --out_file doc/distros_plink-genome.violin.png \
+    --height 2 \
+    --width 8 \
+    --y_label "Plink genome score"
+
+python plotting/plot_distro_as_violins.py \
+    --topk data/1kg_chr1-22_top_hits.txt \
+    --pairs_file data/plink2.kin.pairs.txt \
+    --label_file data/igsr-1000\ genomes\ 30x\ on\ grch38.tsv \
+    --out_file doc/distros_plink2-kin.violin.png \
+    --height 2 \
+    --width 8 \
+    --y_label "Plink2 kinship"
+```
+
+<details>
+<summary>Results:</summary>
+
+![](doc/distros_plink-genome.violin.png)
+
+![](doc/distros_plink2-kin.violin.png)
+
+</details>
 
 ## Compare rank of top k by different metrics
 

@@ -15,7 +15,7 @@ def get_args():
 def main():
     args = get_args()
 
-    top_hits = utils.get_top_hits(args.in_file)
+    top_hits = utils.get_top_hits(args.in_file, integerize=True)
     ids = sorted(top_hits.keys())
 
     D = []
