@@ -18,7 +18,7 @@ def main():
 
     POP_scores = read_data(pop_file)
     IBD_scores = read_data(ibd_file)
-    plot_violin_by_named_relation(POP_scores, IBD_scores, png_file)
+    # plot_violin_by_named_relation(POP_scores, IBD_scores, png_file)
     plot_violin_by_number_meiosis(POP_scores, IBD_scores, png_file)
 
 def plot_violin_by_number_meiosis(POP_scores, IBD_scores, png_file):
@@ -49,7 +49,7 @@ def plot_violin_by_number_meiosis(POP_scores, IBD_scores, png_file):
                         10: 'unrelated'}
 
     POP_data = {}
-    fig, ax = plt.subplots(dpi=300, figsize=(15, 8))
+    fig, ax = plt.subplots(figsize=(25, 15), dpi=200)
     # x-axis is the number of meiosis
     for relationship in number_meiosis:
         try:
@@ -63,7 +63,7 @@ def plot_violin_by_number_meiosis(POP_scores, IBD_scores, png_file):
     ax.set_xticklabels([label for label in meiosis_labels.values()], rotation=0, size=20)
     ax.set_xlabel('Number of Meiosis', fontsize=20)
     ax.set_ylabel('GeSS Score', fontsize=20, color='olivedrab')
-    # ax.set_title('deCODE Families', fontsize=30)
+    ax.set_title('deCODE Families', fontsize=30)
 
     for pc in ax.collections:
         pc.set_facecolor('olivedrab')
@@ -113,7 +113,7 @@ def plot_violin_by_named_relation(POP_scores, IBD_scores, png_file):
                          ['2-cousin'],
                          ['unrelated']]
     POP_data = {}
-    fig, ax = plt.subplots(figsize=(25, 13))
+    fig, ax = plt.subplots(figsize=(25, 15), dpi=200)
 
     for generation in ordered_relations:
         generation_data = []
@@ -138,40 +138,40 @@ def plot_violin_by_named_relation(POP_scores, IBD_scores, png_file):
     for pc in ax.collections:
         pc.set_facecolor('olivedrab')
         pc.set_edgecolor('olivedrab')
-        pc.set_alpha(1)
+        pc.set_alpha(0.6)
 
-    # plot IBD scores for right y-axis
-    ax2 = ax.twinx()
-    IBD_data = {}
-    for generation in ordered_relations:
-        generation_data = []
-        gen_lbl = "\n".join([rl for rl in generation])
-        for relationship in generation:
-            try:
-                generation_data += IBD_scores[relationship]
-            except KeyError:
-                generation_data = [0]
-                print('no data for: ', relationship)
-
-        IBD_data[gen_lbl] = generation_data
-
-    ax2.violinplot([IBD_data[col] for col in IBD_data], showmeans=True)
-    ax2.set_xticks(range(1, len(IBD_data) + 1))
-    ax2.set_xticklabels([col for col in IBD_data], rotation=45)
-    ax2.set_ylabel('deCODE IBD', fontsize=20)
-    # remove first violin plot
-    ax2.collections[0].remove()
-
-    for pc in ax2.collections:
-        pc.set_facecolor('black')
-        pc.set_edgecolor('black')
-        pc.set_alpha(0.5)
+    # # plot IBD scores for right y-axis
+    # ax2 = ax.twinx()
+    # IBD_data = {}
+    # for generation in ordered_relations:
+    #     generation_data = []
+    #     gen_lbl = "\n".join([rl for rl in generation])
+    #     for relationship in generation:
+    #         try:
+    #             generation_data += IBD_scores[relationship]
+    #         except KeyError:
+    #             generation_data = [0]
+    #             print('no data for: ', relationship)
+    #
+    #     IBD_data[gen_lbl] = generation_data
+    #
+    # ax2.violinplot([IBD_data[col] for col in IBD_data], showmeans=True)
+    # ax2.set_xticks(range(1, len(IBD_data) + 1))
+    # ax2.set_xticklabels([col for col in IBD_data], rotation=45)
+    # ax2.set_ylabel('deCODE IBD', fontsize=20)
+    # # remove first violin plot
+    # # ax2.collections[0].remove()
+    #
+    # for pc in ax2.collections:
+    #     pc.set_facecolor('black')
+    #     pc.set_edgecolor('black')
+    #     pc.set_alpha(0.4)
 
 
     ax.spines['top'].set_visible(False)
     ax.spines['right'].set_visible(False)
-    ax2.spines['top'].set_visible(False)
-    ax2.spines['left'].set_visible(False)
+    # ax2.spines['top'].set_visible(False)
+    # ax2.spines['left'].set_visible(False)
 
     plt.savefig(png_file)
 
