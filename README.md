@@ -36,9 +36,9 @@ Arguments:
 Example Run:
 ```
 python plotting/decode.py \
-  --POP data/decode_POP.txt
-  --IBD data/decode_IBD.txt
-  --png doc/decode.png
+  --POP data/decode_POP.txt \
+  --IBD data/decode_IBD.txt \
+  --png doc/decode.png \
 ```
 
 <details>
