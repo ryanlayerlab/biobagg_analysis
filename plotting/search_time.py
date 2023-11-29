@@ -29,18 +29,22 @@ def read_time_file(file):
 
 def main():
     args = get_args()
-    ms = [ time/args.num_samples * 1000 \
+    ms = [ time/args.num_samples * 1000\
             for time in read_time_file(args.in_file)]
 
     fig, ax = plt.subplots(figsize=(args.width, args.height))
 
-    ax.hist(ms, bins=50)
+    ax.hist(ms, bins=50, color='greenyellow')
+    # remove outliers
+    ax.set_xlim(0, 3.5)
 
     ax.spines['top'].set_visible(False)
     ax.spines['right'].set_visible(False)
 
-    ax.set_ylabel('Freq.')
+    ax.set_ylabel('Frequency')
     ax.set_xlabel('Time (ms)')
+    ax.set_title('SVS Search Time Distribution\n'
+                 'for One Query Segment when k = 20')
 
     print('per sample per segment median (ms)', np.median(ms))
     print('per sample per segment mean (ms)', np.mean(ms))
