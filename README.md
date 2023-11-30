@@ -315,6 +315,8 @@ python plotting/plot_distro_as_violins.py \
 
 ![](doc/distros_plink-pihat.violin.png)
 
+![](doc/distros_plink2-kin.violin.png)
+
 ![](doc/distros_plink-dist.violin.png)
 
 </details>
