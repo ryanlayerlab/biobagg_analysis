@@ -428,3 +428,45 @@ python plotting/evaluate_ancestry.py \
 |  YRI  | ![](population_violin_plots/YRI.png) |![](plink_genome_population_violin_plots/YRI.png) |![](plink2_kin_population_violin_plots/YRI.png) |
 
 </details>
+
+## Look at the top k for one all segemetns in one chromosome
+
+There are 3 versions of this plot
+1. All points are grey
+2. Blue match the population and orange do not
+3. The top k are colored
+
+```
+python plotting/query_result.py \
+    --svs_results data/svs_results_chrm18.HG00096.bed.gz \
+    --chrm 18 \
+    --target HG00096 \
+    --out_file doc/HG00096.png 
+
+python plotting/query_result.py \
+    --svs_results data/svs_results_chrm18.HG00096.bed.gz \
+    --chrm 18 \
+    --target HG00096 \
+    --out_file doc/HG00096_labels.png \
+    --label_file data/igsr-1000\ genomes\ 30x\ on\ grch38.tsv
+
+python plotting/query_result.py \
+    --svs_results data/svs_results_chrm18.HG00096.bed.gz \
+    --chrm 18 \
+    --target HG00096  \
+    --out_file doc/HG00096_top_5.png \
+    --k 5
+```
+
+<details>
+<summary>Results:</summary>
+
+![](doc/HG00096.png)
+
+![](doc/HG00096_labels.png)
+
+![](doc/HG00096_top_5.png)
+
+</details>
+
+
