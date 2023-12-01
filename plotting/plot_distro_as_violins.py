@@ -70,6 +70,8 @@ def main():
 
 
     spops = ['EUR', 'EAS', 'AMR', 'SAS', 'AFR']
+    supperpop_names = ['European', 'East Asian', 'American', 'South Asian', 'African']
+
 
     super_population_colors = {'AFR': '#fe9d57',
                                'AMR': '#ba75ff',
@@ -77,7 +79,7 @@ def main():
                                'EUR': '#728eff',
                                'SAS': '#f7d06b'}
 
-    fig = plt.figure(figsize=(args.width, args.height))
+    fig = plt.figure(figsize=(args.width, args.height), dpi=200)
 
     gs = gridspec.GridSpec(1, len(spops), hspace=0.6)
 
@@ -86,10 +88,13 @@ def main():
         ax = fig.add_subplot(gs[i])
         axs.append(ax)
         spop = spops[i]
-        ax.set_title(f"{spop}",
-                     fontsize=4,
-                     loc='left',
-                     fontdict={'verticalalignment':'top'})
+        spop_name = supperpop_names[i]
+        ax.set_title(f"{spop_name}",
+                     fontsize=20,
+                     loc='center',
+                     fontdict={'verticalalignment':'top'},
+                     fontweight=800,
+                     color=super_population_colors[spop])
 
         violin_data = [D[spop]['spop'],
                        D[spop]['pop'],
@@ -97,8 +102,9 @@ def main():
 
         parts = ax.violinplot(violin_data, showextrema=False, showmeans=True)
 
-        parts['cmeans'].set_color(super_population_colors[spop])
-        parts['cmeans'].set_linewidth(0.75)
+        # parts['cmeans'].set_color(super_population_colors[spop])
+        parts['cmeans'].set_color('black')
+        parts['cmeans'].set_linewidth(1)
 
         for b in parts['bodies']:
             b.set_color(super_population_colors[spop])
@@ -114,16 +120,16 @@ def main():
         ax.spines['left'].set_visible(False)
         ax.spines['right'].set_visible(False)
         ax.set_xticks(range(1, 4))
-        ax.set_xticklabels(['Super Pop.', 'Pop.', 'Top K'])
+        ax.set_xticklabels(['Super\nPopulation.', 'Sub\nPopulation', 'GeSS\nTop K'])
 
         if ax != axs[0]:
             ax.set_yticks([])
         else:
-            ax.set_ylabel(args.y_label, fontsize=4)
+            ax.set_ylabel(args.y_label, fontsize=20)
 
         ax.tick_params(axis='both',
                        which='major',
-                       labelsize=3,
+                       labelsize=10,
                        width=0.25,
                        length=1)
 

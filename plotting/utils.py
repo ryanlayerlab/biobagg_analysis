@@ -70,13 +70,16 @@ def get_label_map(file_name, col_name):
 
 def get_pair_map(file):
     pairs = {}
-
+    header = None
     with open(file) as lines:
         for line in lines:
             A = line.rstrip().split()
-            a = A[0]
-            b = A[1]
-            dist = float(A[2])
+            if header is None:
+                header = A
+                continue
+            a = A[1]
+            b = A[3]
+            dist = float(A[11])
 
             if a not in pairs:
                 pairs[a] = {}

@@ -26,6 +26,30 @@ python plotting/evaluate_ancestry.py \
 
 </details>
 
+## Generate violin plots for deCODE data
+
+Arguments:
+- decode_POP.txt: file with pop count scores for decode data 
+- decode_IBD.txt: file with IBD scores for decode data 
+- decode.png: violoin plot
+
+Example Run:
+```
+python plotting/decode.py \
+  --POP data/decode_POP.txt \
+  --IBD data/decode_IBD.txt \
+  --png doc/decode.png \
+```
+
+<details>
+<summary>Example PNGs:</summary>
+
+![deCODE: relationships, pop](doc/decode_rel_gess.png)<br>
+![deCODE: relationships, pop + IBD](doc/decode_rel_both.png)<br>
+![deCODE: meioses, pop](doc/decode_mei_gess.png)<br>
+![deCODE: meioses, pop + IBD](doc/decode_mei_both.png)<br>
+</details>
+
 ## Generate search time plot for 1K
 
 Arguments:
@@ -289,9 +313,11 @@ python plotting/plot_distro_as_violins.py \
 <details>
 <summary>Results:</summary>
 
-![](doc/distros_plink-genome.violin.png)
+![](doc/distros_plink-pihat.violin.png)
 
 ![](doc/distros_plink2-kin.violin.png)
+
+![](doc/distros_plink-dist.violin.png)
 
 </details>
 
