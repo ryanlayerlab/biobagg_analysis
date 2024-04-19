@@ -1,5 +1,24 @@
 # biobagg_analysis
 
+## Compare the % of top k that match the query's super population
+
+```
+python plotting/percent_in_group.py \
+    --pop data/population.txt \
+    --knn data/1kg_chr1-22_top_hits.txt \
+    --plink data/plink2.kin.top_20.txt \
+    --out_file doc/hapsis_v_plink_in_pop.png
+```
+
+<details>
+<summary>Example PNG:</summary>
+  
+![](doc/hapsis_v_plink_in_pop.png)<br>
+
+</details>
+
+
+
 ## Generate violin plots for 1K subpopulation data
 
 Arguments:
