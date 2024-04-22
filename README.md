@@ -16,12 +16,27 @@ cat data/iLASH/chrm15.match \
     -t "iLASH 1KG Chromosome 15" \
     --width 6 \
     --height 3
+
+cat data/iLASH/chrm15.match \
+| cut -f 5-7 \
+| sort \
+| uniq -c \
+| awk '{print $4-$3,$1;}' \
+| python src/scatter.py \
+    -o doc/iLASH.chr15.len_x_ac.scatter.png \
+    --log_x \
+    --log_y \
+    --x_label "IBD length" \
+    --y_label "Allele count" \
+    --fig_x 6 \
+    --fig_y 3
 ```
 
 <details>
 <summary>Example PNG:</summary>
   
-![iLASH chrm15](doc/iLASH.chr15.ac.hist.png)<br>
+![iLASH chrm15 ac](doc/iLASH.chr15.ac.hist.png)<br>
+![iLASH chrm15 len x ac](doc/iLASH.chr15.len_x_ac.scatter.png)<br>
 
 </details>
 
