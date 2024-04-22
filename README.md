@@ -21,7 +21,7 @@ cat data/iLASH/chrm15.match \
 <details>
 <summary>Example PNG:</summary>
   
-![iLASH chrm15](doc/doc/iLASH.chr15.ac.hist.png)<br>
+![iLASH chrm15](doc/iLASH.chr15.ac.hist.png)<br>
 
 </details>
 
