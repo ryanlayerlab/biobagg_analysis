@@ -21,7 +21,7 @@ cat data/iLASH/chrm15.match \
 <details>
 <summary>Example PNG:</summary>
   
-![](doc/doc/iLASH.chr15.ac.hist.png)<br>
+![iLASH chrm15](doc/doc/iLASH.chr15.ac.hist.png)<br>
 
 </details>
 
@@ -40,7 +40,7 @@ python plotting/percent_in_group.py \
 <details>
 <summary>Example PNG:</summary>
   
-![](doc/hapsis_v_plink_in_pop.png)<br>
+![top 20](doc/hapsis_v_plink_in_pop.png)<br>
 
 </details>
 
