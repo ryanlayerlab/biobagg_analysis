@@ -62,6 +62,7 @@ python plotting/percent_in_group.py \
 <summary>Example PNG:</summary>
   
 ![top 20](doc/hapsis_v_plink_in_pop.png)<br>
+![top 20](doc/hapsis_v_plink_in_subpop.png)<br>
 ![top 100](doc/hapsis_v_plink_in_pop.top_100.png)<br>
 
 </details>
