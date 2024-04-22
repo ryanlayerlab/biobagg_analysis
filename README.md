@@ -1,5 +1,32 @@
 # biobagg_analysis
 
+## Look at how comon / rare iLASH IBD calls are
+```
+cat data/iLASH/chrm15.match \
+| cut -f 5-7 \
+| sort \
+| uniq -c \
+| awk '{print $1;}' \
+| python src/hist.py \
+    -o doc/iLASH.chr15.ac.hist.png \
+    -l \
+    -b 50 \
+    -x "IBD allele count" \
+    -y "Freq." \
+    -t "iLASH 1KG Chromosome 15" \
+    --width 6 \
+    --height 3
+```
+
+<details>
+<summary>Example PNG:</summary>
+  
+![](doc/doc/iLASH.chr15.ac.hist.png)<br>
+
+</details>
+
+
+
 ## Compare the % of top k that match the query's super population
 
 ```
