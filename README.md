@@ -50,12 +50,19 @@ python plotting/percent_in_group.py \
     --knn data/1kg_chr1-22_top_hits.txt \
     --plink data/plink2.kin.top_20.txt \
     --out_file doc/hapsis_v_plink_in_pop.png
+
+python plotting/percent_in_group.py \
+    --pop data/population.txt \
+    --knn data/1kg_chr1-22_top_100_hits.txt \
+    --plink data/plink2.kin.top_100.txt \
+    --out_file doc/hapsis_v_plink_in_pop.top_100.png
 ```
 
 <details>
 <summary>Example PNG:</summary>
   
 ![top 20](doc/hapsis_v_plink_in_pop.png)<br>
+![top 100](doc/hapsis_v_plink_in_pop.top_100.png)<br>
 
 </details>
 
