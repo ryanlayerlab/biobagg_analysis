@@ -1,5 +1,32 @@
 # biobagg_analysis
 
+## Look at iLASH v our calls
+```
+python src/ilash_pval.py \
+    --ilash data/iLASH/chrm15.match \
+    --segment_bed data/segment_boundary.bed.gz \
+    --hapsis 'data/svs_results_chrm15-20/chrm15.segment*' \
+> data/ilash_v_hapsis.txt
+
+cat data/ilash_v_hapsis.txt \
+| awk '{print $4,$3;}' \
+| python src/scatter.py \
+    -o doc/ilash_v_hapsis.chr15.png \
+    --fig_x 6 --fig_y 3 \
+    --x_label "GenoSiS popcount" \
+    --y_label "iLASH IBD"
+```
+
+<details>
+<summary>Example PNG:</summary>
+  
+![iLASH v Genosis](doc/ilash_v_hapsis.chr15.png)<br>
+
+</details>
+
+
+
+
 ## Look at how comon / rare iLASH IBD calls are
 ```
 cat data/iLASH/chrm15.match \
