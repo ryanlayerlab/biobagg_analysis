@@ -1,5 +1,24 @@
 # biobagg_analysis
 
+## Targeted search
+Get the SVS score distro (excluding self hits) to justify a 1.0 max 
+cutoff
+```
+python plotting/plot_svs_score_hist.py -i "data/svs_results_100/chrm6.segment*" -o doc/svs_score_top_100.hist.png -N 1000000 -F 100
+
+
+python plotting/plot_svs_score_hist.py -i "data/svs_results_20/chrm6.segment*" -o doc/svs_score_top_20.hist.png -N 1000000 -F 100
+```
+<details>
+<summary>Example PNG:</summary>
+  
+![k=100](doc/svs_score_top_100.hist.png)<br>
+![k=20](doc/svs_score_top_20.hist.png)<br>
+
+</details>
+
+
+
 ## Look at iLASH v our calls
 ```
 python src/ilash_pval.py \
