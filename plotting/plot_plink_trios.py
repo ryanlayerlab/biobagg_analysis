@@ -1,6 +1,7 @@
 import argparse
 from collections import defaultdict
 import matplotlib.pyplot as plt
+import numpy as np
 import random
 
 from plotting import ancestry_helpers
@@ -8,8 +9,8 @@ from src import get_relations
 
 def get_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--hits', type=str, help='top hits file', required=True)
-    parser.add_argument('--dist', type=str, help='ancestry distances file', required=True)
+    parser.add_argument('--plink', type=str, help='plink file', required=True)
+    parser.add_argument('--dist', type=str, help='ped distances and labels', required=True)
     parser.add_argument('--pop', type=str, help='population query', required=True)
     parser.add_argument('--ancestry', type=str, help='ancestry file', required=True)
     parser.add_argument('--ped', type=str, help='PED file', required=True)
@@ -34,39 +35,24 @@ def get_dist(dist_file):
 
     return dist_dict, label_dict
 
-def get_hits(hits_file):
-    hits_dict = defaultdict(dict)
+def get_plink_scores(plink_file):
+    plink_dict = defaultdict(dict)
+    f = open(plink_file, 'r')
+    header = f.readline().strip().split('\t')
+    for line in f:
+        line = line.strip().split()
+        sample1 = line[0]
+        sample2 = line[2]
+        pi_hat = float(line[9])
+        dst = float(line[11])
+        try:
+            plink_dict[sample1].update({sample2: (pi_hat, dst)})
+        except KeyError:
+            plink_dict[sample1] = {sample2: (pi_hat, dst)}
 
-    with open(hits_file, 'r') as f:
-        for line in f:
-            line = line.strip().split()
-            query = line[0]
-            matches = line[1:]
-            for m in matches:
-                match_ID = m.split(',')[0]
-                match_score = m.split(',')[1]
-                try:
-                    hits_dict[query].update({match_ID: float(match_score)})
-                except KeyError:
-                    hits_dict[query] = {match_ID: float(match_score)}
+    return plink_dict
 
-    return hits_dict
-
-def combine_dicts(hits_dict, dist_dict):
-    combined_dict = defaultdict(dict)
-
-    for query in hits_dict:
-        for match in hits_dict[query]:
-            if dist_dict[query][match] == 0:
-                if match != query:
-                    print(query, match, dist_dict[query][match], hits_dict[query][match])
-                if hits_dict[query][match] < 4000:
-                    print(query, match, dist_dict[query][match], hits_dict[query][match])
-            combined_dict[query].update({match: (hits_dict[query][match], dist_dict[query][match])})
-
-    return combined_dict
-
-def plot_1KG_trios(hits_dict, dist_dict, label_dict, pop, color, subpopulations, samples):
+def plot_1KG_trios(plink_dict, dist_dict, label_dict, pop, color, subpopulations, samples):
     #x: [y,y,y,y]
     score_data = defaultdict(list)
     label_data = defaultdict(list)
@@ -100,7 +86,7 @@ def plot_1KG_trios(hits_dict, dist_dict, label_dict, pop, color, subpopulations,
 
     # fill data
     for query in samples:
-        for match in hits_dict[query]:
+        for match in plink_dict[query]:
             # dist = dist_dict[query][match]
             try:
                 label = label_dict[query][match]
@@ -110,7 +96,8 @@ def plot_1KG_trios(hits_dict, dist_dict, label_dict, pop, color, subpopulations,
                 label = SUB_SUPERPOPULATIONS[subpopulations[match]]
 
             try:
-                score = hits_dict[query][match]
+                pi_hat_score = plink_dict[query][match][0]
+                dst_score = plink_dict[query][match][1]
                 # if label == 'outpop':
                 #     if score > 1000:
                 #         print(query, match, dist_dict[query][match], hits_dict[query][match])
@@ -120,10 +107,10 @@ def plot_1KG_trios(hits_dict, dist_dict, label_dict, pop, color, subpopulations,
 
             try:
                 # score_data[dist].append(score)
-                label_data[labels_ordered[label]].append(score)
+                label_data[labels_ordered[label]].append(pi_hat_score)
             except KeyError:
                 # score_data[dist] = [score]
-                label_data[labels_ordered[label]] = [score]
+                label_data[labels_ordered[label]] = [pi_hat_score]
             # print(query, match, dist_dict[query][match], hits_dict[query][match])
 
 
@@ -131,7 +118,7 @@ def plot_1KG_trios(hits_dict, dist_dict, label_dict, pop, color, subpopulations,
     label_data_plot = []
     for l in x_labels_ordered:
         if len(label_data[l]) == 0:
-            label_data_plot.append([-1])
+            label_data_plot.append([0])
         else:
             label_data_plot.append(label_data[l])
 
@@ -156,18 +143,18 @@ def plot_1KG_trios(hits_dict, dist_dict, label_dict, pop, color, subpopulations,
         ax[1].scatter(x, label_data_plot[i], color=color, alpha=0.3)
 
 
-    fig.suptitle('GenoSiS Scores for 1KG Trios\n(' + pop + ')', fontsize=40, fontweight='bold', color=color)
+    fig.suptitle('Plink pi_hat Scores for 1KG Trios\n(' + pop + ')', fontsize=40, fontweight='bold', color=color)
     # top plot
     ax[0].set_ylabel('GenoSiS Score', labelpad=10, fontsize=30, fontweight='bold')
-    # ax[0].tick_params(axis='y', labelsize=20)
-    ax[0].set_yticks(range(0, 8500, 1000), range(0, 8500, 1000), fontsize=20)
+    ax[0].tick_params(axis='y', labelsize=20)
+    # ax[0].set_yticks(range(0, 10, 1), [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1], fontsize=20)
     ax[0].set_xticks([])
 
-    # ax[1].tick_params(axis='y', labelsize=20)
-    ax[1].set_yticks(range(0, 8500, 1000), range(0, 8500, 1000), fontsize=20)
+    ax[1].tick_params(axis='y', labelsize=20)
+    # ax[1].set_yticks(range(0, 10, 1), [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1], fontsize=20)
     ax[1].set_xlabel('Relationship', labelpad=10, fontsize=30, fontweight='bold')
     ax[1].set_xticks(range(1, len(x_labels_ordered)+1), x_labels_ordered, fontsize=20)
-    ax[1].set_ylabel('GenoSiS Score', labelpad=10, fontsize=30, fontweight='bold')
+    ax[1].set_ylabel('plink pi-hat score', labelpad=10, fontsize=30, fontweight='bold')
     # ax[1].set_yticks(fontsize=20)
     ax[0].spines['right'].set_visible(False)
     ax[0].spines['top'].set_visible(False)
@@ -183,7 +170,7 @@ def plot_1KG_trios(hits_dict, dist_dict, label_dict, pop, color, subpopulations,
     # plt.gca().spines['right'].set_visible(False)
     # plt.gca().spines['top'].set_visible(False)
 
-    plt.savefig('1kg_trio_plots/1KG_trios_' + pop + '_20of20.png')
+    plt.savefig('1kg_trio_plots/1KG_trios_plink_' + pop + '.png')
 
     # # violin plot
     # plt.violinplot(score_data.values(), showmeans=True)
@@ -199,13 +186,12 @@ def main():
     args = get_args()
     pop = args.pop
     dist_dict, label_dict = get_dist(args.dist + '_' + pop + '.txt')
-    hits_dict = get_hits(args.hits)
+    plink_dict = get_plink_scores(args.plink)
     subpopulations = ancestry_helpers.get_subpopulations(args.ancestry)
     samples = get_relations.get_samples(args.ped, pop, subpopulations)
 
-    # combined_dict = combine_dicts(hits_dict, dist_dict)
     color = args.color
-    plot_1KG_trios(hits_dict, dist_dict, label_dict, pop, color, subpopulations, samples)
+    plot_1KG_trios(plink_dict, dist_dict, label_dict, pop, color, subpopulations, samples)
 
     # print(hits_dict)
     # dist_dict = get_hits(args.dist)
