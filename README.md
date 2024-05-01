@@ -9,6 +9,9 @@ python plotting/plot_svs_score_hist.py -i "data/svs_results_100/chrm6.segment*" 
 
 python plotting/plot_svs_score_hist.py -i "data/svs_results_20/chrm6.segment*" -o doc/svs_score_top_20.hist.png -N 1000000 -F 100
 ```
+
+```
+```
 <details>
 <summary>Example PNG:</summary>
   
