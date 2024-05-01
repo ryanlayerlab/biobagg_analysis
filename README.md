@@ -20,12 +20,14 @@ python plotting/plot_1kg_trios.py \
 ```
 <details>
 <summary>Example PNG:</summary>
-  
-![AFR_k=100](1kg_trio_plots/1KG_trios_AFR_100of100.png)<br>
-![AMR_k=100](1kg_trio_plots/1KG_trios_AMR_100of100.png)<br>
-![EAS_k=100](1kg_trio_plots/1KG_trios_EAS_100of100.png)<br>
-![EUR_k=100](1kg_trio_plots/1KG_trios_EUR_100of100.png)<br>
-![SAS_k=100](1kg_trio_plots/1KG_trios_SAS_100of100.png)<br>
+
+| Pop. | k=100                                                   | k=20                                                 |
+|------|---------------------------------------------------------|------------------------------------------------------|
+AFR | ![AFR_k=100](1kg_trio_plots/1KG_trios_AFR_100of100.png) | ![AFR_k=20](1kg_trio_plots/1KG_trios_AFR_20of20.png) |
+AMR | ![AMR_k=100](1kg_trio_plots/1KG_trios_AMR_100of100.png) | ![AMR_k=20](1kg_trio_plots/1KG_trios_AMR_20of20.png) |
+EAS | ![EAS_k=100](1kg_trio_plots/1KG_trios_EAS_100of100.png) | ![EAS_k=20](1kg_trio_plots/1KG_trios_EAS_20of20.png) |
+EUR | ![EUR_k=100](1kg_trio_plots/1KG_trios_EUR_100of100.png) | ![EUR_k=20](1kg_trio_plots/1KG_trios_EUR_20of20.png) |
+SAS | ![SAS_k=100](1kg_trio_plots/1KG_trios_SAS_100of100.png) | ![SAS_k=20](1kg_trio_plots/1KG_trios_SAS_20of20.png) |
 
 
 </details>
