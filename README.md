@@ -1,5 +1,35 @@
 # biobagg_analysis
 
+## 1KG trios
+Label relationships in the 1KG trios data
+```
+python src/get_relations.py\
+    --ped samples.trios\
+    --ancestry samples.ancestry
+    --pop AFR 
+```
+Plot GenoSiS scores for the 1KG trios data
+```
+python plotting/plot_1kg_trios.py \
+    --ped data/1kg_trios.txt \
+    --hits data/1kg_chr1-22_top_hits-100.txt \
+    --dist data/1KG_trios \
+    --pop AFR \
+    --ancestry data/igsr-1000 genomes 30x on grch38.tsv \
+    --color darkorange 
+```
+<details>
+<summary>Example PNG:</summary>
+  
+![AFR_k=100](1kg_trio_plots/1KG_trios_AFR_100of100.png)<br>
+![AMR_k=100](1kg_trio_plots/1KG_trios_AMR_100of100.png)<br>
+![EAS_k=100](1kg_trio_plots/1KG_trios_EAS_100of100.png)<br>
+![EUR_k=100](1kg_trio_plots/1KG_trios_EUR_100of100.png)<br>
+![SAS_k=100](1kg_trio_plots/1KG_trios_SAS_100of100.png)<br>
+
+
+</details>
+
 ## Targeted search
 Get the SVS score distro (excluding self hits) to justify a 1.0 max 
 cutoff
