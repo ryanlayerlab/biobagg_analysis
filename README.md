@@ -29,8 +29,27 @@ EAS | ![EAS_k=100](1kg_trio_plots/1KG_trios_EAS_100of100.png) | ![EAS_k=20](1kg_
 EUR | ![EUR_k=100](1kg_trio_plots/1KG_trios_EUR_100of100.png) | ![EUR_k=20](1kg_trio_plots/1KG_trios_EUR_20of20.png) | ![EUR_pihat](1kg_trio_plots/1KG_trios_plink_EUR.png) |
 SAS | ![SAS_k=100](1kg_trio_plots/1KG_trios_SAS_100of100.png) | ![SAS_k=20](1kg_trio_plots/1KG_trios_SAS_20of20.png) | ![SAS_pihat](1kg_trio_plots/1KG_trios_plink_SAS.png) |
 
-
 </details>
+
+## 1KG GenoSiS vs. Plink (kristen)
+Compare 3 plink measurements to GenoSiS scores
+```
+python src/compare_genosis_plink.py \
+    --genosis data/TOP_HITS_20.txt \
+    --plinkgenome data/plink-genome.genome \
+    --plinkkin data/plink2.kin0 \
+    --top_k 20 \
+    --ancestry data/igsr-1000 genomes 30x on grch38.tsv 
+    --pop AFR \
+    --color darkorange 
+```
+| Pop. | k=20                                                          | k=100                                                           |
+|------|---------------------------------------------------------------|-----------------------------------------------------------------|
+AFR | ![AFR_k=20](1kg_plink_plots/genosis_plink_compare_AFR_20.png) | ![AFR_k=100](1kg_plink_plots/genosis_plink_compare_AFR_100.png) |
+AMR | ![AMR_k=20](1kg_plink_plots/genosis_plink_compare_AMR_20.png) | ![AMR_k=100](1kg_plink_plots/genosis_plink_compare_AMR_100.png) |
+EAS | ![EAS_k=20](1kg_plink_plots/genosis_plink_compare_EAS_20.png)    | ![EAS_k=100](1kg_plink_plots/genosis_plink_compare_EAS_100.png) |
+EUR | ![EUR_k=20](1kg_plink_plots/genosis_plink_compare_EUR_20.png)    | ![EUR_k=100](1kg_plink_plots/genosis_plink_compare_EUR_100.png) |
+SAS | ![SAS_k=20](1kg_plink_plots/genosis_plink_compare_SAS_20.png)    | ![SAS_k=100](1kg_plink_plots/genosis_plink_compare_SAS_100.png) |
 
 ## Targeted search
 Get the SVS score distro (excluding self hits) to justify a 1.0 max 
