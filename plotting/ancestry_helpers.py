@@ -108,3 +108,22 @@ def get_subpop_full_names():
             'STU': 'Sri Lankan Tamil in the UK',
             'TSI': 'Toscani in Italia',
             'YRI': 'Yoruba in Ibadan, Nigeria'}
+
+SUPER_SUBPOPULATIONS = {'AFR': ['ASW', 'LWK', 'GWD', 'MSL', 'ESN', 'YRI', 'ACB'],
+                        'AMR': ['CLM', 'PEL', 'MXL', 'PUR'],
+                        'EAS': ['CDX', 'CHB', 'JPT', 'KHV', 'CHS'],
+                        'EUR': ['CEU', 'TSI', 'FIN', 'GBR', 'IBS'],
+                        'SAS': ['BEB', 'GIH', 'ITU', 'PJL', 'STU']}
+
+SUBPOPULATIONS = ['ASW', 'LWK', 'GWD', 'MSL', 'ESN', 'YRI', 'ACB', 'CLM', 'PEL', 'MXL', 'PUR', 'CDX', 'CHB', 'JPT', 'KHV', 'CHS', 'CEU', 'TSI', 'FIN', 'GBR', 'IBS', 'BEB', 'GIH', 'ITU', 'PJL', 'STU']
+
+SUB_SUPERPOPULATIONS = {'ASW': 'AFR', 'LWK': 'AFR', 'GWD': 'AFR', 'MSL': 'AFR', 'ESN': 'AFR', 'YRI': 'AFR', 'ACB': 'AFR', 'CLM': 'AMR', 'PEL': 'AMR', 'MXL': 'AMR', 'PUR': 'AMR', 'CDX': 'EAS', 'CHB': 'EAS', 'JPT': 'EAS', 'KHV': 'EAS', 'CHS': 'EAS', 'CEU': 'EUR', 'TSI': 'EUR', 'FIN': 'EUR', 'GBR': 'EUR', 'IBS': 'EUR', 'BEB': 'SAS', 'GIH': 'SAS', 'ITU': 'SAS', 'PJL': 'SAS', 'STU': 'SAS'}
+
+def get_subpopulations(ancestry_file):
+    sample_subpopulations = {}
+    with open(ancestry_file) as f:
+        for line in f:
+            for subpop in SUBPOPULATIONS:
+                if subpop in line:
+                    sample_subpopulations[line.split()[0]] = subpop
+    return sample_subpopulations
