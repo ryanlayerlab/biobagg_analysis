@@ -145,7 +145,7 @@ def plot_1KG_trios(plink_dict, dist_dict, label_dict, pop, color, subpopulations
 
     fig.suptitle('Plink pi_hat Scores for 1KG Trios\n(' + pop + ')', fontsize=40, fontweight='bold', color=color)
     # top plot
-    ax[0].set_ylabel('GenoSiS Score', labelpad=10, fontsize=30, fontweight='bold')
+    ax[0].set_ylabel('plink pi-hat score', labelpad=10, fontsize=30, fontweight='bold')
     ax[0].tick_params(axis='y', labelsize=20)
     # ax[0].set_yticks(range(0, 10, 1), [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1], fontsize=20)
     ax[0].set_xticks([])
