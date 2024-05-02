@@ -19,6 +19,10 @@ def get_pairwise_DST_score_dict(plink_file):
                 pairsie_DST_score_dict[sample_A][sample_B] = DST_score
             except KeyError:
                 pairsie_DST_score_dict[sample_A].update({sample_B: DST_score})
+            try:
+                pairsie_DST_score_dict[sample_B][sample_A] = DST_score
+            except KeyError:
+                pairsie_DST_score_dict[sample_B].update({sample_A: DST_score})
     return pairsie_DST_score_dict
 
 def get_pairwise_pihat_score_dict(plink_file):
@@ -38,6 +42,11 @@ def get_pairwise_pihat_score_dict(plink_file):
                 pairsie_pihat_score_dict[sample_A][sample_B] = pihat_score
             except KeyError:
                 pairsie_pihat_score_dict[sample_A].update({sample_B: pihat_score})
+            try:
+                pairsie_pihat_score_dict[sample_B][sample_A] = pihat_score
+            except KeyError:
+                pairsie_pihat_score_dict[sample_B].update({sample_A: pihat_score})
+
     return pairsie_pihat_score_dict
 
 def get_pairwise_kin_score_dict(plink_file):
@@ -57,4 +66,8 @@ def get_pairwise_kin_score_dict(plink_file):
                 pairwise_kin_score_dict[sample_A][sample_B] = kin_score
             except KeyError:
                 pairwise_kin_score_dict[sample_A].update({sample_B: kin_score})
+            try:
+                pairwise_kin_score_dict[sample_B][sample_A] = kin_score
+            except KeyError:
+                pairwise_kin_score_dict[sample_B].update({sample_A: kin_score})
     return pairwise_kin_score_dict

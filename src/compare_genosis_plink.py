@@ -12,6 +12,7 @@ def parse_args():
     parser.add_argument("-k", "--top_k", help="top K hits to return", default=20)
     parser.add_argument("-a", "--ancestry", help="ancestry file")
     parser.add_argument("-p", "--pop", help="population to investigate")
+    parser.add_argument("-c", "--color", help="color for plot")
     return parser.parse_args()
 
 def get_plink_top_hits(plink_dict, K):
@@ -38,8 +39,24 @@ def main():
     plotting.plot_genosis_plink.plot_plink_genosis_compare(args.ancestry,
                                                            genosis_K_dict,
                                                            plink_DST_K_dict,
+                                                           plink_pihat_K_dict,
+                                                           plink_kin_K_dict,
                                                            args.pop,
-                                                           int(args.top_k))
+                                                           int(args.top_k), args.color)
+
+    # plotting.plot_genosis_plink.plot_plink_genosis_compare(args.ancestry,
+    #                                                        genosis_K_dict,
+    #                                                        plink_pihat_K_dict,
+    #                                                        args.pop,
+    #                                                        int(args.top_k),
+    #                                                        "pihat")
+    #
+    # plotting.plot_genosis_plink.plot_plink_genosis_compare(args.ancestry,
+    #                                                        genosis_K_dict,
+    #                                                        plink_kin_K_dict,
+    #                                                        args.pop,
+    #                                                        int(args.top_k),
+    #                                                        "kin")
 
 
 
