@@ -130,7 +130,7 @@ def plot_plink_genosis_compare(population_file,
     plt.subplots_adjust(top=0.9)
     plt.legend()
 
-    plt.savefig('genosis_plink_compare_' + pop + '.png')
+    plt.savefig('1kg_plink_plots/genosis_plink_compare_' + pop + '_' + str(k) + '.png')
 
 
 
