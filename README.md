@@ -1,5 +1,23 @@
 # biobagg_analysis
 
+## GenoSiS v deCODE
+```
+python plotting/genosis_v_deCODE_smooth_hist.py \
+    --POP data/decode_POP.txt \
+    --IBD data/decode_IBD.txt \
+    --png doc/genosis_v_decode.png \
+    --height 3.5
+```
+
+<details>
+<summary>Example PNG:</summary>
+  
+![genosis v decode](doc/genosis_v_decode.png)<br>
+
+</details>
+
+
+
 ## 1KG trios
 Label relationships in the 1KG trios data
 ```
