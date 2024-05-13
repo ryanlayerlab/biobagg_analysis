@@ -61,16 +61,24 @@ def plot_data(query_pop_results, query_pop, out):
     for pop, scores in query_pop_results.items():
         sns.kdeplot(scores, color=pop_color_dict[pop], label=pop, ax=axs[0])
         axs[1].hist(scores, bins=50, color=pop_color_dict[pop], alpha=0.5)
-        # log scale for histogram
+        # x-labels
+        axs[0].set_xlabel('GenoSiS score')
+        axs[1].set_xlabel('GenoSiS score')
+        # y-labels
+        axs[0].set_ylabel('Density')
+        axs[1].set_ylabel('Frequency')
 
+        # legend for both
+        legend_labels = ['AFR', 'AMR', 'EAS', 'EUR', 'SAS']
+        axs[0].legend(frameon=False, title='Database Population', labels=legend_labels, loc='upper right')
+        axs[1].legend(frameon=False, title='Database Population', labels=legend_labels, loc='upper right')
+
+    axs[0].set_title('Density plot of\nGenoSiS scores for ' + query_pop, fontsize=20)
+    axs[1].set_title('Histogram of\nGenoSiS scores for ' + query_pop, fontsize=20)
     axs[1].set_yscale('log')
     sns.despine()
-    plt.xlabel('GenoSiS score')
-    plt.ylabel('Density')
-    plt.title('GenoSiS scores for ' + query_pop)
     # legend labels
-    legend_labels = ['AFR', 'AMR', 'EAS', 'EUR', 'SAS']
-    plt.legend(frameon=False, title='Database Population', labels=legend_labels, loc='upper right')
+
     plt.tight_layout()
     plt.savefig(out + query_pop + '_query.png')
     # plot the mean of each population
