@@ -11,9 +11,12 @@ python plotting/plot_d1kg_distributions.py\
     --ped data/1kg_trios.txt \
     --out 1kg_plots/
 ```
+
 <details>
 <summary>Example PNG:</summary>
-    ![k=20](1kg_plots/1KG_pop_distributions.png)<br>
+  
+![1kg_pop_k20](1kg_plots/1KG_pop_distributions.png)<br>
+
 </details>
 
 
