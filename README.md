@@ -6,9 +6,10 @@ Plot 1KG population density plots
 python plotting/plot_d1kg_distributions.py\
     --trios 1kg_trio_data/GenoSiS_ \
     --ancestry "data/igsr-1000 genomes 30x on grch38.tsv" \
+    --summary data/1KG_pop_hits.txt \
     --hits data/1kg_chr1-22_top_hits-100.txt \
     --ped data/1kg_trios.txt \
-    --out 1kg_trio_plots/1kg_plots
+    --out 1kg_plots/
 ```
 <details>
 <summary>Example PNG:</summary>

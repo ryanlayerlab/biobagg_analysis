@@ -21,6 +21,7 @@ def get_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--hits', type=str, help='top hits file', required=True)
     parser.add_argument('--trios', type=str, help='trios scores', required=True)
+    parser.add_argument('--summary', type=str, help='summary of population scores', required=True)
     parser.add_argument('--ancestry', type=str, help='population query', required=True)
     parser.add_argument('--ped', type=str, help='pedigree file', required=True)
     parser.add_argument('--out', type=str, help='output file', required=True)
@@ -194,26 +195,96 @@ def write_pop_hits(hits, out_dir):
             f.write('\n')
     f.close()
 
+def read_pop_hits_summary(summary_file):
+    pop_hits = {'AFR': {'subpop': [], 'superpop': [], 'outgroup': []},
+                'AMR': {'subpop': [], 'superpop': [], 'outgroup': []},
+                'EAS': {'subpop': [], 'superpop': [], 'outgroup': []},
+                'EUR': {'subpop': [], 'superpop': [], 'outgroup': []},
+                'SAS': {'subpop': [], 'superpop': [], 'outgroup': []},}
+    f = open(summary_file, 'r')
+    header = f.readline()
+    for line in f:
+        line = line.strip().split(',')
+        superpop = line[0]
+        category = line[1]
+        scores = [float(x) for x in line[2].strip().split()]
+        pop_hits[superpop][category] = scores
+
+    f.close()
+    return pop_hits
+
+
+
+def plot_no_trios_population(pop_hits_dict, out_dir):
+
+    fig, axs = plt.subplots(len(pop_color_dict.keys()), 1, figsize=(7, 13), dpi=150)
+    fig.suptitle('GenoSiS scores in 1KG populationsg', fontsize=20)
+
+    for i, superpop in enumerate(pop_color_dict.keys()):
+        pop_scores = []
+        for j, category in enumerate(pop_hits_dict[superpop].keys()):
+            scores = pop_hits_dict[superpop][category]
+            pop_scores.extend(scores)
+            # plot density plot
+            category_color_dict = {'subpop': pop_color_dict[superpop],
+                                   'superpop': 'gray',
+                                   'outgroup': 'black'}
+            sns.kdeplot(scores, color=category_color_dict[category], ax=axs[i], linewidth=2, fill=True, alpha=0.6)
+
+        # add population title
+        axs[i].set_title(superpop, fontsize=15)
+        # same x range
+        try:
+            max_score = max(max(pop_hits_dict[superpop]['subpop']), max(pop_hits_dict[superpop]['superpop']),
+                            max(pop_hits_dict[superpop]['outgroup']))
+        except ValueError:
+            max_score = max(max(pop_hits_dict[superpop]['subpop']), max(pop_hits_dict[superpop]['superpop']))
+
+        axs[i].set_xlim(0, max_score + 10)
+
+        # format
+        axs[i].spines['top'].set_visible(False)
+        axs[i].spines['right'].set_visible(False)
+        axs[i].set_ylabel('Density')
+        axs[i].set_xlabel('GenoSiS Score')
+
+        # custom legend with boxes and colors
+        legend = ['Subpopulation', 'Superpopulation', 'Outgroup']
+        colors = [pop_color_dict[superpop], 'gray', 'black']
+        handles = [plt.Rectangle((0, 0), 1, 1, color=colors[i], ec="k") for i in range(len(legend))]
+        axs[i].legend(handles, legend, loc='upper right')
+
+    plt.tight_layout()
+    plt.savefig(out_dir + '1KG_pop_distributions.png')
+
+
 def main():
     args = get_args()
     trio_data_prefix = args.trios
+    summary_pop_hits = args.summary
     hits_file = args.hits
     ancestry = args.ancestry
     ped_file = args.ped
     out_dir = args.out
 
-    # plot distribution for trio data, all populations
-    trio_scores = get_trio_scores(trio_data_prefix)
-    plot_trio_all_populations(trio_scores, out_dir)
+    ## WORK WITH TRIO DATA
+    # # plot distribution for trio data, all populations
+    # trio_scores = get_trio_scores(trio_data_prefix)
+    # plot_trio_all_populations(trio_scores, out_dir)
 
+    ## USING OLD CODE BEFORE I WROTE A SUMMARY DATA FILE
     # plot distribution for population data, no trios
-    trio_samples = get_trio_samples(ped_file)
-    print(len(trio_samples))
-    sample_subpop = ancestry_helpers.get_subpopulations(ancestry)
-    SUB_SUPERPOPULATIONS = ancestry_helpers.SUB_SUPERPOPULATIONS
-    hits = read_hits_file(hits_file, trio_samples, sample_subpop, SUB_SUPERPOPULATIONS)
-    write_pop_hits(hits, out_dir)
-    plot_population_distributions(hits, out_dir)
+    # trio_samples = get_trio_samples(ped_file)
+    # print(len(trio_samples))
+    # sample_subpop = ancestry_helpers.get_subpopulations(ancestry)
+    # SUB_SUPERPOPULATIONS = ancestry_helpers.SUB_SUPERPOPULATIONS
+    # hits = read_hits_file(hits_file, trio_samples, sample_subpop, SUB_SUPERPOPULATIONS)
+    # # write_pop_hits(hits, out_dir)
+    # plot_population_distributions(hits, out_dir)
+
+    ## USING SUMMARY DATA FILE
+    pop_hits_dict = read_pop_hits_summary(summary_pop_hits)
+    plot_no_trios_population(pop_hits_dict, out_dir)
 
 
 if __name__ == '__main__':
