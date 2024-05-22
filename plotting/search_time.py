@@ -34,7 +34,7 @@ def main():
 
     fig, ax = plt.subplots(figsize=(args.width, args.height))
 
-    ax.hist(ms, bins=50, color='greenyellow')
+    ax.hist(ms, bins=50, color='olivedrab')
     # remove outliers
     ax.set_xlim(0, 3.5)
 

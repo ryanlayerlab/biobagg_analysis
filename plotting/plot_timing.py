@@ -12,14 +12,14 @@ def get_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--segments', type=str, help='top hits file', required=True)
     parser.add_argument('--times', type=str, help='trios scores', required=True)
-    parser.add_argument('--chrm', type=str, help='output directory', required=True)
     parser.add_argument('--out', type=str, help='output directory', required=True)
 
     return parser.parse_args()
 
 SYSTEM='eureka'
 DATA='CCPM'
-NUM_SAMPLES=100
+NUM_SAMPLES=73346
+#146692
 
 def get_segment_search_times(segment_file):
     read_embeddings_times = []
@@ -63,51 +63,6 @@ def get_segment_search_times(segment_file):
     f.close()
     return read_embeddings_times, loading_index_times, searching_index_times, scoring_times, full_times, sorting_time
 
-
-def get_segment_search_times_OLD(segment_file):
-    all_times = []
-    f = open(segment_file, 'r')
-    header = f.readline()
-    for line in f:
-        if 'config' in line:
-            continue
-        line = line.strip().split(':')
-        time, unit = line[1].split()
-        time = float(time)
-        all_times.append(time)
-
-    f.close()
-    return all_times
-
-def plot_segment_search_times_OLD(all_times, out, chrm):
-    # sns.set(style='whitegrid')
-    fig, ax = plt.subplots(figsize=(10, 6))
-    sns.histplot(all_times, kde=True, ax=ax)
-    num_segments = len(all_times)
-    num_queries = NUM_SAMPLES * 2
-    title = DATA + '-chrm ' + chrm + '\nTIMING BY SEGMENT\n' + SYSTEM
-    ax.set_title(title, fontsize=16, fontweight='bold')
-    ax.set_xlabel('Time\n(seconds)')
-    ax.set_ylabel('Frequency')
-
-    # add text box with data information
-    textstr = '\n'.join((
-        r'$\mathrm{num\ segments}=%.0f$' % (num_segments, ),
-        r'$\mathrm{num\ samples}=%.0f$' % (NUM_SAMPLES, ),
-        r'$\mathrm{num\ queries}=%.0f$' % (num_queries, ),
-        r'$\mathrm{mean}=%.2f$' % (sum(all_times)/len(all_times), ),
-        r'$\mathrm{median}=%.2f$' % (sorted(all_times)[len(all_times)//2], )))
-
-    props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
-    ax.text(0.65, 0.95, textstr, transform=ax.transAxes, fontsize=14,
-            verticalalignment='top', bbox=props)
-
-    ax.spines['top'].set_visible(False)
-    ax.spines['right'].set_visible(False)
-
-    plt.savefig(out + 'segment_search_times.png')
-    plt.close()
-
 def plot_segment_search_times(reading_embeddings_times,
                               loading_index_times,
                               searching_index_times,
@@ -136,7 +91,7 @@ def plot_segment_search_times(reading_embeddings_times,
         scoring_times = [x/num_queries for x in scoring_times]
         full_times = [x/num_queries for x in full_times]
         num_queries = NUM_SAMPLES * 2
-        title = DATA + '-chrm ' + chrm + '\nTIMING BY SAMPLE\n' + SYSTEM
+        title = DATA + '-chrm ' + chrm + '\nTIMING BY QUERY\n' + SYSTEM
         fig.suptitle(title, fontsize=25, fontweight='bold')
         out_file = out + 'chrm' + chrm + '_sample_timing.png'
 
@@ -182,38 +137,118 @@ def plot_segment_search_times(reading_embeddings_times,
     #     for i in range(4):
     #         axs[i].set_xlim(0, max_x )
 
+    # add text box of number of queries and number of segments
+    textstr = 'Number of Queries: ' + str(num_queries) + '\nNumber of Segments: ' + str(num_segments)
+    props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
+    axs[0].text(0.05, 0.95, textstr, transform=axs[0].transAxes, fontsize=14,
+                verticalalignment='top', bbox=props)
+
 
     plt.tight_layout()
     plt.savefig(out_file)
     plt.close()
+
+def plot_outer_loop_timing(full_times,
+                            out,
+                            chrm,
+                            sample):
+    # just plot outer loop (full) times
+    fig, ax = plt.subplots(figsize=(8, 5), dpi=200)
+    title = DATA + '-chrm ' + chrm + '\nTIMING BY SEGMENT\n' + SYSTEM
+    ax.set_title(title, fontsize=25, fontweight='bold')
+    out_file = out + 'chrm' + chrm + '_segment_full_timing.png'
+
+    num_segments = len(full_times)
+    num_queries = NUM_SAMPLES * 2
+
+
+    if sample:
+        full_times = [x / num_queries for x in full_times]
+        title = DATA + '-chrm ' + chrm + '\nTIMING BY QUERY\n' + SYSTEM
+        ax.set_title(title, fontsize=25, fontweight='bold')
+        out_file = out + 'chrm' + chrm + '_sample_full_timing.png'
+
+    sns.histplot(full_times, kde=True, ax=ax)
+    ax.set_xlabel('Time\n(seconds)')
+    ax.set_ylabel('Frequency')
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+
+    textstr = 'Number of Queries: ' + str(num_queries) + '\nNumber of Segments: ' + str(num_segments)
+    props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
+    ax.text(0.55, 0.95, textstr, transform=ax.transAxes, fontsize=14,
+            verticalalignment='top', bbox=props)
+
+    plt.tight_layout()
+    plt.savefig(out_file)
 
 
 def main():
     args = get_args()
     segment_file = args.segments
     times_file = args.times
-    chrm = args.chrm
     out = args.out
 
     # all_times = get_segment_search_times_OLD(segment_file)
     # plot_segment_search_times_OLD(all_times, out, chrm)
 
-    (reading_embeddings_times,
-     loading_index_times,
-     searching_index_times,
-     scoring_times,
-     full_times,
-     sorting_time) = get_segment_search_times(segment_file)
+    read_embeddings_times_list = []
+    loading_index_times_list = []
+    searching_index_times_list = []
+    scoring_times_list = []
+    full_times_list = []
+    sorting_times_list = []
 
-    sample = False
-    plot_segment_search_times(reading_embeddings_times,
-                              loading_index_times,
-                              searching_index_times,
-                              scoring_times,
-                              full_times,
-                              sorting_time,
+    included_chroms = []
+
+    # for all chromosomes, make long list of times
+    for chrom in range(1, 23):
+        try:
+            segment_file = args.segments + 'chrm' + str(chrom) + '_segments.log'
+            (reading_embeddings_times,
+             loading_index_times,
+             searching_index_times,
+             scoring_times,
+             full_times,
+             sorting_time) = get_segment_search_times(segment_file)
+
+            # append to lists
+            read_embeddings_times_list.extend(reading_embeddings_times)
+            loading_index_times_list.extend(loading_index_times)
+            searching_index_times_list.extend(searching_index_times)
+            scoring_times_list.extend(scoring_times)
+            full_times_list.extend(full_times)
+            sorting_times_list.append(sorting_time)
+
+            included_chroms.append(chrom)
+
+        except FileNotFoundError:
+            continue
+
+
+    chrm = str(min(included_chroms)) + '-' + str(max(included_chroms))
+
+
+    plot_segment_search_times(read_embeddings_times_list,
+                              loading_index_times_list,
+                              searching_index_times_list,
+                              scoring_times_list,
+                              full_times_list,
+                              sorting_times_list,
                               out,
-                              chrm, sample)
+                              chrm, False)
+    plot_segment_search_times(read_embeddings_times_list,
+                              loading_index_times_list,
+                              searching_index_times_list,
+                              scoring_times_list,
+                              full_times_list,
+                              sorting_times_list,
+                              out,
+                              chrm, True)
+
+    plot_outer_loop_timing(full_times_list, out, chrm, False)
+    plot_outer_loop_timing(full_times_list, out, chrm, True)
+
 
 
 if __name__ == '__main__':
