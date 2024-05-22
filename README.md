@@ -1,5 +1,21 @@
 # biobagg_analysis
 
+## 1KG population distributions
+Plot 1KG population density plots
+```
+python plotting/plot_d1kg_distributions.py\
+    --trios 1kg_trio_data/GenoSiS_ \
+    --ancestry "data/igsr-1000 genomes 30x on grch38.tsv" \
+    --hits data/1kg_chr1-22_top_hits-100.txt \
+    --ped data/1kg_trios.txt \
+    --out 1kg_trio_plots/1kg_plots
+```
+<details>
+<summary>Example PNG:</summary>
+    ![k=20](1kg_plots/1KG_pop_distributions.png)<br>
+</details>
+
+
 ## GenoSiS v deCODE
 ```
 python plotting/genosis_v_deCODE_smooth_hist.py \
@@ -23,7 +39,7 @@ Label relationships in the 1KG trios data
 ```
 python src/get_relations.py\
     --ped samples.trios\
-    --ancestry samples.ancestry
+    --ancestry data/igsr-1000 genomes 30x on grch38.tsv \
     --pop AFR 
 ```
 Plot GenoSiS scores for the 1KG trios data
