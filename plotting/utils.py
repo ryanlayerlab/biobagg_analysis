@@ -79,7 +79,7 @@ def get_pair_map(file):
                 continue
             a = A[1]
             b = A[3]
-            dist = float(A[11])
+            dist = float(A[9])
 
             if a not in pairs:
                 pairs[a] = {}
