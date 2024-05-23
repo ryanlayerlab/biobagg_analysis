@@ -31,6 +31,21 @@ python plotting/figure2_related.py \
 
 </details>
 
+### Figure 3: Ancestry Data
+```
+python plotting/figure3_ancestry.py \
+    --genosis data/1KG_pop_hits.txt \
+    --dst plink_top_K_data/plink_DST_20_groups.txt \
+    --pihat plink_top_K_data/plink_pihat_20_groups.txt \
+    --kinship plink_top_K_data/plink_kin_20_groups.txt \
+    --png pub_figures/figure3_ancestry.png
+```
+<details>
+  
+![figure3](pub_figures/figure3_ancestry.png)<br>
+
+</details>
+
 ## 1KG population distributions
 Plot 1KG population density plots
 ```
