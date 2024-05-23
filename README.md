@@ -38,11 +38,11 @@ python plotting/figure3_ancestry.py \
     --dst plink_top_K_data/plink_DST_20_groups.txt \
     --pihat plink_top_K_data/plink_pihat_20_groups.txt \
     --kinship plink_top_K_data/plink_kin_20_groups.txt \
-    --png pub_figures/figure3_ancestry.png
+    --png_dist pub_figures/figure3_distribution.png
 ```
 <details>
   
-![figure3](pub_figures/figure3_ancestry.png)<br>
+![figure3](pub_figures/figure3_distribution.png)<br>
 
 </details>
 
