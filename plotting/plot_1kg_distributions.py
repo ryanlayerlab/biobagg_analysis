@@ -4,9 +4,12 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import scipy.stats as stats
 import random
+import pandas as pd
 
-from plotting import ancestry_helpers
-from src import get_relations
+#from plotting import ancestry_helpers
+import ancestry_helpers
+#from ../src import get_relations
+import get_relations
 
 trio_color_dict = {'in_family': '#1E65A6',
                   'out_family': '#DC64B9'}
@@ -221,15 +224,16 @@ def plot_no_trios_population(pop_hits_dict, out_dir):
     fig.suptitle('GenoSiS scores in 1KG populationsg', fontsize=20)
 
     for i, superpop in enumerate(pop_color_dict.keys()):
-        pop_scores = []
-        for j, category in enumerate(pop_hits_dict[superpop].keys()):
-            scores = pop_hits_dict[superpop][category]
-            pop_scores.extend(scores)
-            # plot density plot
-            category_color_dict = {'subpop': pop_color_dict[superpop],
-                                   'superpop': 'gray',
-                                   'outgroup': 'black'}
-            sns.kdeplot(scores, color=category_color_dict[category], ax=axs[i], linewidth=2, fill=True, alpha=0.6)
+
+        D = []
+        for k in ['subpop', 'superpop', 'outgroup']:
+            D.append(pop_hits_dict[superpop][k])
+        sns.kdeplot(D,
+                    ax=axs[i],
+                    linewidth=2,
+                    fill=True,
+                    alpha=0.6,
+                    palette=[pop_color_dict[superpop], 'gray', 'black'])
 
         # add population title
         axs[i].set_title(superpop, fontsize=15)
@@ -240,7 +244,8 @@ def plot_no_trios_population(pop_hits_dict, out_dir):
         except ValueError:
             max_score = max(max(pop_hits_dict[superpop]['subpop']), max(pop_hits_dict[superpop]['superpop']))
 
-        axs[i].set_xlim(0, max_score + 10)
+        #axs[i].set_xlim(0, max_score + 10)
+        axs[i].set_xlim(0, 1500)
 
         # format
         axs[i].spines['top'].set_visible(False)
@@ -251,7 +256,8 @@ def plot_no_trios_population(pop_hits_dict, out_dir):
         # custom legend with boxes and colors
         legend = ['Subpopulation', 'Superpopulation', 'Outgroup']
         colors = [pop_color_dict[superpop], 'gray', 'black']
-        handles = [plt.Rectangle((0, 0), 1, 1, color=colors[i], ec="k") for i in range(len(legend))]
+        handles = [plt.Rectangle((0,0),1,1, color=colors[i], ec="k") for i in range(len(legend))]
+
         axs[i].legend(handles, legend, loc='upper right')
 
     plt.tight_layout()
