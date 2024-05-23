@@ -1,5 +1,36 @@
 # biobagg_analysis
 
+## Publication Figures
+### Figure 1: Workflow
+<details>
+  
+![workflow](pub_figures/horizontal_workflow.001.jpeg)<br>
+
+</details>
+
+### Figure 2: Family Data
+```
+python plotting/figure2_related.py \
+    --decode_genosis data/decode_POP.txt \
+    --decode_ibd data/decode_IBD.txt \
+    --AFR_genosis 1kg_trio_data/GenoSiS_AFR_trio_scores_20.txt \
+    --AMR_genosis 1kg_trio_data/GenoSiS_AMR_trio_scores_20.txt \
+    --EAS_genosis 1kg_trio_data/GenoSiS_EAS_trio_scores_20.txt \
+    --EUR_genosis 1kg_trio_data/GenoSiS_EUR_trio_scores_20.txt \
+    --SAS_genosis 1kg_trio_data/GenoSiS_SAS_trio_scores_20.txt \
+    --AFR_kin 1kg_trio_data/plink_kin_AFR_trio_scores_20.txt \
+    --AMR_kin 1kg_trio_data/plink_kin_AMR_trio_scores_20.txt \
+    --EAS_kin 1kg_trio_data/plink_kin_EAS_trio_scores_20.txt \
+    --EUR_kin 1kg_trio_data/plink_kin_EUR_trio_scores_20.txt \
+    --SAS_kin 1kg_trio_data/plink_kin_SAS_trio_scores_20.txt \
+    --png pub_figures/figure2_family.png
+```
+<details>
+  
+![figure2](pub_figures/figure2_family.png)<br>
+
+</details>
+
 ## 1KG population distributions
 Plot 1KG population density plots
 ```
