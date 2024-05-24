@@ -1,6 +1,8 @@
 import argparse
 from collections import defaultdict
 import matplotlib.pyplot as plt
+from matplotlib.patches import Rectangle
+from matplotlib.colors import LogNorm
 import numpy as np
 import pandas as pd
 import seaborn as sns
@@ -23,9 +25,16 @@ def get_ancestry_colors():
         'AFR': 'darkorange',
         'AMR': 'mediumpurple',
         'EAS': 'deeppink',
-        'EUR': 'steelblue',
+        'EUR': 'dodgerblue',
         'SAS': 'goldenrod'
     }
+    # return {
+    #     'AFR': 'copper',
+    #     'AMR': 'Purples',
+    #     'EAS': 'Reds',
+    #     'EUR': 'Blues',
+    #     'SAS': 'Wistia'
+    # }
 
 def read_subpop_counts(subpop_counts_file):
     '''
@@ -50,44 +59,59 @@ def plot_subpop_counts_heatmatp(subpop_counts,
                                 output_file):
     SUPER_SUBPOPULATIONS = ancestry_helpers.SUPER_SUBPOPULATIONS
     num_subpops = len(subpop_counts)
+    all_subpops = sorted(subpop_counts.keys())
     ordered_subpops = []
+    for superpop in SUPER_SUBPOPULATIONS:
+        subpops = sorted([subpop for subpop in all_subpops if ancestry_helpers.SUB_SUPERPOPULATIONS[subpop] == superpop])
+        ordered_subpops.extend(subpops)
+    colormap = 'Greys'
 
-    # plot should be ordered and colored by superpopulation
     # make a matrix of counts
     index_offset = 0
     counts = np.zeros((num_subpops, num_subpops))
     for superpop in SUPER_SUBPOPULATIONS:
         subpops = sorted([subpop for subpop in subpop_counts if ancestry_helpers.SUB_SUPERPOPULATIONS[subpop] == superpop])
-        ordered_subpops.extend(subpops)
         for i, query_subpop in enumerate(subpops):
-            for j, match_subpop in enumerate(subpops):
-                counts[i+index_offset, j+index_offset] = subpop_counts[query_subpop][match_subpop]
+            for j, match_subpop in enumerate(ordered_subpops):
+                counts[i+index_offset, j] = subpop_counts[query_subpop][match_subpop]
+                ## handle zeros for log
+                if counts[i+index_offset, j] == 0:
+                    counts[i+index_offset, j] = 1
         index_offset += len(subpops)
-
 
     # make a dataframe
     df = pd.DataFrame(counts, index=ordered_subpops, columns=ordered_subpops)
-
-    # # plot
-    # plt.figure(figsize=(10, 10))
-
     # plot
-    plt.figure(figsize=(10, 10), dpi=300)
+    plt.figure(figsize=(18, 15), dpi=300)
     sns.set(font_scale=1.5)
-    sns.heatmap(df, cmap='Greys', annot=False, fmt='g', cbar=True, square=True, xticklabels=True, yticklabels=True)
+    row_colors = [get_ancestry_colors()[ancestry_helpers.SUB_SUPERPOPULATIONS[subpop]] for subpop in ordered_subpops]
+
+    sns.heatmap(df, cmap=colormap, annot=False, cbar=True, square=True,
+                xticklabels=True, yticklabels=True,
+                norm=LogNorm(), cbar_kws={'label': 'GenoSiS Score'})
+
+    # add patches for superpopulations
+    line_offset = 0
+    for i in SUPER_SUBPOPULATIONS:
+        num_subpops = len(SUPER_SUBPOPULATIONS[i])
+        plt.gca().add_patch(Rectangle((line_offset, line_offset), num_subpops, num_subpops,
+                                      edgecolor=get_ancestry_colors()[i],
+                                      facecolor=get_ancestry_colors()[i],
+                                      alpha=0.3, lw=2))
+        line_offset += num_subpops
 
     # draw lines between superpopulations
     line_offset = 0
     for i in SUPER_SUBPOPULATIONS:
         num_subpops = len(SUPER_SUBPOPULATIONS[i])
-        plt.axhline(num_subpops + line_offset, color='black', linewidth=2)
-        plt.axvline(num_subpops + line_offset, color='black', linewidth=2)
+        # plt.axhline(num_subpops + line_offset, color=get_ancestry_colors()[i], linewidth=2)
+        plt.axvline(num_subpops + line_offset, color=get_ancestry_colors()[i], linewidth=2)
         line_offset += num_subpops
 
 
-    plt.xlabel('Match Subpopulation')
-    plt.ylabel('Query Subpopulation')
-    plt.title('Subpopulation Counts')
+    plt.xlabel('Match Subpopulation', fontsize=20)
+    plt.ylabel('Query Subpopulation', fontsize=20)
+    plt.title('Subpopulation Counts', fontsize=40)
     plt.tight_layout()
     plt.savefig(output_file)
 
