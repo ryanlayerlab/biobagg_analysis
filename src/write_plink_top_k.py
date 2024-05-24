@@ -3,8 +3,9 @@ import read_plink as rp
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Writes top K samples and scores from plink files")
-    parser.add_argument("-pg", "--plinkgenome", help="plink genome output file")
-    parser.add_argument("-pk", "--plinkkin", help="plink genome output file")
+    parser.add_argument("-pd", "--plink_dst", help="plink genome output file")
+    parser.add_argument("-pp", "--plink_pihat", help="plink pihat output file")
+    parser.add_argument("-pk", "--plink_kin", help="plink kinship output file")
     parser.add_argument("-k", "--knn", help="top K hits to return", default=20)
     parser.add_argument("-o", "--out", help="output directory")
     return parser.parse_args()
