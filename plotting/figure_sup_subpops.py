@@ -87,8 +87,8 @@ def plot_subpop_counts_heatmatp(subpop_counts,
     row_colors = [get_ancestry_colors()[ancestry_helpers.SUB_SUPERPOPULATIONS[subpop]] for subpop in ordered_subpops]
 
     sns.heatmap(df, cmap=colormap, annot=False, cbar=True, square=True,
-                xticklabels=True, yticklabels=True,
-                norm=LogNorm(), cbar_kws={'label': 'GenoSiS Score'})
+                xticklabels=False, yticklabels=False,
+                norm=LogNorm(), cbar_kws={'label': 'Cohort Counts'})
 
     # add patches for superpopulations
     line_offset = 0
@@ -97,21 +97,52 @@ def plot_subpop_counts_heatmatp(subpop_counts,
         plt.gca().add_patch(Rectangle((line_offset, line_offset), num_subpops, num_subpops,
                                       edgecolor=get_ancestry_colors()[i],
                                       facecolor=get_ancestry_colors()[i],
-                                      alpha=0.3, lw=2))
+                                      alpha=0.3, lw=5))
         line_offset += num_subpops
+
+    # add xtick labels and color by superpopulation
+    xtick_labels = []
+    ytick_labels = []
+    xtick_positions = []
+    ytick_positions = []
+    tick_offset = 0
+    x_i = 0
+    y_i = 0
+    for i in SUPER_SUBPOPULATIONS:
+        num_subpops = len(SUPER_SUBPOPULATIONS[i])
+        xtick_labels.extend([subpop for subpop in ordered_subpops[tick_offset:tick_offset+num_subpops]])
+        ytick_labels.append(i)
+        xtick_positions.extend(range(x_i, x_i + num_subpops))
+        ytick_positions.append(tick_offset + num_subpops//2)
+        x_i += num_subpops
+        tick_offset += num_subpops
+    plt.xticks(xtick_positions, xtick_labels,
+               rotation=90, fontsize=25)
+    for tick in plt.gca().get_xticklabels():
+        tick.set_color(get_ancestry_colors()[ancestry_helpers.SUB_SUPERPOPULATIONS[tick.get_text()]])
+
+
+    plt.yticks(ytick_positions, ytick_labels,
+               rotation=90, fontsize=30, fontweight='bold',
+               va='center')
+    for tick in plt.gca().get_yticklabels():
+        tick.set_color(get_ancestry_colors()[tick.get_text()])
+
 
     # draw lines between superpopulations
     line_offset = 0
     for i in SUPER_SUBPOPULATIONS:
         num_subpops = len(SUPER_SUBPOPULATIONS[i])
-        # plt.axhline(num_subpops + line_offset, color=get_ancestry_colors()[i], linewidth=2)
-        plt.axvline(num_subpops + line_offset, color=get_ancestry_colors()[i], linewidth=2)
+        plt.axhline(num_subpops + line_offset, color='black', linewidth=2)
+        plt.axvline(num_subpops + line_offset, color='black', linewidth=2)
         line_offset += num_subpops
 
 
-    plt.xlabel('Match Subpopulation', fontsize=20)
-    plt.ylabel('Query Subpopulation', fontsize=20)
-    plt.title('Subpopulation Counts', fontsize=40)
+    plt.xlabel('Match Population', fontsize=40)
+    plt.ylabel('Query Population', fontsize=40)
+    plt.title('Total Counts for\nSubpopulation Cohorts', fontsize=50)
+    # move plot to make room for title
+    plt.subplots_adjust(top=0.9, bottom=0.2, right=0.9, left=0.1)
     plt.tight_layout()
     plt.savefig(output_file)
 
