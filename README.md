@@ -34,15 +34,24 @@ python plotting/figure2_related.py \
 ### Figure 3: Ancestry Data
 ```
 python plotting/figure3_ancestry.py \
-    --genosis data/1KG_pop_hits.txt \
-    --dst plink_top_K_data/plink_DST_20_groups.txt \
-    --pihat plink_top_K_data/plink_pihat_20_groups.txt \
-    --kinship plink_top_K_data/plink_kin_20_groups.txt \
-    --png_dist pub_figures/figure3_distribution.png
+    --ancestry data/igsr-1000 genomes 30x on grch38.tsv \
+    --k 20 \
+    --genosis_groups data/1KG_pop_hits.txt \
+    --genosis_k data/TOP_HITS_20.txt \
+    --dst_groups plink_top_K_data/plink_DST_20_groups.txt \
+    --pihat_groups plink_top_K_data/plink_pihat_20_groups.txt \
+    --kinship_groups plink_top_K_data/plink_kin_20_groups.txt \
+    --dst_k plink_top_K_data/plink_DST_top_20.txt \
+    --pihat_k plink_top_K_data/plink_pihat_top_20.txt \
+    --kinship_k plink_top_K_data/plink_kin_top_20.txt \
+    --png_dist pub_figures/figure3_distribution.png \
+    --png_k pub_figures/figure3_topk.png
 ```
 <details>
   
-![figure3](pub_figures/figure3_distribution.png)<br>
+![figure3_distribution](pub_figures/figure3_distribution.png)<br>
+![figure3_topK](pub_figures/figure3_topk.png)<br>
+
 
 </details>
 
