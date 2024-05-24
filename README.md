@@ -55,6 +55,21 @@ python plotting/figure3_ancestry.py \
 
 </details>
 
+### SUPPLEMENTAL
+#### Figure S1: Cohort Counts by Subpopulation
+```
+python plotting/figure_sup_subpops.py \
+    --ancestry data/igsr-1000 genomes 30x on grch38.tsv \
+    --k 20 \
+    --genosis data/genosis_subpop_counts.tsv \
+    --png pub_figures/supplement_subpop.png
+```
+<details>
+  
+![supp1_subpop_cohorts](pub_figures/supplement_subpop.png)<br>
+
+</details>
+
 ## 1KG population distributions
 Plot 1KG population density plots
 ```
