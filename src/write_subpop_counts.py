@@ -30,6 +30,7 @@ def get_subpop_counts(top_k_file,
         query = line[0]
         matches = line[1:]
         query_subpopulation = subpopulations[query]
+        query_dict = {}
         for match_score in matches:
             match = match_score.split(',')[0]
             # ignore self match
