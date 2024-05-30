@@ -11,18 +11,18 @@
 ### Figure 2: Family Data
 ```
 python plotting/figure2_related.py \
-    --decode_genosis data/decode_POP.txt \
-    --decode_ibd data/decode_IBD.txt \
-    --AFR_genosis 1kg_trio_data/GenoSiS_AFR_trio_scores_20.txt \
-    --AMR_genosis 1kg_trio_data/GenoSiS_AMR_trio_scores_20.txt \
-    --EAS_genosis 1kg_trio_data/GenoSiS_EAS_trio_scores_20.txt \
-    --EUR_genosis 1kg_trio_data/GenoSiS_EUR_trio_scores_20.txt \
-    --SAS_genosis 1kg_trio_data/GenoSiS_SAS_trio_scores_20.txt \
-    --AFR_kin 1kg_trio_data/plink_kin_AFR_trio_scores_20.txt \
-    --AMR_kin 1kg_trio_data/plink_kin_AMR_trio_scores_20.txt \
-    --EAS_kin 1kg_trio_data/plink_kin_EAS_trio_scores_20.txt \
-    --EUR_kin 1kg_trio_data/plink_kin_EUR_trio_scores_20.txt \
-    --SAS_kin 1kg_trio_data/plink_kin_SAS_trio_scores_20.txt \
+    --decode_genosis data/decode/decode_POP.txt \
+    --decode_ibd data/decode/decode_IBD.txt \
+    --AFR_genosis data/1kg_trio_data/GenoSiS_AFR_trio_scores_20.txt \
+    --AMR_genosis data/1kg_trio_data/GenoSiS_AMR_trio_scores_20.txt \
+    --EAS_genosis data/1kg_trio_data/GenoSiS_EAS_trio_scores_20.txt \
+    --EUR_genosis data/1kg_trio_data/GenoSiS_EUR_trio_scores_20.txt \
+    --SAS_genosis data/1kg_trio_data/GenoSiS_SAS_trio_scores_20.txt \
+    --AFR_kin data/1kg_trio_data/plink_kin_AFR_trio_scores_20.txt \
+    --AMR_kin data/1kg_trio_data/plink_kin_AMR_trio_scores_20.txt \
+    --EAS_kin data/1kg_trio_data/plink_kin_EAS_trio_scores_20.txt \
+    --EUR_kin data/1kg_trio_data/plink_kin_EUR_trio_scores_20.txt \
+    --SAS_kin data/1kg_trio_data/plink_kin_SAS_trio_scores_20.txt \
     --png pub_figures/figure2_family.png
 ```
 <details>
@@ -34,16 +34,16 @@ python plotting/figure2_related.py \
 ### Figure 3: Ancestry Data
 ```
 python plotting/figure3_ancestry.py \
-    --ancestry data/igsr-1000 genomes 30x on grch38.tsv \
+    --ancestry data/1kg_info/1kg_ancestry.tsv \
     --k 20 \
     --genosis_groups data/1KG_pop_hits.txt \
     --genosis_k data/TOP_HITS_20.txt \
-    --dst_groups plink_top_K_data/plink_DST_20_groups.txt \
-    --pihat_groups plink_top_K_data/plink_pihat_20_groups.txt \
-    --kinship_groups plink_top_K_data/plink_kin_20_groups.txt \
-    --dst_k plink_top_K_data/plink_DST_top_20.txt \
-    --pihat_k plink_top_K_data/plink_pihat_top_20.txt \
-    --kinship_k plink_top_K_data/plink_kin_top_20.txt \
+    --dst_groups data/1kg_plink_topK/plink_DST_20_groups.txt \
+    --pihat_groups data/1kg_plink_topK/plink_pihat_20_groups.txt \
+    --kinship_groups data/1kg_plink_topK/plink_kin_20_groups.txt \
+    --dst_k data/1kg_plink_topK/plink_DST_top_20.txt \
+    --pihat_k data/1kg_plink_topK/plink_pihat_top_20.txt \
+    --kinship_k data/1kg_plink_topK/plink_kin_top_20.txt \
     --png_dist pub_figures/figure3_distribution.png \
     --png_k pub_figures/figure3_topk.png
 ```
@@ -57,7 +57,7 @@ python plotting/figure3_ancestry.py \
 ### Figure 5: Cohort Quality
 ```
 python plotting/figure3_ancestry.py \
-    --ancestry data/igsr-1000 genomes 30x on grch38.tsv \
+    --ancestry data/1kg_info/1kg_ancestry.tsv \
     --k 20 \
     --quality_dir quality_data/ \
     --png pub_figures/quality
@@ -72,10 +72,13 @@ python plotting/figure3_ancestry.py \
 #### Figure S1: Cohort Counts by Subpopulation
 ```
 python plotting/figure_sup_subpops.py \
-    --ancestry data/igsr-1000 genomes 30x on grch38.tsv \
+    --ancestry data/1kg_info/1kg_ancestry.tsv \
     --k 20 \
-    --genosis data/genosis_subpop_counts.tsv \
-    --png pub_figures/supplement_subpop.png
+    --genosis data/subpop_counts/genosis_subpop_counts.tsv
+    --dst data/subpop_counts/dst_subpop_counts.tsv
+    --pihat data/subpop_counts/pihat_subpop_counts.tsv
+    --kin data/subpop_counts/kinship_subpop_counts.tsv
+    --png pub_figures/
 ```
 <details>
 
@@ -85,20 +88,22 @@ python plotting/figure_sup_subpops.py \
  plink dst   | ![dst-subpop-heatmap](pub_figures/supplement_subpop_dst.png)         |
  plink pi-hat   | ![pi-hat-subpop-heatmap](pub_figures/supplement_subpop_pihat.png)    | 
  plink2 kinship   | ![kinship-subpop-heatmap](pub_figures/supplement_subpop_kinship.png) |
-  
-![supp1_subpop_cohorts](pub_figures/supplement_subpop.png)<br>
 
 </details>
+
+--------------------------------------------
+_!! **I have done some reorganizing of the data files, so paths might be wrong below** !!_
+
 
 ## 1KG population distributions
 Plot 1KG population density plots
 ```
 python plotting/plot_d1kg_distributions.py\
     --trios 1kg_trio_data/GenoSiS_ \
-    --ancestry "data/igsr-1000 genomes 30x on grch38.tsv" \
+    --ancestry data/1kg_info/1kg_ancestry.tsv \
     --summary data/1KG_pop_hits.txt \
     --hits data/1kg_chr1-22_top_hits-100.txt \
-    --ped data/1kg_trios.txt \
+    --ped data/1kg_info/1kg_trios.txt \
     --out 1kg_plots/
 ```
 
@@ -133,29 +138,29 @@ Label relationships in the 1KG trios data
 ```
 python src/get_relations.py\
     --ped samples.trios\
-    --ancestry data/igsr-1000 genomes 30x on grch38.tsv \
+    --ancestry data/1kg_info/1kg_ancestry.tsv \
     --pop AFR 
 ```
 Plot GenoSiS scores for the 1KG trios data
 ```
 python plotting/plot_1kg_trios.py \
-    --ped data/1kg_trios.txt \
+    --ped data/1kg_info/1kg_trios.txt \
     --hits data/1kg_chr1-22_top_hits-100.txt \
-    --dist data/1KG_trios \
+    --dist data/1kg_info/1kg_trios \
     --pop AFR \
-    --ancestry data/igsr-1000 genomes 30x on grch38.tsv \
+    --ancestry data/1kg_info/1kg_ancestry.tsv \
     --color darkorange 
 ```
 <details>
 <summary>Example PNG:</summary>
 
-| Pop. | k=100                                                   | k=20                                                 | plink pi-hat                                         |
-|------|---------------------------------------------------------|------------------------------------------------------|------------------------------------------------------|
-AFR | ![AFR_k=100](1kg_trio_plots/1KG_trios_AFR_100of100.png) | ![AFR_k=20](1kg_trio_plots/1KG_trios_AFR_20of20.png) | ![AFR_pihat](1kg_trio_plots/1KG_trios_plink_AFR.png) |
-AMR | ![AMR_k=100](1kg_trio_plots/1KG_trios_AMR_100of100.png) | ![AMR_k=20](1kg_trio_plots/1KG_trios_AMR_20of20.png) | ![AMR_pihat](1kg_trio_plots/1KG_trios_plink_AMR.png) |
-EAS | ![EAS_k=100](1kg_trio_plots/1KG_trios_EAS_100of100.png) | ![EAS_k=20](1kg_trio_plots/1KG_trios_EAS_20of20.png) | ![EAS_pihat](1kg_trio_plots/1KG_trios_plink_EAS.png) |
-EUR | ![EUR_k=100](1kg_trio_plots/1KG_trios_EUR_100of100.png) | ![EUR_k=20](1kg_trio_plots/1KG_trios_EUR_20of20.png) | ![EUR_pihat](1kg_trio_plots/1KG_trios_plink_EUR.png) |
-SAS | ![SAS_k=100](1kg_trio_plots/1KG_trios_SAS_100of100.png) | ![SAS_k=20](1kg_trio_plots/1KG_trios_SAS_20of20.png) | ![SAS_pihat](1kg_trio_plots/1KG_trios_plink_SAS.png) |
+| Pop. | k=20                                                    | plink pi-hat                                         |
+|------|---------------------------------------------------------|------------------------------------------------------|
+AFR |  ![AFR_k=20](1kg_trio_plots/1KG_trios_AFR_20of20.png) | ![AFR_pihat](1kg_trio_plots/1KG_trios_plink_AFR.png) |
+AMR |  ![AMR_k=20](1kg_trio_plots/1KG_trios_AMR_20of20.png) | ![AMR_pihat](1kg_trio_plots/1KG_trios_plink_AMR.png) |
+EAS | ![EAS_k=20](1kg_trio_plots/1KG_trios_EAS_20of20.png) | ![EAS_pihat](1kg_trio_plots/1KG_trios_plink_EAS.png) |
+EUR |  ![EUR_k=20](1kg_trio_plots/1KG_trios_EUR_20of20.png) | ![EUR_pihat](1kg_trio_plots/1KG_trios_plink_EUR.png) |
+SAS |  ![SAS_k=20](1kg_trio_plots/1KG_trios_SAS_20of20.png) | ![SAS_pihat](1kg_trio_plots/1KG_trios_plink_SAS.png) |
 
 </details>
 
@@ -167,7 +172,7 @@ python src/compare_genosis_plink.py \
     --plinkgenome data/plink-genome.genome \
     --plinkkin data/plink2.kin0 \
     --top_k 20 \
-    --ancestry data/igsr-1000 genomes 30x on grch38.tsv 
+    --ancestry data/1kg_info/1kg_ancestry.tsv 
     --pop AFR \
     --color darkorange 
 ```
@@ -419,7 +424,7 @@ Arguments:
 ```
 python plotting/top_hits_umap.py \
   --in_file data/1kg_chr1-22_top_hits.txt \
-  --label_file data/igsr-1000\ genomes\ 30x\ on\ grch38.tsv \
+  --label_file data/1kg_info/1kg_ancestry.tsv \
   --out_file doc/top_hit_umap.png
 ```
 
@@ -434,7 +439,7 @@ python plotting/top_hits_umap.py \
 ```
 python plotting/top_hits_pca.py \
   --in_file data/1kg_chr1-22_top_hits-100.txt \
-  --label_file data/igsr-1000\ genomes\ 30x\ on\ grch38.tsv \
+  --label_file data/1kg_info/1kg_ancestry.tsv \
   --out_file doc/top_hit_pca.png
 ```
 
@@ -535,7 +540,7 @@ Look at the similarity score distributions for different groups using different 
 python plotting/plot_distros.py \
     --topk_file data/1kg_chr1-22_top_hits-100.txt \
     --pairs_file data/plink2.kin.pairs.txt \
-    --label_file data/igsr-1000\ genomes\ 30x\ on\ grch38.tsv \
+    --label_file data/1kg_info/1kg_ancestry.tsv \
     --out_file doc/distros_plink2-kin.png \
     --width 2 \
     --height 3 \
@@ -548,7 +553,7 @@ python plotting/plot_distros.py \
 python plotting/plot_distros.py \
     --topk_file data/1kg_chr1-22_top_hits-100.txt \
     --pairs_file data/plink-genome.pairs.txt \
-    --label_file data/igsr-1000\ genomes\ 30x\ on\ grch38.tsv \
+    --label_file data/1kg_info/1kg_ancestry.tsv \
     --out_file doc/distros_plink-genome.png \
     --width 2 \
     --height 3 \
@@ -561,7 +566,7 @@ python plotting/plot_distros.py \
 python plotting/plot_distros.py \
     --topk_file data/1kg_chr1-22_top_hits-100.txt \
     --pairs_file data/iLASH.pairs.txt \
-    --label_file data/igsr-1000\ genomes\ 30x\ on\ grch38.tsv \
+    --label_file data/1kg_info/1kg_ancestry.tsv \
     --out_file doc/distros_iLASH.png \
     --width 2 \
     --height 3 \
@@ -591,7 +596,7 @@ And as violin plots
 python plotting/plot_distro_as_violins.py \
     --topk data/1kg_chr1-22_top_hits.txt \
     --pairs_file data/plink-genome.pairs.txt \
-    --label_file data/igsr-1000\ genomes\ 30x\ on\ grch38.tsv \
+    --label_file data/1kg_info/1kg_ancestry.tsv \
     --out_file doc/distros_plink-genome.violin.png \
     --height 2 \
     --width 8 \
@@ -600,7 +605,7 @@ python plotting/plot_distro_as_violins.py \
 python plotting/plot_distro_as_violins.py \
     --topk data/1kg_chr1-22_top_hits.txt \
     --pairs_file data/plink2.kin.pairs.txt \
-    --label_file data/igsr-1000\ genomes\ 30x\ on\ grch38.tsv \
+    --label_file data/1kg_info/1kg_ancestry.tsv \
     --out_file doc/distros_plink2-kin.violin.png \
     --height 2 \
     --width 8 \
@@ -626,7 +631,7 @@ python plotting/plot_distro_as_violins.py \
 ```
 plot_ranks.py \
     --topk_file data/1kg_chr1-22_top_hits.txt \
-    --label_file data/igsr-1000\ genomes\ 30x\ on\ grch38.tsv \
+    --label_file data/1kg_info/1kg_ancestry.tsv \
     --pairs_file data/plink2.kin.pairs.txt \
     --out_file doc/ranks_plink2-kin.png \
     --height 2 \
@@ -635,7 +640,7 @@ plot_ranks.py \
 
 ~/src/biobagg_analysis$ python plotting/plot_ranks.py \
     --topk_file data/1kg_chr1-22_top_hits.txt \
-    --label_file data/igsr-1000\ genomes\ 30x\ on\ grch38.tsv \
+    --label_file data/1kg_info/1kg_ancestry.tsv \
     --pairs_file data/plink-genome.pairs.txt \
     --out_file doc/ranks_plink-genome.png \
     --height 2 \
@@ -660,7 +665,7 @@ plot_ranks.py \
 ```
 python plotting/plot_topk_score_distro.py \
     --topk_file data/1kg_chr1-22_top_hits.txt \
-    --label_file data/igsr-1000\ genomes\ 30x\ on\ grch38.tsv \
+    --label_file data/1kg_info/1kg_ancestry.tsv \
     --out_file doc/topk_score_distro.png  \
     --height 2 \
     --width 8 \
@@ -669,7 +674,7 @@ python plotting/plot_topk_score_distro.py \
 
 python plotting/plot_topk_score_distro.py \
     --topk_file data/1kg_chr1-22_top_hits.txt \
-    --label_file data/igsr-1000\ genomes\ 30x\ on\ grch38.tsv \
+    --label_file data/1kg_info/1kg_ancestry.tsv \
     --out_file doc/topk_score_distro.log.png  \
     --height 2 \
     --width 8 \
@@ -771,7 +776,7 @@ python plotting/query_result.py \
     --chrm 18 \
     --target HG00096 \
     --out_file doc/HG00096_labels.png \
-    --label_file data/igsr-1000\ genomes\ 30x\ on\ grch38.tsv
+    --label_file data/1kg_info/1kg_ancestry.tsv
 
 python plotting/query_result.py \
     --svs_results data/svs_results_chrm18.HG00096.bed.gz \
