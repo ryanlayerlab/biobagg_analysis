@@ -16,6 +16,9 @@ def parse_args():
     parser.add_argument('--ancestry', help='1KG ancestry labels', required=True)
     parser.add_argument('--k', help='k used for knn', required=True)
     parser.add_argument('--genosis', type=str, required=True, help='Path to genosis cohort file')
+    parser.add_argument('--dst', type=str, required=True, help='Path to plink dst top 20 file')
+    parser.add_argument('--pihat', type=str, required=True, help='Path to plink pi-hat top 20 file')
+    parser.add_argument('--kinship', type=str, required=True, help='Path to plink kinship top 20 file')
     parser.add_argument('--png', help='Output png file with top k percents', required=True)
 
     return parser.parse_args()
@@ -67,7 +70,8 @@ def read_subpop_counts(subpop_counts_file):
 
 def plot_subpop_counts_heatmatp(subpop_counts,
                                 subpopulation_number_samples,
-                                output_file):
+                                output_file,
+                                plink=False):
     SUPER_SUBPOPULATIONS = ancestry_helpers.SUPER_SUBPOPULATIONS
     num_subpops = len(subpop_counts)
     all_subpops = sorted(subpop_counts.keys())
@@ -85,12 +89,13 @@ def plot_subpop_counts_heatmatp(subpop_counts,
         for i, query_subpop in enumerate(subpops):
             for j, match_subpop in enumerate(ordered_subpops):
                 counts[i+index_offset, j] = subpop_counts[query_subpop][match_subpop]
-                ## handle zeros for log
-                if counts[i+index_offset, j] == 0:
-                    counts[i+index_offset, j] = 1
+                if not plink:
+                    ## handle zeros for log
+                    if counts[i+index_offset, j] == 0:
+                        counts[i+index_offset, j] = 1
 
-                # normalize by size of subpopulation
-                counts[i+index_offset, j] /= subpopulation_number_samples[query_subpop]
+                # # normalize by size of subpopulation
+                # counts[i+index_offset, j] /= subpopulation_number_samples[query_subpop]
             print(query_subpop, subpopulation_number_samples[query_subpop])
 
         index_offset += len(subpops)
@@ -102,10 +107,17 @@ def plot_subpop_counts_heatmatp(subpop_counts,
     sns.set(font_scale=1.5)
     row_colors = [get_ancestry_colors()[ancestry_helpers.SUB_SUPERPOPULATIONS[subpop]] for subpop in ordered_subpops]
 
-    sns.heatmap(df, cmap=colormap, annot=False, cbar=True, square=True,
+    # log scale
+    if not plink:
+        sns.heatmap(df, cmap=colormap, annot=False, cbar=True, square=True,
                 xticklabels=False, yticklabels=False,
                 norm=LogNorm(),
                 cbar_kws={'label': 'Cohort Counts'})
+    else:
+        sns.heatmap(df, cmap=colormap, annot=False, cbar=True, square=True,
+                xticklabels=False, yticklabels=False,
+                cbar_kws={'label': 'Cohort Counts'})
+
     # with log, add this to heatmatp plot above
     # norm = LogNorm()
 
@@ -167,13 +179,31 @@ def plot_subpop_counts_heatmatp(subpop_counts,
 def main():
     args = parse_args()
 
-    genosis_subpop_counts = read_subpop_counts(args.genosis)
-
     subpopulation_number_samples = get_subpop_number_samples(args.ancestry)
 
+    genosis_subpop_counts = read_subpop_counts(args.genosis)
     plot_subpop_counts_heatmatp(genosis_subpop_counts,
                                 subpopulation_number_samples,
-                                args.png)
+                                args.png + 'supplement_subpop_genosis.png')
+
+    dst_subpop_counts = read_subpop_counts(args.dst)
+    plot_subpop_counts_heatmatp(dst_subpop_counts,
+                                subpopulation_number_samples,
+                                args.png + 'supplement_subpop_dst.png',
+                                plink=True)
+
+    pihat_subpop_counts = read_subpop_counts(args.pihat)
+    plot_subpop_counts_heatmatp(pihat_subpop_counts,
+                                subpopulation_number_samples,
+                                args.png + 'supplement_subpop_pihat.png',
+                                plink=True)
+
+    kinship_subpop_counts = read_subpop_counts(args.kinship)
+    plot_subpop_counts_heatmatp(kinship_subpop_counts,
+                                subpopulation_number_samples,
+                                args.png + 'supplement_subpop_kinship.png',
+                                plink=True)
+
 
 
 if __name__ == '__main__':

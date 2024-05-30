@@ -8,6 +8,9 @@ def parse_args():
     parser = argparse.ArgumentParser(description='Write subpopulation counts to file')
     parser.add_argument('--ancestry', help='1KG ancestry labels', required=True)
     parser.add_argument('--genosis', type=str, required=True, help='Path to genosis cohort file')
+    parser.add_argument('--dst', type=str, required=True, help='Path to plink dst top 20 file')
+    parser.add_argument('--pihat', type=str, required=True, help='Path to plink pi-hat top 20 file')
+    parser.add_argument('--kinship', type=str, required=True, help='Path to plink kinship top 20 file')
     parser.add_argument('--output_dir', type=str, required=True, help='Path to output directory')
     return parser.parse_args()
 
@@ -67,9 +70,22 @@ def main():
     args = parse_args()
 
     subpopulations = ancestry_helpers.get_subpopulations(args.ancestry)
+
     genosis_subpop_counts = get_subpop_counts(args.genosis, subpopulations, header=False)
-    output_file = args.output_dir + 'genosis_subpop_counts.tsv'
-    write_subpop_counts(genosis_subpop_counts, output_file)
+    genosis_output = args.output_dir + 'genosis_subpop_counts.tsv'
+    write_subpop_counts(genosis_subpop_counts, genosis_output)
+
+    dst_subpop_counts = get_subpop_counts(args.dst, subpopulations)
+    dst_output = args.output_dir + 'dst_subpop_counts.tsv'
+    write_subpop_counts(dst_subpop_counts, dst_output)
+
+    pihat_subpop_counts = get_subpop_counts(args.pihat, subpopulations)
+    pihat_output = args.output_dir + 'pihat_subpop_counts.tsv'
+    write_subpop_counts(pihat_subpop_counts, pihat_output)
+
+    kinship_subpop_counts = get_subpop_counts(args.kinship, subpopulations)
+    kinship_output = args.output_dir + 'kinship_subpop_counts.tsv'
+    write_subpop_counts(kinship_subpop_counts, kinship_output)
 
 
 if __name__ == '__main__':
