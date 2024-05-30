@@ -1,34 +1,24 @@
 import argparse
 from collections import defaultdict
 import matplotlib.pyplot as plt
-from matplotlib.patches import Rectangle
-from matplotlib.colors import LogNorm
-import numpy as np
-import pandas as pd
-import seaborn as sns
-from scipy.stats import ks_2samp
-from scipy.stats import norm
+import os
+import sys
 
-import plotting.ancestry_helpers as ancestry_helpers
+sys.path.append(os.path.abspath('plotting/'))
+import ancestry_helpers
 
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--ancestry', help='1KG ancestry labels', required=True)
     parser.add_argument('--k', help='k used for knn', required=True)
+    parser.add_argument('--colors', help='file with color codes', required=True)
+    # INPUT DIR
     parser.add_argument('--quality_dir', type=str, required=True,
                         help='Path to directory of quality experiments')
-    parser.add_argument('--png', help='Output png file with top k percents', required=True)
+    # OUTPUT
+    parser.add_argument('--png_hist', help='Output png firl for histogram', required=True)
 
     return parser.parse_args()
-
-def get_ancestry_colors():
-    return {
-        'AFR': 'darkorange',
-        'AMR': 'mediumpurple',
-        'EAS': 'deeppink',
-        'EUR': 'dodgerblue',
-        'SAS': 'goldenrod'
-    }
 
 def read_quality_results(query_pop_file):
     '''
@@ -70,6 +60,7 @@ def plot_quality_results_histogram(AFR_quality_scores,
                                    # EAS_quality_scores,
                                    EUR_quality_scores,
                                    SAS_quality_scores,
+                                   colors,
                                    png):
     SUPER_SUBPOPULATIONS = ancestry_helpers.SUPER_SUBPOPULATIONS
 
@@ -77,18 +68,16 @@ def plot_quality_results_histogram(AFR_quality_scores,
                            figsize=(20, 15), dpi=300,
                            sharex=True, sharey=True)
 
-    ancestry_colors = get_ancestry_colors()
-
     # African query is first column
     ax[0, 0].set_title('AFR Query', fontsize=20)
     for i, database_population in enumerate(AFR_quality_scores.keys()):
         database_scores = []
         for j, database_subpopulation in enumerate(AFR_quality_scores[database_population].keys()):
             database_scores.extend(AFR_quality_scores[database_population][database_subpopulation])
-        ax[i, 0].hist(database_scores, bins=50, color=ancestry_colors[database_population], alpha=0.5)
+        ax[i, 0].hist(database_scores, bins=50, color=colors[database_population], alpha=0.5)
         # set y-axis label
         ax[i, 0].set_ylabel(database_population + '\nDatabase',
-                            fontsize=25, color=ancestry_colors[database_population],
+                            fontsize=25, color=colors[database_population],
                             fontweight='bold', labelpad=40)
         # set x-axis label
         ax[3, i].set_xlabel('GenoSiS Score', fontsize=20, labelpad=20)
@@ -104,7 +93,7 @@ def plot_quality_results_histogram(AFR_quality_scores,
         database_scores = []
         for j, database_subpopulation in enumerate(AMR_quality_scores[database_population].keys()):
             database_scores.extend(AMR_quality_scores[database_population][database_subpopulation])
-        ax[i, 1].hist(database_scores, bins=50, color=ancestry_colors[database_population], alpha=0.5)
+        ax[i, 1].hist(database_scores, bins=50, color=colors[database_population], alpha=0.5)
         # set x-axis label
         ax[3, i].set_xlabel('GenoSiS Score', fontsize=20, labelpad=20)
 
@@ -123,7 +112,7 @@ def plot_quality_results_histogram(AFR_quality_scores,
         database_scores = []
         for j, database_subpopulation in enumerate(EUR_quality_scores[database_population].keys()):
             database_scores.extend(EUR_quality_scores[database_population][database_subpopulation])
-        ax[i, 2].hist(database_scores, bins=50, color=ancestry_colors[database_population], alpha=0.5)
+        ax[i, 2].hist(database_scores, bins=50, color=colors[database_population], alpha=0.5)
         # set x-axis label
         ax[3, i].set_xlabel('GenoSiS Score', fontsize=20, labelpad=20)
 
@@ -133,7 +122,7 @@ def plot_quality_results_histogram(AFR_quality_scores,
         database_scores = []
         for j, database_subpopulation in enumerate(SAS_quality_scores[database_population].keys()):
             database_scores.extend(SAS_quality_scores[database_population][database_subpopulation])
-        ax[i, 3].hist(database_scores, bins=50, color=ancestry_colors[database_population], alpha=0.5)
+        ax[i, 3].hist(database_scores, bins=50, color=colors[database_population], alpha=0.5)
         # set x-axis label
         ax[3, i].set_xlabel('GenoSiS\nScore', fontsize=20, labelpad=20)
 
@@ -161,7 +150,7 @@ def main():
     ancestry_file = args.ancestry
     k = args.k
     quality_dir = args.quality_dir
-    out_png = args.png
+    colors = ancestry_helpers.get_colors(args.colors)
 
     AFR_quality_scores = read_quality_results(quality_dir + 'AFR.txt')
     AMR_quality_scores = read_quality_results(quality_dir + 'AMR.txt')
@@ -175,6 +164,7 @@ def main():
     #                              EAS_quality_scores,
     #                              EUR_quality_scores,
     #                              SAS_quality_scores,
+    #                              colors,
     #                              out_png + '_heatmap.png')
 
 
@@ -183,7 +173,8 @@ def main():
                                    # EAS_quality_scores,
                                    EUR_quality_scores,
                                    SAS_quality_scores,
-                                   out_png + '_histogram.png')
+                                   colors,
+                                   args.png_hist)
 
 
 
