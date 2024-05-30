@@ -1,3 +1,19 @@
+# local files
+example_quality/
+.DS_Store
+.idea/
+data/AFR_query/
+data/AMR_query/
+data/EAS_query/
+data/EUR_query/
+data/SAS_query/
+data/ccpm_data/
+1kg_times/
+data/plink-genome.genome
+data/plink-genome.top_20.txt
+data/plink2.kin0
+data/population.txt
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
