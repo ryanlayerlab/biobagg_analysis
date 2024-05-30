@@ -1,6 +1,11 @@
 # biobagg_analysis
 
 ## Publication Figures
+To generate all figures, run:
+```
+bash pubfigures/generate_all_figures.sh
+```
+
 ### Figure 1: Workflow
 <details>
   
@@ -11,6 +16,7 @@
 ### Figure 2: Family Data
 ```
 python plotting/figure2_related.py \
+    --colors pub_figures/colors.txt \
     --decode_genosis data/decode/decode_POP.txt \
     --decode_ibd data/decode/decode_IBD.txt \
     --AFR_genosis data/1kg_trio_data/GenoSiS_AFR_trio_scores_20.txt \
@@ -18,6 +24,16 @@ python plotting/figure2_related.py \
     --EAS_genosis data/1kg_trio_data/GenoSiS_EAS_trio_scores_20.txt \
     --EUR_genosis data/1kg_trio_data/GenoSiS_EUR_trio_scores_20.txt \
     --SAS_genosis data/1kg_trio_data/GenoSiS_SAS_trio_scores_20.txt \
+    --AFR_dst data/1kg_trio_data/plink_dst_AFR_trio_scores_20.txt \
+    --AMR_dst data/1kg_trio_data/plink_dst_AMR_trio_scores_20.txt \
+    --EAS_dst data/1kg_trio_data/plink_dst_EAS_trio_scores_20.txt \
+    --EUR_dst data/1kg_trio_data/plink_dst_EUR_trio_scores_20.txt \
+    --SAS_dst data/1kg_trio_data/plink_dst_SAS_trio_scores_20.txt \
+    --AFR_pihat data/1kg_trio_data/plink_pihat_AFR_trio_scores_20.txt \
+    --AMR_pihat data/1kg_trio_data/plink_pihat_AMR_trio_scores_20.txt \
+    --EAS_pihat data/1kg_trio_data/plink_pihat_EAS_trio_scores_20.txt \
+    --EUR_pihat data/1kg_trio_data/plink_pihat_EUR_trio_scores_20.txt \
+    --SAS_pihat data/1kg_trio_data/plink_pihat_SAS_trio_scores_20.txt \
     --AFR_kin data/1kg_trio_data/plink_kin_AFR_trio_scores_20.txt \
     --AMR_kin data/1kg_trio_data/plink_kin_AMR_trio_scores_20.txt \
     --EAS_kin data/1kg_trio_data/plink_kin_EAS_trio_scores_20.txt \
@@ -36,8 +52,9 @@ python plotting/figure2_related.py \
 python plotting/figure3_ancestry.py \
     --ancestry data/1kg_info/1kg_ancestry.tsv \
     --k 20 \
-    --genosis_groups data/1KG_pop_hits.txt \
-    --genosis_k data/TOP_HITS_20.txt \
+    --colors pub_figures/colors.txt \
+    --genosis_groups data/1kg_pop_hits.txt \
+    --genosis_k data/1kg_top_hits/TOP_HITS_20.txt \
     --dst_groups data/1kg_plink_topK/plink_DST_20_groups.txt \
     --pihat_groups data/1kg_plink_topK/plink_pihat_20_groups.txt \
     --kinship_groups data/1kg_plink_topK/plink_kin_20_groups.txt \
@@ -56,11 +73,12 @@ python plotting/figure3_ancestry.py \
 
 ### Figure 5: Cohort Quality
 ```
-python plotting/figure3_ancestry.py \
+python plotting/figure5_quality.py \
     --ancestry data/1kg_info/1kg_ancestry.tsv \
     --k 20 \
-    --quality_dir quality_data/ \
-    --png pub_figures/quality
+    --colors pub_figures/colors.txt \
+    --quality_dir data/quality_data/ \
+    --png_hist pub_figures/figure5_histogram.png
 ```
 <details>
   
@@ -74,10 +92,11 @@ python plotting/figure3_ancestry.py \
 python plotting/figure_sup_subpops.py \
     --ancestry data/1kg_info/1kg_ancestry.tsv \
     --k 20 \
-    --genosis data/subpop_counts/genosis_subpop_counts.tsv
-    --dst data/subpop_counts/dst_subpop_counts.tsv
-    --pihat data/subpop_counts/pihat_subpop_counts.tsv
-    --kin data/subpop_counts/kinship_subpop_counts.tsv
+    --colors pub_figures/colors.txt \
+    --genosis data/subpop_counts/genosis_subpop_counts.tsv \
+    --dst data/subpop_counts/dst_subpop_counts.tsv \
+    --pihat data/subpop_counts/pihat_subpop_counts.tsv \
+    --kin data/subpop_counts/kinship_subpop_counts.tsv \
     --png pub_figures/
 ```
 <details>
