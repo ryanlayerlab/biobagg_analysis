@@ -101,9 +101,10 @@ python plotting/figure_sup_subpops.py \
 ```
 <details>
 
-| genosis | plink dst | plink pi-hat | plink2 kinship| 
-|-------|-------|-------|-------|
-| ![genosis-subpop-heatmap](pub_figures/supplement_subpop_genosis.png) | ![dst-subpop-heatmap](pub_figures/supplement_subpop_dst.png) | ![pi-hat-subpop-heatmap](pub_figures/supplement_subpop_pihat.png) | ![kinship-subpop-heatmap](pub_figures/supplement_subpop_kinship.png) |
+| | |
+|-------|-------|
+| ![genosis-subpop-heatmap](pub_figures/supplement_subpop_genosis.png) | ![dst-subpop-heatmap](pub_figures/supplement_subpop_dst.png) |
+| ![pi-hat-subpop-heatmap](pub_figures/supplement_subpop_pihat.png) | ![kinship-subpop-heatmap](pub_figures/supplement_subpop_kinship.png) |
 
 </details>
 
