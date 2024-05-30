@@ -138,6 +138,9 @@ def get_colors(color_file):
     f = open(color_file, 'r')
     for line in f:
         line = line.strip().split(',')
-        colors[line[0]] = line[1]
+        try:
+            colors[int(line[0])] = line[1]
+        except ValueError:
+            colors[line[0]] = line[1]
     f.close()
     return colors
