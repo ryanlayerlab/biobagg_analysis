@@ -127,3 +127,17 @@ def get_subpopulations(ancestry_file):
                 if subpop in line:
                     sample_subpopulations[line.split()[0]] = subpop
     return sample_subpopulations
+
+def get_colors(color_file):
+    '''
+    Get colors from file
+    @param color_file: path to color file
+    @return: dictionary of colors
+    '''
+    colors = {}
+    f = open(color_file, 'r')
+    for line in f:
+        line = line.strip().split(',')
+        colors[line[0]] = line[1]
+    f.close()
+    return colors
