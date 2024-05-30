@@ -1,0 +1,15 @@
+0,grey
+1,firebrick
+2,yellowgreen
+3,steelblue
+4,deeppink
+5,darkorange
+6,mediumpurple
+10,black
+AFR,goldenrod
+AMR,firebrick
+EAS,olivedrab
+EUR,dodgerblue
+SAS,mediumpurple
+superpop,grey
+outgroup,black
