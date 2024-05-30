@@ -82,12 +82,9 @@ python plotting/figure_sup_subpops.py \
 ```
 <details>
 
-| Score | k=20                                                                 | 
-|-------|----------------------------------------------------------------------|
- genosis   | ![genosis-subpop-heatmap](pub_figures/supplement_subpop_genosis.png) | 
- plink dst   | ![dst-subpop-heatmap](pub_figures/supplement_subpop_dst.png)         |
- plink pi-hat   | ![pi-hat-subpop-heatmap](pub_figures/supplement_subpop_pihat.png)    | 
- plink2 kinship   | ![kinship-subpop-heatmap](pub_figures/supplement_subpop_kinship.png) |
+| genosis | plink dst | plink pi-hat | plink2 kinship| 
+|-------|-------|-------|-------|
+| ![genosis-subpop-heatmap](pub_figures/supplement_subpop_genosis.png) | ![dst-subpop-heatmap](pub_figures/supplement_subpop_dst.png) | ![pi-hat-subpop-heatmap](pub_figures/supplement_subpop_pihat.png) | ![kinship-subpop-heatmap](pub_figures/supplement_subpop_kinship.png) |
 
 </details>
 
