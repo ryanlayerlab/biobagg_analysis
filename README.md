@@ -52,6 +52,19 @@ python plotting/figure3_ancestry.py \
 ![figure3_distribution](pub_figures/figure3_distribution.png)<br>
 ![figure3_topK](pub_figures/figure3_topk.png)<br>
 
+</details>
+
+### Figure 5: Cohort Quality
+```
+python plotting/figure3_ancestry.py \
+    --ancestry data/igsr-1000 genomes 30x on grch38.tsv \
+    --k 20 \
+    --quality_dir quality_data/ \
+    --png pub_figures/quality
+```
+<details>
+  
+![figure5_cohort_quality_hist](pub_figures/figure5_histogram.png)<br>
 
 </details>
 
