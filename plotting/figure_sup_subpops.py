@@ -4,33 +4,28 @@ import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle
 from matplotlib.colors import LogNorm
 import numpy as np
+import os
 import pandas as pd
 import seaborn as sns
-from scipy.stats import ks_2samp
-from scipy.stats import norm
+import sys
 
-import plotting.ancestry_helpers as ancestry_helpers
+sys.path.append(os.path.abspath('plotting/'))
+import ancestry_helpers
 
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--ancestry', help='1KG ancestry labels', required=True)
     parser.add_argument('--k', help='k used for knn', required=True)
+    parser.add_argument('--colors', help='file with color codes', required=True)
+    # INPUT FILES
     parser.add_argument('--genosis', type=str, required=True, help='Path to genosis cohort file')
     parser.add_argument('--dst', type=str, required=True, help='Path to plink dst top 20 file')
     parser.add_argument('--pihat', type=str, required=True, help='Path to plink pi-hat top 20 file')
     parser.add_argument('--kinship', type=str, required=True, help='Path to plink kinship top 20 file')
+    # OUTPUT
     parser.add_argument('--png', help='Output png file with top k percents', required=True)
 
     return parser.parse_args()
-
-def get_ancestry_colors():
-    return {
-        'AFR': 'darkorange',
-        'AMR': 'mediumpurple',
-        'EAS': 'deeppink',
-        'EUR': 'dodgerblue',
-        'SAS': 'goldenrod'
-    }
 
 def get_subpop_number_samples(ancestry_file):
     '''
@@ -70,6 +65,7 @@ def read_subpop_counts(subpop_counts_file):
 
 def plot_subpop_counts_heatmatp(subpop_counts,
                                 subpopulation_number_samples,
+                                colors,
                                 output_file,
                                 title):
     SUPER_SUBPOPULATIONS = ancestry_helpers.SUPER_SUBPOPULATIONS
@@ -95,7 +91,7 @@ def plot_subpop_counts_heatmatp(subpop_counts,
 
                 # # normalize by size of subpopulation
                 # counts[i+index_offset, j] /= subpopulation_number_samples[query_subpop]
-            print(query_subpop, subpopulation_number_samples[query_subpop])
+            # print(query_subpop, subpopulation_number_samples[query_subpop])
 
         index_offset += len(subpops)
 
@@ -104,7 +100,7 @@ def plot_subpop_counts_heatmatp(subpop_counts,
     # plot
     plt.figure(figsize=(18, 15), dpi=300)
     sns.set(font_scale=1.5)
-    row_colors = [get_ancestry_colors()[ancestry_helpers.SUB_SUPERPOPULATIONS[subpop]] for subpop in ordered_subpops]
+    row_colors = [colors[ancestry_helpers.SUB_SUPERPOPULATIONS[subpop]] for subpop in ordered_subpops]
 
     # log scale
     sns.heatmap(df, cmap=colormap, annot=False, cbar=True, square=True,
@@ -119,7 +115,7 @@ def plot_subpop_counts_heatmatp(subpop_counts,
     for i in SUPER_SUBPOPULATIONS:
         num_subpops = len(SUPER_SUBPOPULATIONS[i])
         plt.gca().add_patch(Rectangle((line_offset, line_offset), num_subpops, num_subpops,
-                                      edgecolor=get_ancestry_colors()[i],
+                                      edgecolor=colors[i],
                                       facecolor='none',
                                       alpha=1, lw=15))
         line_offset += num_subpops
@@ -142,14 +138,14 @@ def plot_subpop_counts_heatmatp(subpop_counts,
     plt.xticks(xtick_positions, xtick_labels,
                rotation=90, fontsize=25, ha='right')
     for tick in plt.gca().get_xticklabels():
-        tick.set_color(get_ancestry_colors()[ancestry_helpers.SUB_SUPERPOPULATIONS[tick.get_text()]])
+        tick.set_color(colors[ancestry_helpers.SUB_SUPERPOPULATIONS[tick.get_text()]])
 
 
     plt.yticks(ytick_positions, ytick_labels,
                rotation=90, fontsize=30, fontweight='bold',
                va='center')
     for tick in plt.gca().get_yticklabels():
-        tick.set_color(get_ancestry_colors()[tick.get_text()])
+        tick.set_color(colors[tick.get_text()])
 
 
     # draw lines between superpopulations
@@ -174,28 +170,33 @@ def main():
     args = parse_args()
 
     subpopulation_number_samples = get_subpop_number_samples(args.ancestry)
+    colors = ancestry_helpers.get_colors(args.colors)
 
     genosis_subpop_counts = read_subpop_counts(args.genosis)
     plot_subpop_counts_heatmatp(genosis_subpop_counts,
                                 subpopulation_number_samples,
+                                colors,
                                 args.png + 'supplement_subpop_genosis.png',
                                 'Genosis')
 
     dst_subpop_counts = read_subpop_counts(args.dst)
     plot_subpop_counts_heatmatp(dst_subpop_counts,
                                 subpopulation_number_samples,
+                                colors,
                                 args.png + 'supplement_subpop_dst.png',
                                 'plink DST')
 
     pihat_subpop_counts = read_subpop_counts(args.pihat)
     plot_subpop_counts_heatmatp(pihat_subpop_counts,
                                 subpopulation_number_samples,
+                                colors,
                                 args.png + 'supplement_subpop_pihat.png',
                                 'plink PI-HAT')
 
     kinship_subpop_counts = read_subpop_counts(args.kinship)
     plot_subpop_counts_heatmatp(kinship_subpop_counts,
                                 subpopulation_number_samples,
+                                colors,
                                 args.png + 'supplement_subpop_kinship.png',
                                 'plink2 Kinship')
 
