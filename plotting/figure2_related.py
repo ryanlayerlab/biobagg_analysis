@@ -1,12 +1,18 @@
 import argparse
 import matplotlib.pyplot as plt
 import numpy as np
+import os
 import seaborn as sns
 from scipy.stats import ks_2samp
 from scipy.stats import norm
+import sys
+
+sys.path.append(os.path.abspath('plotting/'))
+import ancestry_helpers
 
 def parse_args():
     parser = argparse.ArgumentParser()
+    parser.add_argument('--colors', help='file with color codes', required=True)
     # DECODE DATA
     parser.add_argument('--decode_genosis', help='decode genosis scores', required=True)
     parser.add_argument('--decode_ibd', help='decode ibd scores', required=True)
@@ -31,6 +37,7 @@ def parse_args():
     parser.add_argument('--EAS_kin', help='EAS 1kg plink kinship trio scores')
     parser.add_argument('--EUR_kin', help='EUR 1kg plink kinship trio scores')
     parser.add_argument('--SAS_kin', help='SAS 1kg plink kinship trio scores')
+    # OUTPUT
     parser.add_argument('--png', help='output png file', required=True)
     return parser.parse_args()
 
@@ -52,18 +59,6 @@ def get_num_meiosis(relationship):
                       '2-cousin': 6,
                       'unrelated': 10,}
     return number_meiosis[relationship]
-
-def get_meiosis_color(num_meiosis):
-    meiosis_colors = {0: 'grey',
-                      1: 'firebrick',
-                      2: 'yellowgreen',
-                      3: 'steelblue',
-                      4: 'deeppink',
-                      5: 'darkorange',
-                      6: 'mediumpurple',
-                      10: 'black'}
-    return meiosis_colors[num_meiosis]
-
 
 def read_decode_data(decode_data_file):
     '''
@@ -144,6 +139,7 @@ def plot_combined_figures(decode_ibd_data,
                           tg_genosis_scores,
                           tg_dst_scores,
                           plink_label,
+                          colors,
                           png_file):
     '''
     Show all plots on one figure
@@ -164,14 +160,14 @@ def plot_combined_figures(decode_ibd_data,
         else:
             label = str(num_meiosis)
         sns.kdeplot(decode_ibd_data[num_meiosis],
-                    color=get_meiosis_color(num_meiosis),
+                    color=colors[num_meiosis],
                     ax=decode_IBD_plt,
                     label=label,
                     fill=True, alpha=alpha_value)
     # formatting
     decode_IBD_plt.spines['top'].set_visible(False)
     decode_IBD_plt.spines['right'].set_visible(False)
-    decode_IBD_plt.set_yticks(np.arange(0, 0.1, 0.02))
+    decode_IBD_plt.set_yticks(np.arange(0, 0.15, 0.025))
     decode_IBD_plt.set_xlabel('deCODE IBD Scores')
     decode_IBD_plt.set_ylabel('Density')
 
@@ -184,14 +180,14 @@ def plot_combined_figures(decode_ibd_data,
         else:
             label = str(num_meiosis)
         sns.kdeplot(decode_genosis_data[num_meiosis],
-                    color=get_meiosis_color(num_meiosis),
+                    color=colors[num_meiosis],
                     ax=decode_genosis_plt,
                     label=label,
                     fill=True, alpha=alpha_value)
     # formatting
     decode_genosis_plt.spines['top'].set_visible(False)
     decode_genosis_plt.spines['right'].set_visible(False)
-    decode_genosis_plt.set_yticks(np.arange(0, 0.1, 0.02))
+    decode_genosis_plt.set_yticks(np.arange(0, 0.15, 0.025))
     decode_genosis_plt.set_xlabel('GenoSiS Scores')
     decode_genosis_plt.set_ylabel('Density')
 
@@ -204,7 +200,7 @@ def plot_combined_figures(decode_ibd_data,
         else:
             label = str(num_meiosis)
         sns.kdeplot(tg_dst_scores[num_meiosis],
-                    color=get_meiosis_color(num_meiosis),
+                    color=colors[num_meiosis],
                     ax=tg_plink_plt,
                     label=label,
                     fill=True, alpha=alpha_value)
@@ -222,7 +218,7 @@ def plot_combined_figures(decode_ibd_data,
         else:
             label = str(num_meiosis)
         sns.kdeplot(tg_genosis_scores[num_meiosis],
-                    color=get_meiosis_color(num_meiosis),
+                    color=colors[num_meiosis],
                     ax=tg_genosis_plt,
                     label=label,
                     fill=True, alpha=alpha_value)
@@ -259,10 +255,15 @@ def plot_combined_figures(decode_ibd_data,
 
 def main():
     args = parse_args()
+    colors = ancestry_helpers.get_colors(args.colors)
 
     # read deCODE data
     decode_genosis_scores = read_decode_data(args.decode_genosis)
     decode_ibd_scores = read_decode_data(args.decode_ibd)
+    # divide IBD by 2
+    for num_meiosis in decode_ibd_scores.keys():
+        decode_ibd_scores[num_meiosis] = [x/2 for x in decode_ibd_scores[num_meiosis]]
+
     # 1kg data
     ## genosis scores
     AFR_genosis_scores = read_1kg_data(args.AFR_genosis, 'AFR')
@@ -316,6 +317,7 @@ def main():
                           tg_genosis_scores,
                           tg_kin_scores,
                           plink_label,
+                          colors,
                           args.png)
 
 
