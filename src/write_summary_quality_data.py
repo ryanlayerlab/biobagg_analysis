@@ -45,9 +45,11 @@ def assert_sample_pop(sample, pop, sample_subpopulations):
         return 1
 
 def read_top_hits(query_file,
-                  query_full_dict,
-                  database_pop,
-                  sample_subpopulations):
+                    query_full_dict,
+                    database_pop,
+                    sample_subpopulations):
+
+    # keys by subpopulation
     f = open(query_file, 'r')
     header = f.readline()
     query_subpopulation = sample_subpopulations[header.strip().split(':')[1].strip()]
@@ -59,7 +61,7 @@ def read_top_hits(query_file,
         if hit_ID == header.strip().split(':')[1].strip():
             continue
         hit_score = float(L[1])
-        # get match of hit
+        # get subpopulation of hit
         hit_subpopulation = sample_subpopulations[hit_ID]
         # get superpopulation of hit
         hit_superpopulation = SUB_SUPERPOPULATIONS[hit_subpopulation]
@@ -70,37 +72,34 @@ def read_top_hits(query_file,
 
         # add score to subpopulation list
         try:
-            query_full_dict[database_pop][hit_subpopulation].append(hit_score)
+            query_full_dict[database_pop][query_subpopulation][hit_subpopulation].append(hit_score)
         except KeyError:
             try:
-                query_full_dict[database_pop][hit_subpopulation] = [hit_score]
+                query_full_dict[database_pop][query_subpopulation][hit_subpopulation] = [hit_score]
             except KeyError:
-                query_full_dict[database_pop] = {hit_subpopulation : [hit_score]}
-
-    #print(query_scores[db_pop])
+                query_full_dict[database_pop][query_subpopulation] = {hit_subpopulation : [hit_score]}
     f.close()
     return query_full_dict
 
 def write_query_pop_scores(query_pop,
-                           query_full_dict):
+                            query_full_dict):
 
     o_file = open(query_pop + '.txt', 'w')
     header = 'QUERY POPULATION: ' + query_pop + '\n'
     o_file.write(header)
 
     for database_pop in query_full_dict.keys():
-        
         o_file.write('database: ' + database_pop + '\n')
-        for subpop in query_full_dict[database_pop]:
-            line = subpop + ':'
-            scores = query_full_dict[database_pop][subpop]
-            if len(scores) == 0:
-                continue
-            else:
-                for score in scores:
-                    line += str(score) + ','
-            o_file.write(line + '\n')
-    o_file.close()
+        for query_subpop in query_full_dict[database_pop]:
+            for hit_subpop in query_full_dict[database_pop][query_subpop]:
+                line = query_subpop + '->' + hit_subpop + ':'
+                scores = query_full_dict[database_pop][query_subpop][hit_subpop]
+                if len(scores) == 0:
+                    continue
+                else:
+                    for score in scores:
+                        line += str(score) + ','
+                    o_file.write(line + '\n')
     
 
 def main():
@@ -114,7 +113,7 @@ def main():
     super_populations = {
                         'AFR': 'African',
                         'AMR': 'American',
-                        #'EAS': 'East Asian',
+                        'EAS': 'East Asian',
                         'EUR': 'European',
                         'SAS': 'South Asian'}
 

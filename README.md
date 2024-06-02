@@ -78,13 +78,18 @@ python plotting/figure5_quality.py \
     --k 20 \
     --colors pub_figures/colors.txt \
     --quality_dir data/quality_data/ \
-    --png_hist pub_figures/figure5_histogram.png
+    --png_hist pub_figures/figure5_
 ```
 <details>
   
-![figure5_cohort_quality_hist](pub_figures/figure5_histogram.png)<br>
+![figure5_cohort_quality_super_hist](pub_figures/figure5_super_histogram.png)<br>
+![figure5_cohort_quality_sub_hist](pub_figures/figure5_sub_histogram.png)<br>
+![figure5_cohort_quality_heatmap](pub_figures/figure5_heatmap.png)<br>
+
 
 </details>
+
+
 
 ### SUPPLEMENTAL
 #### Figure S1: Cohort Counts by Subpopulation
