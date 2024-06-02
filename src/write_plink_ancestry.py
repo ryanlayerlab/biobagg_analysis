@@ -86,13 +86,13 @@ def main():
     ped_file = 'data/1kg_trios.txt'
     trio_samples = get_trio_samples(ped_file)
 
-    ancestry_file = 'data/igsr-1000 genomes 30x on grch38.tsv'
+    ancestry_file = 'data/1kg_ancestry.tsv'
     sample_subpop = ah.get_subpopulations(ancestry_file)
     SUB_SUPERPOPULATIONS = ah.SUB_SUPERPOPULATIONS
 
-    plink_dst_hits_file = 'plink_top_K_data/plink_DST_top_20.txt'
-    plink_pihat_hits_file = 'plink_top_K_data/plink_pihat_top_20.txt'
-    plink_kinship_hits_file = 'plink_top_K_data/plink_kin_top_20.txt'
+    plink_dst_hits_file = '1kg_plink_topK/plink_DST_top_20.txt'
+    plink_pihat_hits_file = '1kg_plink_topK/plink_pihat_top_20.txt'
+    plink_kinship_hits_file = '1kg_plink_topK/plink_kin_top_20.txt'
     dst_hits = read_hits_file(plink_dst_hits_file,
                               trio_samples,
                               sample_subpop,
@@ -105,9 +105,9 @@ def main():
                                   trio_samples,
                                   sample_subpop,
                                   SUB_SUPERPOPULATIONS)
-    write_plink_hits(dst_hits, 'plink_top_K_data/plink_DST_20_groups.txt')
-    write_plink_hits(pihat_hits, 'plink_top_K_data/plink_pihat_20_groups.txt')
-    write_plink_hits(kinship_hits, 'plink_top_K_data/plink_kin_20_groups.txt')
+    write_plink_hits(dst_hits, '1kg_plink_topK/plink_DST_20_groups.txt')
+    write_plink_hits(pihat_hits, '1kg_plink_topK/plink_pihat_20_groups.txt')
+    write_plink_hits(kinship_hits, '1kg_plink_topK/plink_kin_20_groups.txt')
 
 if __name__ == '__main__':
     main()

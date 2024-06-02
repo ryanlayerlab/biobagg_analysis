@@ -77,6 +77,8 @@ def plot_subpop_counts_heatmatp(subpop_counts,
         ordered_subpops.extend(subpops)
     colormap = 'Greys'
 
+    # [row_idx, col_idx]
+
     # make a matrix of counts
     index_offset = 0
     counts = np.zeros((num_subpops, num_subpops))
@@ -158,7 +160,7 @@ def plot_subpop_counts_heatmatp(subpop_counts,
 
 
     plt.xlabel('Query Population', fontsize=40)
-    plt.ylabel('Match Population', fontsize=40)
+    plt.ylabel('Cohort Population', fontsize=40)
     title += '\nTotal Counts for Subpopulation Cohorts'
     plt.title(title, fontsize=50)
     # move plot to make room for title
