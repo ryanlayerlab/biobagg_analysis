@@ -86,7 +86,10 @@ python plotting/figure5_quality.py \
 ![figure5_cohort_quality_sub_hist](pub_figures/figure5_sub_histogram.png)<br>
 ![figure5_cohort_quality_heatmap](pub_figures/figure5_heatmap.png)<br>
 
+
 </details>
+
+
 
 ### SUPPLEMENTAL
 #### Figure S1: Cohort Counts by Subpopulation
