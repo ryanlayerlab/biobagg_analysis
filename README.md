@@ -82,7 +82,7 @@ python plotting/figure5_quality.py \
 ```
 <details>
   
-![figure5_cohort_quality_hist](pub_figures/figure5_histogram.png)<br>
+![figure5_cohort_quality_hist](pub_figures/figure5_histogram_super.png)<br>
 
 </details>
 
