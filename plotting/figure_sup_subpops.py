@@ -157,8 +157,8 @@ def plot_subpop_counts_heatmatp(subpop_counts,
         line_offset += num_subpops
 
 
-    plt.xlabel('Match Population', fontsize=40)
-    plt.ylabel('Query Population', fontsize=40)
+    plt.xlabel('Query Population', fontsize=40)
+    plt.ylabel('Match Population', fontsize=40)
     title += '\nTotal Counts for Subpopulation Cohorts'
     plt.title(title, fontsize=50)
     # move plot to make room for title
