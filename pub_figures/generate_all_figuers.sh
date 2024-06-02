@@ -64,7 +64,7 @@ python -W ignore plotting/figure5_quality.py \
   --k 20 \
   --colors pub_figures/colors.txt \
   --quality_dir data/quality_data/ \
-  --png_hist pub_figures/figure5_histogram.png
+  --png pub_figures/figure5_
 
 # supplementary figures
 echo 'Plotting supplementary figures...'
