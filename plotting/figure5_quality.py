@@ -57,14 +57,14 @@ def plot_quality_results_heatmap(AFR_quality_scores,
 
 def plot_quality_results_histogram(AFR_quality_scores,
                                    AMR_quality_scores,
-                                   # EAS_quality_scores,
+                                   EAS_quality_scores,
                                    EUR_quality_scores,
                                    SAS_quality_scores,
                                    colors,
                                    png):
     SUPER_SUBPOPULATIONS = ancestry_helpers.SUPER_SUBPOPULATIONS
 
-    fig, ax = plt.subplots(4, 4,
+    fig, ax = plt.subplots(5, 5,
                            figsize=(20, 15), dpi=300,
                            sharex=True, sharey=True)
 
@@ -80,7 +80,7 @@ def plot_quality_results_histogram(AFR_quality_scores,
                             fontsize=25, color=colors[database_population],
                             fontweight='bold', labelpad=40)
         # set x-axis label
-        ax[3, i].set_xlabel('GenoSiS Score', fontsize=20, labelpad=20)
+        ax[4, i].set_xlabel('GenoSiS Score', fontsize=20, labelpad=20)
         # ignore outliers
         # ax[i, 1].set_xlim(0, 1000)
         # log scale
@@ -95,41 +95,43 @@ def plot_quality_results_histogram(AFR_quality_scores,
             database_scores.extend(AMR_quality_scores[database_population][database_subpopulation])
         ax[i, 1].hist(database_scores, bins=50, color=colors[database_population], alpha=0.5)
         # set x-axis label
-        ax[3, i].set_xlabel('GenoSiS Score', fontsize=20, labelpad=20)
+        ax[4, i].set_xlabel('GenoSiS Score', fontsize=20, labelpad=20)
 
 
     # # East Asian query is third column
-    # ax[0, 2].set_title('EAS Query', fontsize=20)
-    # for i, database_population in enumerate(EAS_quality_scores.keys()):
-    #     database_scores = []
-    #     for j, database_subpopulation in enumerate(EAS_quality_scores[database_population].keys()):
-    #         database_scores.extend(EAS_quality_scores[database_population][database_subpopulation])
-    #     ax[i, 2].hist(database_scores, bins=50, color=ancestry_colors[database_population], alpha=0.5)
+    ax[0, 2].set_title('EAS Query', fontsize=20)
+    for i, database_population in enumerate(EAS_quality_scores.keys()):
+        database_scores = []
+        for j, database_subpopulation in enumerate(EAS_quality_scores[database_population].keys()):
+            database_scores.extend(EAS_quality_scores[database_population][database_subpopulation])
+        ax[i, 2].hist(database_scores, bins=50, color=colors[database_population], alpha=0.5)
+        # set x-axis label
+        ax[4, i].set_xlabel('GenoSiS Score', fontsize=20, labelpad=20)
 
     # European query is fourth column
-    ax[0, 2].set_title('EUR Query', fontsize=20)
+    ax[0, 3].set_title('EUR Query', fontsize=20)
     for i, database_population in enumerate(EUR_quality_scores.keys()):
         database_scores = []
         for j, database_subpopulation in enumerate(EUR_quality_scores[database_population].keys()):
             database_scores.extend(EUR_quality_scores[database_population][database_subpopulation])
-        ax[i, 2].hist(database_scores, bins=50, color=colors[database_population], alpha=0.5)
+        ax[i, 3].hist(database_scores, bins=50, color=colors[database_population], alpha=0.5)
         # set x-axis label
-        ax[3, i].set_xlabel('GenoSiS Score', fontsize=20, labelpad=20)
+        ax[4, i].set_xlabel('GenoSiS Score', fontsize=20, labelpad=20)
 
     # South Asian query is fifth column
-    ax[0, 3].set_title('SAS Query', fontsize=20)
+    ax[0, 4].set_title('SAS Query', fontsize=20)
     for i, database_population in enumerate(SAS_quality_scores.keys()):
         database_scores = []
         for j, database_subpopulation in enumerate(SAS_quality_scores[database_population].keys()):
             database_scores.extend(SAS_quality_scores[database_population][database_subpopulation])
-        ax[i, 3].hist(database_scores, bins=50, color=colors[database_population], alpha=0.5)
+        ax[i, 4].hist(database_scores, bins=50, color=colors[database_population], alpha=0.5)
         # set x-axis label
-        ax[3, i].set_xlabel('GenoSiS\nScore', fontsize=20, labelpad=20)
+        ax[4, i].set_xlabel('GenoSiS\nScore', fontsize=20, labelpad=20)
 
 
     # formatting for all subplots
-    for i in range(4):
-        for j in range(4):
+    for i in range(5):
+        for j in range(5):
             # remove spines
             ax[i, j].spines['top'].set_visible(False)
             ax[i, j].spines['right'].set_visible(False)
@@ -154,7 +156,7 @@ def main():
 
     AFR_quality_scores = read_quality_results(quality_dir + 'AFR.txt')
     AMR_quality_scores = read_quality_results(quality_dir + 'AMR.txt')
-    EAS_quality_scores = []
+    EAS_quality_scores = read_quality_results(quality_dir + 'EAS.txt')
     EUR_quality_scores = read_quality_results(quality_dir + 'EUR.txt')
     SAS_quality_scores = read_quality_results(quality_dir + 'SAS.txt')
 
@@ -170,7 +172,7 @@ def main():
 
     plot_quality_results_histogram(AFR_quality_scores,
                                    AMR_quality_scores,
-                                   # EAS_quality_scores,
+                                   EAS_quality_scores,
                                    EUR_quality_scores,
                                    SAS_quality_scores,
                                    colors,
