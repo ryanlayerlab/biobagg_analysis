@@ -7,9 +7,9 @@
 6,mediumpurple
 10,black
 AFR,deepskyblue
-AMR,crimson
-EAS,yellowgreen
-EUR,mediumpurple
-SAS,gold
+AMR,gold
+EAS,crimson
+EUR,yellowgreen
+SAS,mediumpurple
 superpop,grey
 outgroup,black
