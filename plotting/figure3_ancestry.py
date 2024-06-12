@@ -163,10 +163,35 @@ def plot_ancestry_group_distributions(genosis_scores,
                                       colors,
                                       png_file):
 
+    alpha_value = 0.5
+
     # Create the combined figure
     combined_figure, axes = plt.subplots(5, 4, figsize=(20, 12), dpi=300)
-    alpha_value = 0.5
-    genosis_x_max = 1500
+
+    col1_xlim = (0, 4000)
+    col1_ylim = (0, 0.01)
+    col2_xlim = (0.95, 1)
+    col2_ylim = (0, 1600)
+    col3_xlim = (-0.1, 1)
+    col3_ylim = (0, 250)
+    col4_xlim = (-0.25, 0.3)
+    col4_ylim = (0, 80)
+
+    # set axes limits
+    for col_j in range(4):
+        for row_i in range(5):
+            if col_j == 0:
+                axes[row_i, col_j].set_xlim(col1_xlim)
+                axes[row_i, col_j].set_ylim(col1_ylim)
+            elif col_j == 1:
+                axes[row_i, col_j].set_xlim(col2_xlim)
+                axes[row_i, col_j].set_ylim(col2_ylim)
+            elif col_j == 2:
+                axes[row_i, col_j].set_xlim(col3_xlim)
+                axes[row_i, col_j].set_ylim(col3_ylim)
+            elif col_j == 3:
+                axes[row_i, col_j].set_xlim(col4_xlim)
+                axes[row_i, col_j].set_ylim(col4_ylim)
 
     # Plot the GenoSiS scores in first column
     for i, superpop in enumerate(genosis_scores.keys()):
@@ -183,11 +208,11 @@ def plot_ancestry_group_distributions(genosis_scores,
                     fill=True, alpha=alpha_value)
         axes[0, 0].set_title('GenoSiS Scores', fontsize=20, fontweight='bold')
         axes[i, 0].set_ylabel('Density')
-        axes[i, 0].set_xlim(0, genosis_x_max)
+        # axes[i, 0].set_xlim(0, genosis_x_max)
         axes[i, 0].spines['top'].set_visible(False)
         axes[i, 0].spines['right'].set_visible(False)
         legend = ['Subpopulation', 'Superpopulation', 'Outgroup']
-        handles = [plt.Rectangle((0, 0), 1, 1, color=colors_list[i], ec="k") for i in range(len(legend))]
+        handles = [plt.Rectangle((0, 0), 1, 1, color=colors_list[i]) for i in range(len(legend))]
         axes[i, 0].legend(handles, legend, loc='upper right', frameon=False)
 
     # Plot the plink DST scores in second column
@@ -208,7 +233,7 @@ def plot_ancestry_group_distributions(genosis_scores,
         axes[i, 1].spines['top'].set_visible(False)
         axes[i, 1].spines['right'].set_visible(False)
         legend = ['Subpopulation', 'Superpopulation', 'Outgroup']
-        handles = [plt.Rectangle((0, 0), 1, 1, color=colors_list[i], ec="k") for i in range(len(legend))]
+        handles = [plt.Rectangle((0, 0), 1, 1, color=colors_list[i]) for i in range(len(legend))]
         axes[i, 1].legend(handles, legend, loc='upper right', frameon=False)
 
     # Plot the plink pi-hat scores in third column
@@ -229,7 +254,7 @@ def plot_ancestry_group_distributions(genosis_scores,
         axes[i, 2].spines['top'].set_visible(False)
         axes[i, 2].spines['right'].set_visible(False)
         legend = ['Subpopulation', 'Superpopulation', 'Outgroup']
-        handles = [plt.Rectangle((0, 0), 1, 1, color=colors_list[i], ec="k") for i in range(len(legend))]
+        handles = [plt.Rectangle((0, 0), 1, 1, color=colors_list[i]) for i in range(len(legend))]
         axes[i, 2].legend(handles, legend, loc='upper right', frameon=False)
 
     # Plot the plink kinship scores in fourth column
@@ -250,7 +275,7 @@ def plot_ancestry_group_distributions(genosis_scores,
         axes[i, 3].spines['top'].set_visible(False)
         axes[i, 3].spines['right'].set_visible(False)
         legend = ['Subpopulation', 'Superpopulation', 'Outgroup']
-        handles = [plt.Rectangle((0, 0), 1, 1, color=colors_list[i], ec="k") for i in range(len(legend))]
+        handles = [plt.Rectangle((0, 0), 1, 1, color=colors_list[i]) for i in range(len(legend))]
         axes[i, 3].legend(handles, legend, loc='upper right', frameon=False)
 
     # shift plots down and to the right
@@ -281,37 +306,84 @@ def plot_ancestry_top_k(genosis_scores,
                         png_file):
 
     # Create the combined figure
-    combined_figure, axes = plt.subplots(5, 4, figsize=(20, 12), dpi=300)
+    combined_figure, axes = plt.subplots(5, 3, figsize=(15, 12), dpi=300)
     alpha_value = 0.5
     genosis_x_max = 1500
 
-    # Plot the GenoSiS scores in first column
-    for i, superpop in enumerate(genosis_scores.keys()):
-        D = []
-        colors_list = []
-        for j, category in enumerate(genosis_scores[superpop].keys()):
-            D.append(genosis_scores[superpop][category])
-            intermediate_colors = get_category_colors(colors, superpop)
-            colors_list.append(intermediate_colors[category])
-        sns.kdeplot(D,
-                    ax=axes[i, 0],
-                    label=superpop,
-                    palette=colors_list,
-                    fill=True, alpha=alpha_value)
-        axes[0, 0].set_title('GenoSiS Scores', fontsize=20, fontweight='bold')
-        axes[i, 0].set_ylabel('Density')
-        axes[i, 0].set_xlim(0, genosis_x_max)
-        axes[i, 0].spines['top'].set_visible(False)
-        axes[i, 0].spines['right'].set_visible(False)
-        legend = ['Subpopulation', 'Superpopulation', 'Outgroup']
-        handles = [plt.Rectangle((0, 0), 1, 1, color=colors_list[i], ec="k") for i in range(len(legend))]
-        axes[i, 0].legend(handles, legend, loc='upper right', frameon=False)
+    # # Plot the GenoSiS scores in first column
+    # for i, superpop in enumerate(genosis_scores.keys()):
+    #     D = []
+    #     colors_list = []
+    #     for j, category in enumerate(genosis_scores[superpop].keys()):
+    #         D.append(genosis_scores[superpop][category])
+    #         intermediate_colors = get_category_colors(colors, superpop)
+    #         colors_list.append(intermediate_colors[category])
+    #     sns.kdeplot(D,
+    #                 ax=axes[i, 0],
+    #                 label=superpop,
+    #                 palette=colors_list,
+    #                 fill=True, alpha=alpha_value)
+    #     axes[0, 0].set_title('GenoSiS Scores', fontsize=20, fontweight='bold')
+    #     axes[i, 0].set_ylabel('Density')
+    #     axes[i, 0].set_xlim(0, genosis_x_max)
+    #     axes[i, 0].spines['top'].set_visible(False)
+    #     axes[i, 0].spines['right'].set_visible(False)
+    #     legend = ['Subpopulation', 'Superpopulation', 'Outgroup']
+    #     handles = [plt.Rectangle((0, 0), 1, 1, color=colors_list[i], ec="k") for i in range(len(legend))]
+    #     axes[i, 0].legend(handles, legend, loc='upper right', frameon=False)
 
     # Plot the genoSiS top k percents and dst top K percents in second column
     # line plot for genosis
     # dashed line plot for plink
     for i, superpop in enumerate(genosis_superpop_percents.keys()):
         x = list(genosis_superpop_percents[superpop].keys())
+        genosis_y = [list(genosis_superpop_percents[superpop].values()),
+                     list(genosis_subpop_percents[superpop].values())]
+        D_genosis_superpop = pd.DataFrame({'K': x,
+                          'GenoSiS Scores': genosis_y[0]})
+
+        intermediate_colors = get_category_colors(colors, superpop)
+        super_color = intermediate_colors['superpop']
+        sub_color = intermediate_colors['subpop']
+
+        sns.lineplot(x='K', y='GenoSiS Scores',
+                     data=D_genosis_superpop,
+                     ax=axes[i, 0],
+                     label='Genosis Superpop',
+                     color=super_color)
+        D_genosis_subpop = pd.DataFrame({'K': x,
+                          'GenoSiS Scores': genosis_y[1]})
+        sns.lineplot(x='K', y='GenoSiS Scores',
+                        data=D_genosis_subpop,
+                        ax=axes[i, 0],
+                        label='Genosis Subpop',
+                        color=sub_color)
+        D_dst_superpop = pd.DataFrame({'K': x,
+                          'Plink DST Scores': list(dst_superpop_percents[superpop].values())})
+        sns.lineplot(x='K', y='Plink DST Scores',
+                        data=D_dst_superpop,
+                        ax=axes[i, 0],
+                        label='Plink DST superpop',
+                        color=super_color,
+                        linestyle='dashed')
+        D_dst_subpop = pd.DataFrame({'K': x,
+                          'Plink DST Scores': list(dst_subpop_percents[superpop].values())})
+        sns.lineplot(x='K', y='Plink DST Scores',
+                        data=D_dst_subpop,
+                        ax=axes[i, 0],
+                        label='Plink DST subpop',
+                        color=sub_color,
+                        linestyle='dashed')
+        axes[0, 0].set_title('GenoSiS vs.\nPlink DST', fontsize=20, fontweight='bold')
+        axes[i, 0].set_ylabel('% in Population')
+        axes[i, 0].set_xticks(range(5, 21, 5))
+        axes[i, 0].set_ylim(0, 1.1)
+        axes[i, 0].spines['top'].set_visible(False)
+        axes[i, 0].spines['right'].set_visible(False)
+
+    # Plot the genoSiS top k percents and pihat top K percents in third column
+    for i, superpop in enumerate(pihat_superpop_percents.keys()):
+        x = list(pihat_superpop_percents[superpop].keys())
         genosis_y = [list(genosis_superpop_percents[superpop].values()),
                      list(genosis_subpop_percents[superpop].values())]
         D_genosis_superpop = pd.DataFrame({'K': x,
@@ -333,58 +405,11 @@ def plot_ancestry_top_k(genosis_scores,
                         ax=axes[i, 1],
                         label='Genosis Subpop',
                         color=sub_color)
-        D_dst_superpop = pd.DataFrame({'K': x,
-                          'Plink DST Scores': list(dst_superpop_percents[superpop].values())})
-        sns.lineplot(x='K', y='Plink DST Scores',
-                        data=D_dst_superpop,
-                        ax=axes[i, 1],
-                        label='Plink DST superpop',
-                        color=super_color,
-                        linestyle='dashed')
-        D_dst_subpop = pd.DataFrame({'K': x,
-                          'Plink DST Scores': list(dst_subpop_percents[superpop].values())})
-        sns.lineplot(x='K', y='Plink DST Scores',
-                        data=D_dst_subpop,
-                        ax=axes[i, 1],
-                        label='Plink DST subpop',
-                        color=sub_color,
-                        linestyle='dashed')
-        axes[0, 1].set_title('GenoSiS vs.\nPlink DST', fontsize=20, fontweight='bold')
-        axes[i, 1].set_ylabel('% in Population')
-        axes[i, 1].set_xticks(range(5, 21, 5))
-        axes[i, 1].set_ylim(0, 1.1)
-        axes[i, 1].spines['top'].set_visible(False)
-        axes[i, 1].spines['right'].set_visible(False)
-
-    # Plot the genoSiS top k percents and pihat top K percents in third column
-    for i, superpop in enumerate(pihat_superpop_percents.keys()):
-        x = list(pihat_superpop_percents[superpop].keys())
-        genosis_y = [list(genosis_superpop_percents[superpop].values()),
-                     list(genosis_subpop_percents[superpop].values())]
-        D_genosis_superpop = pd.DataFrame({'K': x,
-                          'GenoSiS Scores': genosis_y[0]})
-
-        intermediate_colors = get_category_colors(colors, superpop)
-        super_color = intermediate_colors['superpop']
-        sub_color = intermediate_colors['subpop']
-
-        sns.lineplot(x='K', y='GenoSiS Scores',
-                     data=D_genosis_superpop,
-                     ax=axes[i, 2],
-                     label='Genosis Superpop',
-                     color=super_color)
-        D_genosis_subpop = pd.DataFrame({'K': x,
-                          'GenoSiS Scores': genosis_y[1]})
-        sns.lineplot(x='K', y='GenoSiS Scores',
-                        data=D_genosis_subpop,
-                        ax=axes[i, 2],
-                        label='Genosis Subpop',
-                        color=sub_color)
         D_pihat_superpop = pd.DataFrame({'K': x,
                           'Plink pi-hat Scores': list(pihat_superpop_percents[superpop].values())})
         sns.lineplot(x='K', y='Plink pi-hat Scores',
                         data=D_pihat_superpop,
-                        ax=axes[i, 2],
+                        ax=axes[i, 1],
                         label='Plink pi-hat superpop',
                         color=super_color,
                         linestyle='dashed')
@@ -392,16 +417,16 @@ def plot_ancestry_top_k(genosis_scores,
                           'Plink pi-hat Scores': list(pihat_subpop_percents[superpop].values())})
         sns.lineplot(x='K', y='Plink pi-hat Scores',
                         data=D_pihat_subpop,
-                        ax=axes[i, 2],
+                        ax=axes[i, 1],
                         label='Plink pi-hat subpop',
                         color=sub_color,
                         linestyle='dashed')
-        axes[0, 2].set_title('GenoSiS vs.\nPlink pi-hat', fontsize=20, fontweight='bold')
-        axes[i, 2].set_ylabel('% in Population')
-        axes[i, 2].set_xticks(range(5, 21, 5))
-        axes[i, 2].set_ylim(0, 1.1)
-        axes[i, 2].spines['top'].set_visible(False)
-        axes[i, 2].spines['right'].set_visible(False)
+        axes[0, 1].set_title('GenoSiS vs.\nPlink pi-hat', fontsize=20, fontweight='bold')
+        axes[i, 1].set_ylabel('% in Population')
+        axes[i, 1].set_xticks(range(5, 21, 5))
+        axes[i, 1].set_ylim(0, 1.1)
+        axes[i, 1].spines['top'].set_visible(False)
+        axes[i, 1].spines['right'].set_visible(False)
 
     # Plot the genoSiS top k percents and kinship top K percents in fourth column
     for i, superpop in enumerate(kinship_superpop_percents.keys()):
@@ -417,21 +442,21 @@ def plot_ancestry_top_k(genosis_scores,
 
         sns.lineplot(x='K', y='GenoSiS Scores',
                      data=D_genosis_superpop,
-                     ax=axes[i, 3],
+                     ax=axes[i, 2],
                      label='Genosis superpop',
                      color=super_color)
         D_genosis_subpop = pd.DataFrame({'K': x,
                           'GenoSiS Scores': genosis_y[1]})
         sns.lineplot(x='K', y='GenoSiS Scores',
                         data=D_genosis_subpop,
-                        ax=axes[i, 3],
+                        ax=axes[i, 2],
                         label='Genosis subpop',
                         color=sub_color)
         D_kinship_superpop = pd.DataFrame({'K': x,
                           'Plink kinship Scores': list(kinship_superpop_percents[superpop].values())})
         sns.lineplot(x='K', y='Plink kinship Scores',
                         data=D_kinship_superpop,
-                        ax=axes[i, 3],
+                        ax=axes[i, 2],
                         label='Plink kinship superpop',
                         color=super_color,
                         linestyle='dashed')
@@ -439,16 +464,16 @@ def plot_ancestry_top_k(genosis_scores,
                           'Plink kinship Scores': list(kinship_subpop_percents[superpop].values())})
         sns.lineplot(x='K', y='Plink kinship Scores',
                         data=D_kinship_subpop,
-                        ax=axes[i, 3],
+                        ax=axes[i, 2],
                         label='Plink kinship subpop',
                         color=sub_color,
                         linestyle='dashed')
-        axes[0, 3].set_title('GenoSiS vs.\nPlink Kinship', fontsize=20, fontweight='bold')
-        axes[i, 3].set_ylabel('% in Population')
-        axes[i, 3].set_xticks(range(5, 21, 5))
-        axes[i, 3].set_ylim(0, 1.1)
-        axes[i, 3].spines['top'].set_visible(False)
-        axes[i, 3].spines['right'].set_visible(False)
+        axes[0, 2].set_title('GenoSiS vs.\nPlink Kinship', fontsize=20, fontweight='bold')
+        axes[i, 2].set_ylabel('% in Population')
+        axes[i, 2].set_xticks(range(5, 21, 5))
+        axes[i, 2].set_ylim(0, 1.1)
+        axes[i, 2].spines['top'].set_visible(False)
+        axes[i, 2].spines['right'].set_visible(False)
 
         # shift plots down and to the right
         plt.subplots_adjust(top=0.85, right=1.)

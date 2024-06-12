@@ -6,10 +6,10 @@
 5,darkorange
 6,mediumpurple
 10,black
-AFR,goldenrod
-AMR,firebrick
-EAS,olivedrab
-EUR,dodgerblue
+AFR,deepskyblue
+AMR,gold
+EAS,crimson
+EUR,yellowgreen
 SAS,mediumpurple
 superpop,grey
 outgroup,black
