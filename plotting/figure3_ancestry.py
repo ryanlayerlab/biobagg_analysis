@@ -84,6 +84,59 @@ def read_top_K(top_k_file,
                 pass # header
     return top_K_samples, top_K_subpopulations
 
+def get_percent_in_top_k(top_K_samples,
+                         subpopulations):
+    '''
+
+    @param top_K_samples: dictionary with key = sample and value = list of top k samples
+    @param top_K_subpopulations: dictionary with key = sample and value = list of top k subpopulations
+
+    @return: dictionary with key = sample and value = percent in top k that are subpop, superpop, outgroup
+    '''
+    sample_percents = {}
+    for query in top_K_samples.keys():
+        k = len(top_K_samples[query])
+        query_subpop = subpopulations[query]
+        query_superpop = ancestry_helpers.SUB_SUPERPOPULATIONS[query_subpop]
+        subpop_count = 0
+        superpop_count = 0
+        outgroup_count = 0
+        for match in top_K_samples[query]:
+            match_subpop = subpopulations[match]
+            match_superpop = ancestry_helpers.SUB_SUPERPOPULATIONS[match_subpop]
+            if query_subpop == match_subpop:
+                subpop_count += 1
+                superpop_count += 1
+            elif query_superpop == match_superpop:
+                superpop_count += 1
+            else:
+                outgroup_count += 1
+        sample_percents[query] = {'subpop': subpop_count / k,
+                                    'superpop': superpop_count / k,
+                                    'outgroup': outgroup_count / k}
+    return sample_percents
+
+
+def get_pop_counts(sample_percents,
+                   subpopulations):
+    '''
+    Get the counts of samples in the same subpopulation, superpopulation, and outgroup
+    @param sample_percents:
+    @return:
+    '''
+    counts = defaultdict(dict)
+    for sample in sample_percents.keys():
+        # get superpop of sample
+        sample_superpop = ancestry_helpers.SUB_SUPERPOPULATIONS[subpopulations[sample]]
+        for category in sample_percents[sample].keys():
+            if category not in counts[sample_superpop]:
+                counts[sample_superpop][category] = []
+            counts[sample_superpop][category].append(sample_percents[sample][category])
+    return counts
+
+
+
+
 def get_population_percents(top_K_subpopulations,
                             k,
                             subpopulations):
@@ -206,6 +259,20 @@ def plot_ancestry_group_distributions(genosis_scores,
                     label=superpop,
                     palette=colors_list,
                     fill=True, alpha=alpha_value)
+        # try:
+        #     sns.histplot(D[0], ax=axes[i, 0], color=colors_list[0], kde=False, binwidth=50)
+        # except:
+        #     pass
+        # try:
+        #     sns.histplot(D[1], ax=axes[i, 0], color=colors_list[1], kde=False, binwidth=50)
+        # except:
+        #     pass
+        # try:
+        #     sns.histplot(D[2], ax=axes[i, 0], color=colors_list[2], kde=False, binwidth=50)
+        # except:
+        #     pass
+        # # log y - axis
+        # axes[i, 0].set_yscale('log')
         axes[0, 0].set_title('GenoSiS Scores', fontsize=20, fontweight='bold')
         axes[i, 0].set_ylabel('Density')
         # axes[i, 0].set_xlim(0, genosis_x_max)
@@ -228,6 +295,18 @@ def plot_ancestry_group_distributions(genosis_scores,
                     label=superpop,
                     palette=colors_list,
                     fill=True, alpha=alpha_value)
+        # try:
+        #     sns.histplot(D[0], ax=axes[i, 1], color=colors_list[0], kde=False, binwidth=0.001)
+        # except:
+        #     pass
+        # try:
+        #     sns.histplot(D[1], ax=axes[i, 1], color=colors_list[1], kde=False, binwidth=0.001)
+        # except:
+        #     pass
+        # try:
+        #     sns.histplot(D[2], ax=axes[i, 1], color=colors_list[2], kde=False, binwidth=0.001)
+        # except:
+        #     pass
         axes[0, 1].set_title('Plink DST Scores', fontsize=20, fontweight='bold')
         axes[i, 1].set_ylabel('Density')
         axes[i, 1].spines['top'].set_visible(False)
@@ -249,6 +328,18 @@ def plot_ancestry_group_distributions(genosis_scores,
                     label=superpop,
                     palette=colors_list,
                     fill=True, alpha=alpha_value)
+        # try:
+        #     sns.histplot(D[0], ax=axes[i, 2], color=colors_list[0], kde=False, binwidth=0.01)
+        # except:
+        #     pass
+        # try:
+        #     sns.histplot(D[1], ax=axes[i, 2], color=colors_list[1], kde=False, binwidth=0.01)
+        # except:
+        #     pass
+        # try:
+        #     sns.histplot(D[2], ax=axes[i, 2], color=colors_list[2], kde=False, binwidth=0.01)
+        # except:
+        #     pass
         axes[0, 2].set_title('Plink pi-hat Scores', fontsize=20, fontweight='bold')
         axes[i, 2].set_ylabel('Density')
         axes[i, 2].spines['top'].set_visible(False)
@@ -270,6 +361,18 @@ def plot_ancestry_group_distributions(genosis_scores,
                     label=superpop,
                     palette=colors_list,
                     fill=True, alpha=alpha_value)
+        # try:
+        #     sns.histplot(D[0], ax=axes[i, 3], color=colors_list[0], kde=False, binwidth=0.01)
+        # except:
+        #     pass
+        # try:
+        #     sns.histplot(D[1], ax=axes[i, 3], color=colors_list[1], kde=False, binwidth=0.01)
+        # except:
+        #     pass
+        # try:
+        #     sns.histplot(D[2], ax=axes[i, 3], color=colors_list[2], kde=False, binwidth=0.001)
+        # except:
+        #     pass
         axes[0, 3].set_title('Plink kinship Scores', fontsize=20, fontweight='bold')
         axes[i, 3].set_ylabel('Density')
         axes[i, 3].spines['top'].set_visible(False)
@@ -516,31 +619,39 @@ def main():
                                       png_dist)
 
 
-    genosis_top_k_samples, genosis_top_k_subpopulations = read_top_K(args.genosis_k, subpopulations, header=False)
-    genosis_superpop_percents, genosis_subpop_percents = get_population_percents(genosis_top_k_subpopulations,
-                                                                                 int(args.k),
-                                                                                 subpopulations)
-    dst_top_k_samples, dst_top_k_subpopulations = read_top_K(args.dst_k, subpopulations)
-    dst_superpop_percents, dst_subpop_percents = get_population_percents(dst_top_k_subpopulations,
-                                                                         int(args.k),
-                                                                         subpopulations)
-    pihat_top_k_samples, pihat_top_k_subpopulations = read_top_K(args.pihat_k, subpopulations)
-    pihat_superpop_percents, pihat_subpop_percents = get_population_percents(pihat_top_k_subpopulations,
-                                                                             int(args.k),
-                                                                             subpopulations)
-    kinship_top_k_samples, kinship_top_k_subpopulations = read_top_K(args.kinship_k, subpopulations)
-    kinship_superpop_percents, kinship_subpop_percents = get_population_percents(kinship_top_k_subpopulations,
-                                                                                 int(args.k),
-                                                                                 subpopulations)
+    # genosis_top_k_samples, genosis_top_k_subpopulations = read_top_K(args.genosis_k, subpopulations, header=False)
+    # genosis_superpop_percents, genosis_subpop_percents = get_population_percents(genosis_top_k_subpopulations,
+    #                                                                              int(args.k),
+    #                                                                              subpopulations)
+    # genosis_sample_percents = get_percent_in_top_k(genosis_top_k_samples, subpopulations)
+    #
+    #
+    # dst_top_k_samples, dst_top_k_subpopulations = read_top_K(args.dst_k, subpopulations)
+    # dst_superpop_percents, dst_subpop_percents = get_population_percents(dst_top_k_subpopulations,
+    #                                                                      int(args.k),
+    #                                                                      subpopulations)
+    # dst_sample_percents = get_percent_in_top_k(dst_top_k_samples, subpopulations)
+    #
+    # pihat_top_k_samples, pihat_top_k_subpopulations = read_top_K(args.pihat_k, subpopulations)
+    # pihat_superpop_percents, pihat_subpop_percents = get_population_percents(pihat_top_k_subpopulations,
+    #                                                                          int(args.k),
+    #                                                                          subpopulations)
+    # pihat_sample_percents = get_percent_in_top_k(pihat_top_k_samples, subpopulations)
+    #
+    # kinship_top_k_samples, kinship_top_k_subpopulations = read_top_K(args.kinship_k, subpopulations)
+    # kinship_superpop_percents, kinship_subpop_percents = get_population_percents(kinship_top_k_subpopulations,
+    #                                                                              int(args.k),
+    #                                                                              subpopulations)
+    # kinship_sample_percents = get_percent_in_top_k(kinship_top_k_samples, subpopulations)
+    #
 
-    plot_ancestry_top_k(genosis_group_scores,
-                        genosis_superpop_percents, genosis_subpop_percents,
-                        dst_superpop_percents, dst_subpop_percents,
-                        pihat_superpop_percents, pihat_subpop_percents,
-                        kinship_superpop_percents, kinship_subpop_percents,
-                        colors,
-                        args.png_k)
-
+    # plot_ancestry_top_k(genosis_group_scores,
+    #                     genosis_superpop_percents, genosis_subpop_percents,
+    #                     dst_superpop_percents, dst_subpop_percents,
+    #                     pihat_superpop_percents, pihat_subpop_percents,
+    #                     kinship_superpop_percents, kinship_subpop_percents,
+    #                     colors,
+    #                     args.png_k)
 
 if __name__ == '__main__':
     main()
