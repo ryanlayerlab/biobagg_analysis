@@ -494,7 +494,7 @@ def plot_quality_results_heatmap(AFR_sub_scores,
         line_offset += num_subpops
 
     # add text at top for figure title
-    fig.suptitle('Average GenoSiS Scores for Isolated\nQuery and Database Populations',
+    fig.suptitle('Max GenoSiS Scores for Isolated\nQuery and Database Populations',
                  fontsize=40, fontweight='bold')
 
     plt.savefig(png)
@@ -528,11 +528,11 @@ def main():
                          colors,
                          args.png + 'super_histogram.png')
 
-    # AFR_sub_scores = organize_subpopulations(AFR_quality_scores)
-    # AMR_sub_scores = organize_subpopulations(AMR_quality_scores)
-    # EAS_sub_scores = organize_subpopulations(EAS_quality_scores)
-    # EUR_sub_scores = organize_subpopulations(EUR_quality_scores)
-    # SAS_sub_scores = organize_subpopulations(SAS_quality_scores)
+    AFR_sub_scores = organize_subpopulations(AFR_quality_scores)
+    AMR_sub_scores = organize_subpopulations(AMR_quality_scores)
+    EAS_sub_scores = organize_subpopulations(EAS_quality_scores)
+    EUR_sub_scores = organize_subpopulations(EUR_quality_scores)
+    SAS_sub_scores = organize_subpopulations(SAS_quality_scores)
     #
     # plot_sub_histogram(AFR_sub_scores,
     #                    AMR_sub_scores,
@@ -542,13 +542,13 @@ def main():
     #                    colors,
     #                    args.png + 'sub_histogram.png')
 
-    # plot_quality_results_heatmap(AFR_sub_scores,
-    #                              AMR_sub_scores,
-    #                              EAS_sub_scores,
-    #                              EUR_sub_scores,
-    #                              SAS_sub_scores,
-    #                              colors,
-    #                              args.png + 'heatmap.png')
+    plot_quality_results_heatmap(AFR_sub_scores,
+                                 AMR_sub_scores,
+                                 EAS_sub_scores,
+                                 EUR_sub_scores,
+                                 SAS_sub_scores,
+                                 colors,
+                                 args.png + 'heatmap.png')
 
 
 if __name__ == '__main__':
