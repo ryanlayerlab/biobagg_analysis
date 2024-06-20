@@ -85,29 +85,36 @@ def organize_data(ccpm_ancestry_data,
     return ancestry_counts
 
 
-def plot_data(ancestry_counts, png_file):
+def plot_data(ancestry_counts, png_file, num_chrom):
     '''
     Plot the ancestry data
     @param ancestry_counts: dictionary of dictionaries with ancestry as key and list of cohort counts as values
     @param png_file: path to the output png file
     '''
-    # Plot with heatmap ancestry labels as x and y
-    fig, ax = plt.subplots(figsize=(12, 10), dpi=300)
-    # get average counts for each ancestry
-    avg_counts = {a: [np.mean(ancestry_counts[a][b])/3 for b in ancestry_counts[a]] for a in ancestry_counts}
+    ordered_ancestry = ['Africa', 'America', 'East Asian', 'Europe', 'Middle East', 'Central South Asian']
+    ordered_ancestry_labels = ['Africa', 'America', 'East\nAsian', 'Europe', 'Middle\nEast', 'Central\nSouth Asian']
+    # Plot with heatmap ancestry labels as x and y in order
+    fig, ax = plt.subplots(figsize=(18, 15), dpi=300)
+    # get average counts for each ancestry in order
+    # avg_counts = {a: [np.mean(ancestry_counts[a][b])/num_chrom for b in ancestry_counts[a]] for a in ancestry_counts}
+    avg_counts = {a: [np.mean(ancestry_counts[a][b])/ num_chrom for b in ordered_ancestry] for a in ordered_ancestry}
     df = pd.DataFrame(avg_counts)
-
+    sns.set(font_scale=1.5)
     # Plot the heatmap transposed with range 0 to 20
-    sns.heatmap(df.T, cmap='Blues', ax=ax,
-                cbar_kws={'label': 'Average number of hits in cohort'},
-                annot=True, fmt='.2f',
+    sns.heatmap(df.T, cmap='Greys', ax=ax,
+                square=True,
+                annot=False, fmt='.2f', annot_kws={'size': 20},
                 vmin=0, vmax=20)
-    ax.set_title('Average cohort counts by ancestry\nCCPM (chrm 21-22)', fontsize=16, fontweight='bold', pad=20)
-    ax.set_xlabel('Cohort Ancestry', fontsize=12, fontweight='bold', labelpad=10)
-    ax.set_ylabel('Query Ancestry', fontsize=12, fontweight='bold', labelpad=10)
-    ax.set_xticks(np.arange(0.5, len(df.columns), 1), df.columns)
-    ax.set_yticks(np.arange(0.5, len(df.columns), 1), df.columns)
+    cbar = ax.collections[0].colorbar
+    cbar.set_label('Average number of hits in cohort', fontsize=20, labelpad=20)
+    ax.set_title('Average cohort counts by ancestry\nCCPM (chrm 1-11,20-22)', fontsize=40, pad=20)
+    ax.set_xlabel('Cohort Population', fontsize=35, labelpad=20)
+    ax.set_ylabel('Query Population', fontsize=35, labelpad=20)
+    ax.set_xticklabels(ordered_ancestry_labels, fontsize=20)
+    ax.set_yticklabels(ordered_ancestry_labels, fontsize=20)
 
+
+    plt.tight_layout()
     plt.savefig(png_file)
 
 
@@ -117,6 +124,8 @@ def main():
     ccpm_ancestry_file = args.ancestry
     ancestry_dir = args.ancestry_dir
     png_file = args.png
+
+    num_chrom = 13
 
     print('Reading ccpm ancestry file')
     ccpm_ancestry = read_ccpm_ancestry(ccpm_ancestry_file)
@@ -136,7 +145,7 @@ def main():
                                     ccpm_ancestry_labels)
 
     # Plot the data
-    plot_data(ancestry_counts, png_file)
+    plot_data(ancestry_counts, png_file, num_chrom)
 
 
 

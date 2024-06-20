@@ -47,7 +47,7 @@ python plotting/figure2_related.py \
 
 </details>
 
-### Figure 3: Ancestry Data
+### Figure 3.1: Ancestry Data
 ```
 python plotting/figure3_ancestry.py \
     --ancestry data/1kg_info/1kg_ancestry.tsv \
@@ -71,6 +71,46 @@ python plotting/figure3_ancestry.py \
 
 </details>
 
+#### Figure 3.2: 1KG subopulations
+```
+python plotting/figure_sup_subpops.py \
+    --ancestry data/1kg_info/1kg_ancestry.tsv \
+    --k 20 \
+    --colors pub_figures/colors.txt \
+    --genosis data/subpop_counts/genosis_counts.tsv \
+    --dst data/subpop_counts/dst_counts.tsv \
+    --pihat data/subpop_counts/pihat_counts.tsv \
+    --kin data/subpop_counts/kinship_counts.tsv \
+    --png pub_figures/
+```
+<details>
+
+|                                                           |                                                           |
+|-----------------------------------------------------------|-----------------------------------------------------------|
+| ![genosis-subpop-heatmap](pub_figures/genosis_counts.png) | ![dst-subpop-heatmap](pub_figures/dst_counts.png)         |
+| ![pi-hat-subpop-heatmap](pub_figures/pihat_counts.png)    | ![kinship-subpop-heatmap](pub_figures/kinship_counts.png) |
+
+</details>
+
+### Figure 3.3: CCPM Ancestries
+```
+python plotting/plot_ccpm.py \
+    --ancestry data/ccpm_data/R168_ccpm_f3_PCs_genetic_similarity_19Jun2024.txt
+    --ancestry_dir data/ccpm_data/ccpm_results/
+    --png pub_figures/ccpm_ancestry.png
+```
+
+<details>
+
+![ccpm_ancestry](pub_figures/ccpm_ancestry.png)
+
+</details>
+
+### Figure 4: Timing
+```
+tbd
+```
+
 ### Figure 5: Cohort Quality
 ```
 python plotting/figure5_quality.py \
@@ -92,26 +132,7 @@ python plotting/figure5_quality.py \
 
 
 ### SUPPLEMENTAL
-#### Figure S1: Cohort Counts by Subpopulation
-```
-python plotting/figure_sup_subpops.py \
-    --ancestry data/1kg_info/1kg_ancestry.tsv \
-    --k 20 \
-    --colors pub_figures/colors.txt \
-    --genosis data/subpop_counts/genosis_subpop_counts.tsv \
-    --dst data/subpop_counts/dst_subpop_counts.tsv \
-    --pihat data/subpop_counts/pihat_subpop_counts.tsv \
-    --kin data/subpop_counts/kinship_subpop_counts.tsv \
-    --png pub_figures/
-```
-<details>
 
-| | |
-|-------|-------|
-| ![genosis-subpop-heatmap](pub_figures/supplement_subpop_genosis.png) | ![dst-subpop-heatmap](pub_figures/supplement_subpop_dst.png) |
-| ![pi-hat-subpop-heatmap](pub_figures/supplement_subpop_pihat.png) | ![kinship-subpop-heatmap](pub_figures/supplement_subpop_kinship.png) |
-
-</details>
 
 --------------------------------------------
 _!! **I have done some reorganizing of the data files, so paths might be wrong below** !!_

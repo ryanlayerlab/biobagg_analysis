@@ -216,7 +216,8 @@ def plot_heatmap_counts(subpop_counts,
     df = pd.DataFrame(subpop_counts_avg)
     sns.set(font_scale=1.5)
     sns.heatmap(df.T, cmap='Greys', annot=False, cbar=True, square=True,
-                vmin=0, vmax=20)
+                vmin=0, vmax=20,
+                cbar_kws={'label': 'Average number of hits in cohort'})
     # add patches for superpopulations
     line_offset = 0
     for i in SUPER_SUBPOPULATIONS:
@@ -253,20 +254,29 @@ def plot_heatmap_counts(subpop_counts,
     for tick in plt.gca().get_yticklabels():
         tick.set_color(colors[tick.get_text()])
 
-    # draw lines between superpopulations
+    # draw lines between superpopulations except last one
     line_offset = 0
     for i in SUPER_SUBPOPULATIONS:
+        if i == 'SAS':
+            break
         num_subpops = len(SUPER_SUBPOPULATIONS[i])
         plt.axhline(num_subpops + line_offset, color='black', linewidth=2)
         plt.axvline(num_subpops + line_offset, color='black', linewidth=2)
         line_offset += num_subpops
 
+
     plt.xlabel('Cohort Population', fontsize=40)
     plt.ylabel('Query Population', fontsize=40)
-    title += '\nTotal Counts for Subpopulation Cohorts'
-    plt.title(title, fontsize=50)
+    figure_title = ('Average cohort counts by Subpopulation' +
+                    '\n(1KG, ' + title + ')' )
+
+    # set colorbar font and label
+    cbar = plt.gca().collections[0].colorbar
+    cbar.ax.tick_params(labelsize=20)
+    cbar.set_label('Average number of hits in cohort', fontsize=20, labelpad=20)
+
+    plt.title(figure_title, fontsize=40, pad=20)
     # move plot to make room for title
-    plt.subplots_adjust(top=0.9, bottom=0.2, right=0.9, left=0.1)
     plt.tight_layout()
     plt.savefig(output_file)
 
@@ -288,21 +298,21 @@ def main():
                                              header=True)
     plot_heatmap_counts(dst_subpop_counts,
                         colors,
-                        'DST',
+                        'plink DST',
                         args.png + 'dst_counts.png')
 
     pihat_subpop_counts = read_subpop_counts(args.pihat,
                                                 header=True)
     plot_heatmap_counts(pihat_subpop_counts,
                         colors,
-                        'Pihat',
+                        'plink pi-hat',
                         args.png + 'pihat_counts.png')
 
     kinship_subpop_counts = read_subpop_counts(args.kinship,
                                                 header=True)
     plot_heatmap_counts(kinship_subpop_counts,
                         colors,
-                        'Kinship',
+                        'plink2 kinship',
                         args.png + 'kinship_counts.png')
 
 
