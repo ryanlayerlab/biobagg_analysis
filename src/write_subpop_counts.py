@@ -23,7 +23,8 @@ def get_subpop_counts(top_k_file,
     @param subpopulations: dictionary of subpopulations for each sample
     @return: dictionary of subpopulation counts
     '''
-    subpopulation_counts = defaultdict(dict)
+    all_subpopulations = ancestry_helpers.SUBPOPULATIONS
+    subpopulation_counts = {sub: {sub2: [] for sub2 in all_subpopulations} for sub in all_subpopulations}
 
     f = open(top_k_file, 'r')
     if header:
@@ -33,17 +34,18 @@ def get_subpop_counts(top_k_file,
         query = line[0]
         matches = line[1:]
         query_subpopulation = subpopulations[query]
-        query_dict = {}
+        query_dict = {subpop: 0 for subpop in all_subpopulations}
         for match_score in matches:
             match = match_score.split(',')[0]
             # ignore self match
             if query in match:
                 continue
             match_subpopulation = subpopulations[match]
-            try:
-                subpopulation_counts[query_subpopulation][match_subpopulation] += 1
-            except KeyError:
-                subpopulation_counts[query_subpopulation][match_subpopulation] = 1
+            query_dict[match_subpopulation] += 1
+        for subpop in query_dict:
+            subpopulation_counts[query_subpopulation][subpop].append(query_dict[subpop])
+
+    f.close()
     return subpopulation_counts
 
 def write_subpop_counts(subpopulation_counts, output_file):
@@ -54,16 +56,13 @@ def write_subpop_counts(subpopulation_counts, output_file):
     '''
     all_subpopulations = sorted(subpopulation_counts.keys())
     with open(output_file, 'w') as f:
-        f.write('query_subpop\tmatch_subpop,count...\n')
+        f.write('query_subpop match_subpop counts,...\n')
         for query_subpopulation in all_subpopulations:
-            f.write(f'{query_subpopulation}\t')
+            # f.write(f'{query_subpopulation}\t')
             for match_subpopulation in all_subpopulations:
-                try:
-                    count = subpopulation_counts[query_subpopulation][match_subpopulation]
-                except KeyError:
-                    count = 0
-                f.write(f'{match_subpopulation},{count}\t')
-            f.write('\n')
+                counts = subpopulation_counts[query_subpopulation][match_subpopulation]
+                f.write(f'{query_subpopulation}\t{match_subpopulation}\t{",".join(map(str, counts))}\t')
+                f.write('\n')
     f.close()
 
 def main():
@@ -72,19 +71,19 @@ def main():
     subpopulations = ancestry_helpers.get_subpopulations(args.ancestry)
 
     genosis_subpop_counts = get_subpop_counts(args.genosis, subpopulations, header=False)
-    genosis_output = args.output_dir + 'genosis_subpop_counts.tsv'
+    genosis_output = args.output_dir + 'genosis_counts.tsv'
     write_subpop_counts(genosis_subpop_counts, genosis_output)
 
     dst_subpop_counts = get_subpop_counts(args.dst, subpopulations)
-    dst_output = args.output_dir + 'dst_subpop_counts.tsv'
+    dst_output = args.output_dir + 'dst_counts.tsv'
     write_subpop_counts(dst_subpop_counts, dst_output)
 
     pihat_subpop_counts = get_subpop_counts(args.pihat, subpopulations)
-    pihat_output = args.output_dir + 'pihat_subpop_counts.tsv'
+    pihat_output = args.output_dir + 'pihat_counts.tsv'
     write_subpop_counts(pihat_subpop_counts, pihat_output)
 
     kinship_subpop_counts = get_subpop_counts(args.kinship, subpopulations)
-    kinship_output = args.output_dir + 'kinship_subpop_counts.tsv'
+    kinship_output = args.output_dir + 'kinship_counts.tsv'
     write_subpop_counts(kinship_subpop_counts, kinship_output)
 
 
