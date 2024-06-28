@@ -34,7 +34,7 @@ def read_ccpm_ancestry(ccpm_ancestry_file):
 
     return ccpm_ancestry
 
-def read_ccpm_hits(chrm_ancestry_file,
+def read_ccpm_ancestries(chrm_ancestry_file,
                    ccpm_data):
     '''
     Read the ccpm ancestry file and return a dictionary with ccpm id as key and match ids as values
@@ -60,9 +60,9 @@ def read_ccpm_hits(chrm_ancestry_file,
 
     return ccpm_data
 
-def organize_data(ccpm_ancestry_data,
-                  ccpm_ancestry_dict,
-                  ccpm_ancestry_labels):
+def organize_ancestry_data(ccpm_ancestry_data,
+                           ccpm_ancestry_dict,
+                           ccpm_ancestry_labels):
     '''
     Create a dictionary of dictionaries with ancestry as key and count as value s
     @param ccpm_ancestry_data: dictionary with ccpm id as key and match id as value
@@ -84,6 +84,61 @@ def organize_data(ccpm_ancestry_data,
 
     return ancestry_counts
 
+def read_ccpm_genosis_scores(chrm_genosis_file,
+                             ccpm_genosis_scores):
+    '''
+    Read the ccpm genosis scores file and return a dictionary with query id as key and match id and genosis score as values
+    @param chrm_genosis_file: path to the ccpm genosis scores file
+    @param ccpm_genosis_scores: dictionary with query id as key and match id and genosis score as values
+    @return: dictionary with query id as key and match id and genosis score as values
+    '''
+    with open(chrm_genosis_file, 'r') as f:
+        # Skip header
+        f.readline()
+        for line in f:
+            line = line.strip().split('\t')
+            query_id = line[0].strip().split(',')[0]
+            for match_id_score in line[1:]:
+                match_id = match_id_score.split(',')[0]
+                genosis_score = float(match_id_score.split(',')[1])
+                try:
+                    ccpm_genosis_scores[query_id][match_id] += genosis_score
+                except KeyError:
+                    try:
+                        ccpm_genosis_scores[query_id][match_id] = genosis_score
+                    except KeyError:
+                        ccpm_genosis_scores[query_id] = {match_id: genosis_score}
+
+    return ccpm_genosis_scores
+
+def organize_genosis_data(ccpm_genosis_scores,
+                            ccpm_ancestry_dict,
+                            ccpm_ancestry_labels):
+    '''
+    Create a dictionary of dictionaries with ancestry as key and genosis scores as values
+
+    @param ccpm_genosis_scores: dictionary with query id as key and match id and genosis score as values
+    @param ccpm_ancestry_dict: dictionary with ccpm id as key and ancestry as value
+    @param ccpm_ancestry_labels: list of ancestry labels
+    @return:
+    '''
+    ancestry_scores = {ancestry: {ancestry: [] for ancestry in ccpm_ancestry_labels} for ancestry in ccpm_ancestry_labels}
+    for query_id in ccpm_genosis_scores:
+        query_scores = {ancestry: [] for ancestry in ccpm_ancestry_labels}
+        query_ancestry = ccpm_ancestry_dict[query_id]
+        for match_id in ccpm_genosis_scores[query_id]:
+            if query_id == match_id:
+                continue
+            match_ancestry = ccpm_ancestry_dict[match_id]
+            try:
+                query_scores[match_ancestry].append(ccpm_genosis_scores[query_id][match_id])
+            except KeyError:
+                query_scores[match_ancestry] = [ccpm_genosis_scores[query_id][match_id]]
+        for a in query_scores:
+            ancestry_scores[query_ancestry][a].extend(query_scores[a])
+
+    return ancestry_scores
+
 
 def plot_data(ancestry_counts, png_file, num_chrom):
     '''
@@ -103,18 +158,214 @@ def plot_data(ancestry_counts, png_file, num_chrom):
     # Plot the heatmap transposed with range 0 to 20
     sns.heatmap(df.T, cmap='Greys', ax=ax,
                 square=True,
-                annot=False, fmt='.2f', annot_kws={'size': 20},
+                annot=True, fmt='.2f', annot_kws={'size': 20},
                 vmin=0, vmax=20)
     cbar = ax.collections[0].colorbar
-    cbar.set_label('Average number of hits in cohort', fontsize=20, labelpad=20)
-    ax.set_title('Average cohort counts by ancestry\nCCPM (chrm 1-11,20-22)', fontsize=40, pad=20)
-    ax.set_xlabel('Cohort Population', fontsize=35, labelpad=20)
-    ax.set_ylabel('Query Population', fontsize=35, labelpad=20)
+    cbar.set_ticks([0, 5, 10, 15, 20])
+    cbar.set_label('Average counts in cohort', fontsize=25, labelpad=20)
+    # ax.set_title('Average cohort counts by ancestry\nCCPM (chrm 1-22)', fontsize=40, pad=20)
+    ax.set_xlabel('Cohort Population', fontsize=30, labelpad=20)
+    ax.set_ylabel('Query Population', fontsize=30, labelpad=20)
     ax.set_xticklabels(ordered_ancestry_labels, fontsize=20)
     ax.set_yticklabels(ordered_ancestry_labels, fontsize=20)
 
 
     plt.tight_layout()
+    plt.savefig(png_file)
+
+def plot_scores(ancestry_scores, png_file):
+    '''
+    plot distribution of genosis scores
+    @param ancestry_scores: dictionary of dictionaries with ancestry as key and list of genosis scores as values
+    @param png_file: path to the output png file
+    @return: None
+    '''
+    ordered_ancestry = ['Africa', 'America', 'East Asian', 'Europe', 'Middle East', 'Central South Asian']
+    ordered_ancestry_labels = ['Africa', 'America', 'East\nAsian', 'Europe', 'Middle\nEast', 'Central\nSouth Asian']
+
+    # 6 by 6
+    fig, ax = plt.subplots(6, 6, figsize=(18, 15), dpi=300, sharex=True, sharey=True)
+    for i, a in enumerate(ordered_ancestry):
+        for j, b in enumerate(ordered_ancestry):
+            sns.histplot(ancestry_scores[a][b], ax=ax[i, j], bins=20, color='black')
+            # kde plot
+            # sns.kdeplot(ancestry_scores[a][b], ax=ax[i, j], color='black')
+
+            ax[j, i].set_xlabel('Genosis Score', fontsize=15)
+            # remove background grid
+            ax[j, i].grid(False)
+            # ax[j, i].set_ylabel('Count', fontsize=10)
+            # log scale
+            ax[j, i].set_yscale('log')
+
+    # add labels along the left side and bottom
+    for i, a in enumerate(ordered_ancestry_labels):
+        ax[i, 0].set_ylabel(a, fontsize=20)
+        # ax[5, i].set_xlabel(a, fontsize=10)
+
+    # add text box at bottom "Cohort Population"
+    fig.text(0.5, 0.04, 'Cohort Population', ha='center', fontsize=30)
+    # add text box at left "Query Population"
+    fig.text(0.04, 0.5, 'Query Population', va='center', rotation='vertical', fontsize=30)
+
+    # fig.suptitle('Genosis Score Distribution\nCCPM (chrm 1-22)', fontsize=40)
+
+
+    # plt.tight_layout()
+    plt.savefig(png_file)
+
+def plot_with_rank(ccpm_ancestry_data,
+                   ccpm_genosis_scores,
+                   ccpm_ancestry,
+                   png_file):
+    '''
+    plot a scatter plot where x-axis is the cohort rank, y-axis is the genosis score,
+     and the color is "in pop" or "out pop"
+    @param ccpm_ancestry_data: cohort ancestry labels
+    @param ccpm_genosis_scores: cohort genosis scores
+    @param ccpm_ancestry: dict of samples and their ancestry labels
+    @return: None
+    '''
+
+    self_color = 'black'
+    in_pop_color = 'yellowgreen'
+    out_pop_color = 'tomato'
+
+
+    ancestry_options = ['Africa', 'America', 'East Asian', 'Europe', 'Middle East', 'Central South Asian']
+
+    x_africa, y_africa, color_data_africa = [], [], []
+    x_america, y_america, color_data_america = [], [], []
+    x_east_asian, y_east_asian, color_data_east_asian = [], [], []
+    x_europe, y_europe, color_data_europe = [], [], []
+    x_middle_east, y_middle_east, color_data_middle_east = [], [], []
+    x_central_south_asian, y_central_south_asian, color_data_central_south_asian = [], [], []
+
+    for query_id in ccpm_ancestry_data:
+        query_ancestry = ccpm_ancestry[query_id]
+        for match_id in ccpm_ancestry_data[query_id]:
+            match_ancestry = ccpm_ancestry[match_id]
+            # rank is the index of the match in query's top k hits
+            rank = list(ccpm_ancestry_data[query_id]).index(match_id) + 1
+
+            if query_ancestry == 'Africa':
+                x_africa.append(rank)
+                y_africa.append(ccpm_genosis_scores[query_id][match_id])
+                if query_id == match_id:
+                    color_data_africa.append(self_color)
+                elif query_ancestry == match_ancestry:
+                    color_data_africa.append(in_pop_color)
+                else:
+                    color_data_africa.append(out_pop_color)
+            elif query_ancestry == 'America':
+                x_america.append(rank)
+                y_america.append(ccpm_genosis_scores[query_id][match_id])
+                if query_id == match_id:
+                    color_data_america.append(self_color)
+                elif query_ancestry == match_ancestry:
+                    color_data_america.append(in_pop_color)
+                else:
+                    color_data_america.append(out_pop_color)
+            elif query_ancestry == 'East Asian':
+                x_east_asian.append(rank)
+                y_east_asian.append(ccpm_genosis_scores[query_id][match_id])
+                if query_id == match_id:
+                    color_data_east_asian.append(self_color)
+                elif query_ancestry == match_ancestry:
+                    color_data_east_asian.append(in_pop_color)
+                else:
+                    color_data_east_asian.append(out_pop_color)
+            elif query_ancestry == 'Europe':
+                x_europe.append(rank)
+                y_europe.append(ccpm_genosis_scores[query_id][match_id])
+                if query_id == match_id:
+                    color_data_europe.append(self_color)
+                elif query_ancestry == match_ancestry:
+                    color_data_europe.append(in_pop_color)
+                else:
+                    color_data_europe.append(out_pop_color)
+            elif query_ancestry == 'Middle East':
+                x_middle_east.append(rank)
+                y_middle_east.append(ccpm_genosis_scores[query_id][match_id])
+                if query_id == match_id:
+                    color_data_middle_east.append(self_color)
+                elif query_ancestry == match_ancestry:
+                    color_data_middle_east.append(in_pop_color)
+                else:
+                    color_data_middle_east.append(out_pop_color)
+            elif query_ancestry == 'Central South Asian':
+                x_central_south_asian.append(rank)
+                y_central_south_asian.append(ccpm_genosis_scores[query_id][match_id])
+                if query_id == match_id:
+                    color_data_central_south_asian.append(self_color)
+                elif query_ancestry == match_ancestry:
+                    color_data_central_south_asian.append(in_pop_color)
+                else:
+                    color_data_central_south_asian.append(out_pop_color)
+            else:
+                print('Ancestry not found...' + query_ancestry)
+                continue
+        else:
+            continue
+
+    # one plot for each of the 6 ancestries
+    fig, ax = plt.subplots(2, 3, figsize=(18, 15), dpi=300, sharex=True, sharey=True)
+    for i, a in enumerate(ancestry_options):
+        print('Plotting for {}'.format(a))
+        if a == 'Africa':
+            x_data = x_africa
+            y_data = y_africa
+            color_data = color_data_africa
+        elif a == 'America':
+            x_data = x_america
+            y_data = y_america
+            color_data = color_data_america
+        elif a == 'East Asian':
+            x_data = x_east_asian
+            y_data = y_east_asian
+            color_data = color_data_east_asian
+        elif a == 'Europe':
+            x_data = x_europe
+            y_data = y_europe
+            color_data = color_data_europe
+        elif a == 'Middle East':
+            x_data = x_middle_east
+            y_data = y_middle_east
+            color_data = color_data_middle_east
+        elif a == 'Central South Asian':
+            x_data = x_central_south_asian
+            y_data = y_central_south_asian
+            color_data = color_data_central_south_asian
+        else:
+            print('Ancestry not found...' + a)
+            continue
+
+        # jitter the x values
+        x_data = [x + np.random.normal(0, 0.1, 1)[0] for x in x_data]
+
+        ax[i//3, i%3].scatter(x_data, y_data, c=color_data, s=10, alpha=0.5)
+        ax[i//3, i%3].set_title(a, fontsize=20)
+        ax[i//3, i%3].set_xlabel('Cohort Rank', fontsize=15)
+        ax[i//3, i%3].set_ylabel('Genosis Score', fontsize=15)
+        ax[i//3, i%3].set_xticks(range(1, 21, 1))
+        ax[i//3, i%3].grid(False)
+        # log scale
+        ax[i//3, i%3].set_yscale('log')
+
+        # add custom legend
+        ax[i//3, i%3].scatter([], [], c=self_color, s=10, label='Self')
+        ax[i//3, i%3].scatter([], [], c=in_pop_color, s=10, label='In Population')
+        ax[i//3, i%3].scatter([], [], c=out_pop_color, s=10, label='Out Population')
+        ax[i//3, i%3].legend(loc='upper right', fontsize=10)
+
+        # remove spines
+        ax[i//3, i%3].spines['top'].set_visible(False)
+        ax[i//3, i%3].spines['right'].set_visible(False)
+
+        # stop after 1 plot for testing
+        # break
+
+    fig.suptitle('Genosis Score vs Cohort Rank\nCCPM (chrm 1-22)', fontsize=40)
     plt.savefig(png_file)
 
 
@@ -123,9 +374,9 @@ def main():
     args = parse_args()
     ccpm_ancestry_file = args.ancestry
     ancestry_dir = args.ancestry_dir
-    png_file = args.png
+    png_dir = args.png
 
-    num_chrom = 13
+    num_chrom = 18
 
     print('Reading ccpm ancestry file')
     ccpm_ancestry = read_ccpm_ancestry(ccpm_ancestry_file)
@@ -133,19 +384,39 @@ def main():
 
     # {queryID: {matchID: count}}
     ccpm_ancestry_data = defaultdict(dict)
-    for chrm_file in os.listdir(ancestry_dir):
-        if chrm_file.endswith('.txt'):
-            print('Reading ccpm hits for {}'.format(chrm_file))
-            chrm_ancestry_file = os.path.join(ancestry_dir, chrm_file)
-            ccpm_ancestry_data = read_ccpm_hits(chrm_ancestry_file,
-                                                ccpm_ancestry_data)
+    ccpm_genosis_scores = defaultdict(dict)
 
-    ancestry_counts = organize_data(ccpm_ancestry_data,
-                                    ccpm_ancestry,
-                                    ccpm_ancestry_labels)
+    # print how many samples are in each ancestry
+    for a in ccpm_ancestry_labels:
+        print(f'{a}: {list(ccpm_ancestry.values()).count(a)}')
+
+    for chrm_file in os.listdir(ancestry_dir):
+        if chrm_file.endswith('_anc.txt'):
+            print('Reading ccpm ancestries for {}'.format(chrm_file))
+            chrm_ancestry_file = os.path.join(ancestry_dir, chrm_file)
+            ccpm_ancestry_data = read_ccpm_ancestries(chrm_ancestry_file,
+                                                ccpm_ancestry_data)
+        elif chrm_file.endswith('_scores.txt'):
+            print('Reading ccpm scores for {}'.format(chrm_file))
+            chrm_genosis_file = os.path.join(ancestry_dir, chrm_file)
+            ccpm_genosis_scores = read_ccpm_genosis_scores(chrm_genosis_file,
+                                                ccpm_genosis_scores)
+
+    ancestry_counts = organize_ancestry_data(ccpm_ancestry_data,
+                                             ccpm_ancestry,
+                                             ccpm_ancestry_labels)
+
+    ancestry_scores = organize_genosis_data(ccpm_genosis_scores,
+                                             ccpm_ancestry,
+                                             ccpm_ancestry_labels)
 
     # Plot the data
-    plot_data(ancestry_counts, png_file, num_chrom)
+    heatmap_png = png_dir + 'ccpm_ancestry.png'
+    distribution_png = png_dir + 'ccpm_genosis_scores.png'
+    # scatter_png = png_dir + 'ccpm_rank_scores_scatter.png'
+    plot_data(ancestry_counts, heatmap_png, num_chrom)
+    plot_scores(ancestry_scores, distribution_png)
+    # plot_with_rank(ccpm_ancestry_data, ccpm_genosis_scores, ccpm_ancestry, scatter_png)
 
 
 

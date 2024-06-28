@@ -37,9 +37,11 @@ def get_cohorts(chrom_hits):
     '''
     num_files = 0
     ccpm_top_k = defaultdict(list)
+    ccpm_top_k_genosis_scores = defaultdict(dict)
+
     for file in os.listdir(chrom_hits):
-        # if num_files == 10000:
-        #     break
+        if num_files == 100:
+            break
         if file.endswith('.knn'):
             query_id = file.split('.')[0]
             with open(os.path.join(chrom_hits, file), 'r') as f:
@@ -50,10 +52,12 @@ def get_cohorts(chrom_hits):
                     else:
                         line = line.strip().split('\t')
                         match_id = line[0]
+                        genosis_score = float(line[1])
                         ccpm_top_k[query_id].append(match_id)
-            # num_files += 1
+                        ccpm_top_k_genosis_scores[query_id][match_id] = genosis_score
+            num_files += 1
 
-    return ccpm_top_k
+    return ccpm_top_k, ccpm_top_k_genosis_scores
 
 def write_ccpm_hits_ancestry(ccpm_ancestry,
                              ccpm_top_k,
@@ -75,6 +79,22 @@ def write_ccpm_hits_ancestry(ccpm_ancestry,
             f.write('\n')
     f.close()
 
+def write_ccpm_genosis_scores(ccpm_genosis_scores,
+                                output_file):
+        '''
+        Write the genosis scores of the top k hits for each query to a file
+        @param ccpm_genosis_scores: dictionary with ccpm_id as key and top k hits genosis scores as value
+        @param output_file: path to the output file
+        '''
+        with open(output_file, 'w') as f:
+            f.write('query_id\t' + '\thit_id,genosis_score\n')
+            for query_id, hits in ccpm_genosis_scores.items():
+                f.write(f'{query_id}\t')
+                for hit, genosis_score in hits.items():
+                    f.write(f'{hit},{genosis_score}\t')
+                f.write('\n')
+        f.close()
+
 def main():
     # Parse command line arguments
     args = parse_args()
@@ -93,13 +113,19 @@ def main():
     ccpm_ancestry = read_ccpm_ancestry(ccpm_ancestry_file)
 
     print('Reading chromosome hits')
-    ccpm_top_k = get_cohorts(chrom_hits)
+    ccpm_top_k, ccpm_genosis_scores = get_cohorts(chrom_hits)
 
     print('writing chromosome hits ancestry to file')
     out_file = str(chrm) + '_ccpm_anc.txt'
     write_ccpm_hits_ancestry(ccpm_ancestry,
                              ccpm_top_k,
                              out_file)
+
+    print('writing chromosome genosis scores to file')
+    out_file = str(chrm) + '_ccpm_genosis_scores.txt'
+    write_ccpm_genosis_scores(ccpm_genosis_scores,
+                             out_file)
+
 
 
 if __name__ == '__main__':

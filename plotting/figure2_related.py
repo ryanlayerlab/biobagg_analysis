@@ -168,7 +168,7 @@ def plot_combined_figures(decode_ibd_data,
     decode_IBD_plt.spines['top'].set_visible(False)
     decode_IBD_plt.spines['right'].set_visible(False)
     decode_IBD_plt.set_yticks(np.arange(0, 0.15, 0.025))
-    decode_IBD_plt.set_xlabel('deCODE IBD Scores')
+    decode_IBD_plt.set_xlabel('deCODE IBD')
     decode_IBD_plt.set_ylabel('Density')
 
 
@@ -310,7 +310,7 @@ def main():
                                            EUR_kin_scores,
                                            SAS_kin_scores)
 
-    plink_label = 'Plink2 kinship Scores'
+    plink_label = 'Plink2 kinship coefficients'
     # plot all figures
     plot_combined_figures(decode_ibd_scores,
                           decode_genosis_scores,
