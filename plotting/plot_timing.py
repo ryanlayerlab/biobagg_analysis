@@ -10,8 +10,7 @@ from src import get_relations
 
 def get_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--segments', type=str, help='top hits file', required=True)
-    parser.add_argument('--times', type=str, help='trios scores', required=True)
+    parser.add_argument('--times', type=str, help='times dir', required=True)
     parser.add_argument('--out', type=str, help='output directory', required=True)
 
     return parser.parse_args()
@@ -75,12 +74,12 @@ def plot_segment_search_times(reading_embeddings_times,
 
     # sns.set(style='whitegrid')
     # 5 subplots
-    fig, axs = plt.subplots(5, 1, figsize=(10, 15), dpi=200)
+    fig, axs = plt.subplots(2, 1, figsize=(15, 10), dpi=300)
 
     num_segments = len(reading_embeddings_times)
     num_queries = NUM_SAMPLES * 2
-    title = DATA + '-chrm ' + chrm + '\nTIMING BY SEGMENT\n' + SYSTEM
-    fig.suptitle(title, fontsize=25, fontweight='bold')
+    # title = DATA + '-chrm ' + chrm + '\nTIMING BY SEGMENT\n' + SYSTEM
+    # fig.suptitle(title, fontsize=25, fontweight='bold')
     out_file = out + 'chrm' + chrm + '_segment_timing.png'
 
     if sample:
@@ -91,44 +90,48 @@ def plot_segment_search_times(reading_embeddings_times,
         scoring_times = [x/num_queries for x in scoring_times]
         full_times = [x/num_queries for x in full_times]
         num_queries = NUM_SAMPLES * 2
-        title = DATA + '-chrm ' + chrm + '\nTIMING BY QUERY\n' + SYSTEM
-        fig.suptitle(title, fontsize=25, fontweight='bold')
+        # title = DATA + '-chrm ' + chrm + '\nTIMING BY QUERY\n' + SYSTEM
+        # fig.suptitle(title, fontsize=25, fontweight='bold')
         out_file = out + 'chrm' + chrm + '_sample_timing.png'
 
-    color = 'darkblue'
-    sns.histplot(reading_embeddings_times, kde=True, ax=axs[0])
-    sns.histplot(loading_index_times, kde=True, ax=axs[1])
-    sns.histplot(searching_index_times, kde=True, ax=axs[2])
-    sns.histplot(scoring_times, kde=True, ax=axs[3])
-    sns.histplot(full_times, kde=True, ax=axs[4])
+    color = 'darkorange'
+    # sns.histplot(reading_embeddings_times, kde=True, ax=axs[0])
+    # sns.histplot(loading_index_times, kde=True, ax=axs[1])
+    sns.histplot(searching_index_times, kde=True, ax=axs[0], color=color)
+    # sns.histplot(scoring_times, kde=True, ax=axs[3])
+    sns.histplot(full_times, kde=True, ax=axs[1], color=color)
 
 
-    axs[0].set_title('Reading Embeddings', fontsize=16, fontweight='bold', pad=10, loc='left')
+    # axs[0].set_title('Reading Embeddings', fontsize=16, fontweight='bold', pad=10, loc='left')
     # axs[0].set_xlim(0, max(reading_embeddings_times) + 0.1)
-    axs[1].set_title('Loading Index', fontsize=16, fontweight='bold', loc='left')
-    axs[2].set_title('Searching Index', fontsize=16, fontweight='bold', loc='left')
-    axs[3].set_title('Scoring\n(adding pop count in dictionary)', fontsize=16, fontweight='bold', loc='left')
-    axs[4].set_title('Full\n(outer loop)', fontsize=16, fontweight='bold', loc='left')
+    # axs[1].set_title('Loading Index', fontsize=16, fontweight='bold', loc='left')
+    axs[0].set_title('SVS Search', fontsize=35, fontweight='bold', loc='center', pad=10)
+    # axs[3].set_title('Scoring\n(adding pop count in dictionary)', fontsize=16, fontweight='bold', loc='left')
+    axs[1].set_title('GenoSiS Search', fontsize=35, fontweight='bold', loc='center', pad=10)
 
 
-    for i in range(5):
-        axs[i].set_xlabel('Time\n(seconds)')
-        axs[i].set_ylabel('Frequency')
+    for i in range(2):
+        axs[i].set_xlabel('Time (seconds)', fontsize=20)
+        axs[i].set_ylabel('Frequency', fontsize=20)
         axs[i].spines['top'].set_visible(False)
         axs[i].spines['right'].set_visible(False)
+        # add text box of number of queries and number of segments
+        textstr = 'Number of Queries: ' + str(num_queries) + '\nNumber of Segments: ' + str(num_segments)
+        # props = dict(boxstyle='round', alpha=0.5, facecolor='white')
+        axs[i].text(0.55, 0.55, textstr, transform=axs[i].transAxes, fontsize=20)
 
-    if not sample or sample:
-        # subplots 1-4 should have same x-axis limits
-        max_x = max(max(reading_embeddings_times), max(loading_index_times), max(searching_index_times), max(scoring_times))
-        # get standard deviation of each
-        reading_embeddings_std = round(stats.tstd(reading_embeddings_times), 2)
-        loading_index_std = round(stats.tstd(loading_index_times), 2)
-        searching_index_std = round(stats.tstd(searching_index_times), 2)
-        scoring_std = round(stats.tstd(scoring_times), 2)
-        avg_std = round((reading_embeddings_std + loading_index_std + searching_index_std + scoring_std) / 4, 2)
-
-        for i in range(4):
-            axs[i].set_xlim(0, max_x + avg_std)
+    # if not sample or sample:
+    #     # subplots 1-4 should have same x-axis limits
+    #     max_x = max(max(reading_embeddings_times), max(loading_index_times), max(searching_index_times), max(scoring_times))
+    #     # get standard deviation of each
+    #     reading_embeddings_std = round(stats.tstd(reading_embeddings_times), 2)
+    #     loading_index_std = round(stats.tstd(loading_index_times), 2)
+    #     searching_index_std = round(stats.tstd(searching_index_times), 2)
+    #     scoring_std = round(stats.tstd(scoring_times), 2)
+    #     avg_std = round((reading_embeddings_std + loading_index_std + searching_index_std + scoring_std) / 4, 2)
+    #
+    #     for i in range(2):
+    #         axs[i].set_xlim(0, max_x + avg_std)
 
     # if sample:
     #     # subplots 1-4 should have same x-axis limits
@@ -136,12 +139,6 @@ def plot_segment_search_times(reading_embeddings_times,
     #                 max(scoring_times))
     #     for i in range(4):
     #         axs[i].set_xlim(0, max_x )
-
-    # add text box of number of queries and number of segments
-    textstr = 'Number of Queries: ' + str(num_queries) + '\nNumber of Segments: ' + str(num_segments)
-    props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
-    axs[0].text(0.05, 0.95, textstr, transform=axs[0].transAxes, fontsize=14,
-                verticalalignment='top', bbox=props)
 
 
     plt.tight_layout()
@@ -164,8 +161,8 @@ def plot_outer_loop_timing(full_times,
 
     if sample:
         full_times = [x / num_queries for x in full_times]
-        title = DATA + '-chrm ' + chrm + '\nTIMING BY QUERY\n' + SYSTEM
-        ax.set_title(title, fontsize=25, fontweight='bold')
+        # title = DATA + '-chrm ' + chrm + '\nTIMING BY QUERY\n' + SYSTEM
+        # ax.set_title(title, fontsize=25, fontweight='bold')
         out_file = out + 'chrm' + chrm + '_sample_full_timing.png'
 
     sns.histplot(full_times, kde=True, ax=ax)
@@ -175,7 +172,7 @@ def plot_outer_loop_timing(full_times,
     ax.spines['right'].set_visible(False)
 
     textstr = 'Number of Queries: ' + str(num_queries) + '\nNumber of Segments: ' + str(num_segments)
-    props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
+    props = dict(boxstyle='round', alpha=0.5, facecolor='white')
     ax.text(0.55, 0.95, textstr, transform=ax.transAxes, fontsize=14,
             verticalalignment='top', bbox=props)
 
@@ -185,8 +182,7 @@ def plot_outer_loop_timing(full_times,
 
 def main():
     args = get_args()
-    segment_file = args.segments
-    times_file = args.times
+    times_dir = args.times
     out = args.out
 
     # all_times = get_segment_search_times_OLD(segment_file)
@@ -204,7 +200,7 @@ def main():
     # for all chromosomes, make long list of times
     for chrom in range(1, 23):
         try:
-            segment_file = args.segments + 'chrm' + str(chrom) + '_segments.log'
+            segment_file = times_dir + 'chrm' + str(chrom) + '_segments.log'
             (reading_embeddings_times,
              loading_index_times,
              searching_index_times,
@@ -246,8 +242,8 @@ def main():
                               out,
                               chrm, True)
 
-    plot_outer_loop_timing(full_times_list, out, chrm, False)
-    plot_outer_loop_timing(full_times_list, out, chrm, True)
+    # plot_outer_loop_timing(full_times_list, out, chrm, False)
+    # plot_outer_loop_timing(full_times_list, out, chrm, True)
 
 
 
