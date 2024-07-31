@@ -145,6 +145,50 @@ def plot_segment_search_times(reading_embeddings_times,
     plt.savefig(out_file)
     plt.close()
 
+def plot_search_times(loading_index_times,
+                      searching_index_times,
+                      scoring_times,
+                      out,
+                      chrm,
+                      sample):
+    # combine searching and scoring times
+    full_times = [x + y + z for x, y, z in zip(searching_index_times, scoring_times, loading_index_times)]
+    # plot histogram of full times
+    fig, ax = plt.subplots(figsize=(8, 4), dpi=300)
+    # title = DATA + '-chrm ' + chrm + '\nTIMING BY SEGMENT\n' + SYSTEM
+    title = 'GenoSiS Search\n' + DATA + ', chrm ' + chrm
+    # ax.set_title(title, fontsize=20, fontweight='bold')
+    out_file = out + 'chrm' + chrm + '_segment_full_timing.png'
+
+    num_segments = len(full_times)
+    num_queries = NUM_SAMPLES * 2
+
+    if sample:
+        # full_times = [x / num_queries for x in full_times]
+        full_times = [(x / num_queries) * num_segments for x in full_times]
+
+        # title = DATA + '-chrm ' + chrm + '\nTIMING BY QUERY\n' + SYSTEM
+        title = 'GenoSiS Search\n' + DATA + ', chrm ' + chrm
+        # ax.set_title(title, fontsize=20, fontweight='bold')
+        out_file = out + 'chrm' + chrm + '_sample_full_timing.png'
+
+    sns.histplot(full_times, kde=True, ax=ax, color='darkorange')
+    ax.set_xlabel('Time\n(seconds)')
+    ax.set_ylabel('Frequency')
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+
+    textstr = 'Number of Queries: ' + str(num_queries) + '\nNumber of Segments: ' + str(num_segments)
+    props = dict(boxstyle='round', alpha=0.5, facecolor='white')
+    ax.text(0.55, 0.95, textstr, transform=ax.transAxes, fontsize=14,
+
+            verticalalignment='top', bbox=props)
+
+    plt.tight_layout()
+    plt.savefig(out_file)
+    plt.close()
+
+
 def plot_outer_loop_timing(full_times,
                             out,
                             chrm,
@@ -225,25 +269,28 @@ def main():
     chrm = str(min(included_chroms)) + '-' + str(max(included_chroms))
 
 
-    plot_segment_search_times(read_embeddings_times_list,
-                              loading_index_times_list,
-                              searching_index_times_list,
-                              scoring_times_list,
-                              full_times_list,
-                              sorting_times_list,
-                              out,
-                              chrm, False)
-    plot_segment_search_times(read_embeddings_times_list,
-                              loading_index_times_list,
-                              searching_index_times_list,
-                              scoring_times_list,
-                              full_times_list,
-                              sorting_times_list,
-                              out,
-                              chrm, True)
+    # plot_segment_search_times(read_embeddings_times_list,
+    #                           loading_index_times_list,
+    #                           searching_index_times_list,
+    #                           scoring_times_list,
+    #                           full_times_list,
+    #                           sorting_times_list,
+    #                           out,
+    #                           chrm, False)
+    # plot_segment_search_times(read_embeddings_times_list,
+    #                           loading_index_times_list,
+    #                           searching_index_times_list,
+    #                           scoring_times_list,
+    #                           full_times_list,
+    #                           sorting_times_list,
+    #                           out,
+    #                           chrm, True)
 
     # plot_outer_loop_timing(full_times_list, out, chrm, False)
     # plot_outer_loop_timing(full_times_list, out, chrm, True)
+
+    plot_search_times(loading_index_times_list, searching_index_times_list, scoring_times_list, out, chrm, False)
+    plot_search_times(loading_index_times_list, searching_index_times_list, scoring_times_list, out, chrm, True)
 
 
 
