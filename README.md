@@ -106,6 +106,22 @@ python plotting/plot_ccpm.py \
 
 </details>
 
+### Figure X: FST
+```
+python plotting/plot_subpop_fst.py \
+    --output pub_figures/subpop_fst.png \
+    --input genosis.fst.txt kinship.fst.txt dst.fst.txt pihat.fst.txt \
+    --labels GenoSiS King-robust DST Pi-Hat \
+    --height 5 \
+    --width 5 
+```
+<details>
+
+![fst](pub_figures/subpop_fst.png)
+
+</details>
+
+
 ### Figure 4: Timing
 ```
 tbd
