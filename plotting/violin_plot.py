@@ -71,8 +71,9 @@ def plot_violin_plot(population_data,
     subpop_colors = []
 
     # make violin plot
-    fig, ax = plt.subplots()
-    fig.set_size_inches(20, 13)
+    # set dpi
+    fig, ax = plt.subplots(dpi=250)
+    fig.set_size_inches(18, 5)
     violin_data = []
 
     for super_pop in super_to_sub:
@@ -101,8 +102,10 @@ def plot_violin_plot(population_data,
     ax.set_ylabel('KNN popcount scores', fontsize=20)
 
     # add title
-    subpop_title = "Query Subpopulation:\n" + subpop_full_names[subpop_name] + "\n(" + subpop_name + ")"
-    ax.set_title(subpop_title, fontsize=25, fontweight='bold')
+    subpop_title = subpop_full_names[subpop_name] + "\n(" + subpop_name + ")"
+    ax.set_title(subpop_title, fontsize=20, fontweight='bold')
+    # move title down to stay on page
+    # ax.title.set_position([.5, 1.05])
 
     # color each x violin plot with superpopulation color
     for i in range(len(subpop_codes)):
@@ -125,6 +128,9 @@ def plot_violin_plot(population_data,
         legend_elements.append(Line2D([0], [0], color=super_population_colors[super_pop], lw=20, label=super_pop))
     # ax legend no border
     ax.legend(handles=legend_elements, fontsize=20, frameon=False)
+
+    # remove extra space
+    fig.tight_layout()
 
     # save figure
     png_name = png_dir + subpop_name + '.png'

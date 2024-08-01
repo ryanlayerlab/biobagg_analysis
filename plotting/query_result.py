@@ -13,7 +13,7 @@ def get_args():
     parser.add_argument('--label_file', type=str, required=False)
     parser.add_argument('--k', type=int, default=10)
     parser.add_argument('--out_file', type=str, required=True)
-    parser.add_argument('--height', type=int, default=3)
+    parser.add_argument('--height', type=int, default=5)
     parser.add_argument('--width', type=int, default=10)
     return parser.parse_args()
 
@@ -96,7 +96,7 @@ def main():
                 Y.append(svs_results[(start,end)][s2])
 
 
-    fig, ax = plt.subplots( figsize=(args.width, args.height) )
+    fig, ax = plt.subplots( figsize=(args.width, args.height), dpi=250 )
 
 
     if spop_map is not None:
@@ -118,21 +118,25 @@ def main():
                 alpha=0.5,
                 label='In population')
         plt.legend(frameon=False,
-                   fontsize=6,
+                   fontsize=10,
                    loc='upper right')
     else:
         ax.plot(X,Y,
                 'o',
                 ms=2,
                 markerfacecolor='None',
-                markeredgecolor='grey',
-                markeredgewidth=0.5,
+                markeredgecolor='black',
+                markeredgewidth=0.8,
                 alpha=0.1 if args.k>0 else 0.5)
 
 
     if args.k > 0 and args.k <= 5:
         
-        colors = ['C0', 'C1', 'C2', 'C3', 'C4']
+        colors = ['red',
+                  'darkorange',
+                  'gold',
+                  'green',
+                  'steelblue']
         labels = ['1st', '2nd', '3rd', '4th', '5th']
         X = []
         Y = []
@@ -147,7 +151,7 @@ def main():
 
 
         ax.scatter(X,Y,
-                   s=5,
+                   s=10,
                    lw=1,
                    c=C)
 
@@ -159,20 +163,22 @@ def main():
                                           color=colors[i],
                                           marker='o',
                                           lw=0,
-                                          markersize=3,
+                                          markersize=10,
                                           label=labels[i]))
         plt.legend(handles=legend_elements,
+                   # add title to legend
+                     title="Top 5",
                    frameon=False,
-                   fontsize=6,
+                   fontsize=10,
                    loc='upper right')
 
 
     ax.spines['top'].set_visible(False)
-    ax.spines['bottom'].set_visible(False)
-    ax.spines['left'].set_visible(False)
+    # ax.spines['bottom'].set_visible(False)
+    # ax.spines['left'].set_visible(False)
     ax.spines['right'].set_visible(False)
     ax.set_xlabel('Chromosome ' + args.chrm)
-    ax.set_ylabel('Similarity')
+    ax.set_ylabel('SVS score')
     
     plt.tight_layout()
     plt.savefig(args.out_file, dpi=300)

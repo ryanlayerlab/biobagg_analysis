@@ -76,7 +76,7 @@ def plot_plink_genosis_compare(population_file,
     plink_pihat_y = get_y_values(plink_pihat, pop, k, subpopulations)
     plink_kin_y = get_y_values(plink_kin, pop, k, subpopulations)
 
-    # 3 figures, 1 for each plink metric
+    # 3 pub_figures, 1 for each plink metric
     fig, axs = plt.subplots(3, figsize=(10, 15), dpi=100)
     fig.suptitle('GenoSiS vs Plink\n' + pop, fontsize=20, fontweight='bold')
 

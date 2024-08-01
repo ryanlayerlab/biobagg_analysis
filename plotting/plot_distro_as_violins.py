@@ -79,7 +79,7 @@ def main():
                                'EUR': '#728eff',
                                'SAS': '#f7d06b'}
 
-    fig = plt.figure(figsize=(args.width, args.height), dpi=200)
+    fig = plt.figure(figsize=(args.width, args.height), dpi=250)
 
     gs = gridspec.GridSpec(1, len(spops), hspace=0.6)
 

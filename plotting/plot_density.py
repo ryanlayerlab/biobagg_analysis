@@ -96,8 +96,8 @@ def plot_density_by_ancestry(sample_densities,
     #          '\nChromosome ' + chrm + ', segments (0,' + str(len(sample_densities['HG00096_0'])) + ')')
     # title = ('Chromosome ' + chrm + ' segments 1-' + str(len(sample_densities['HG00096_0'])+1))
 
-    fig, axes = plt.subplots(num_superpops, 1,
-                             figsize=(6, 12),
+    fig, axes = plt.subplots(1, num_superpops,
+                             figsize=(27, 4),
                              sharex=True, sharey=True,
                              dpi=300)
 
@@ -122,7 +122,7 @@ def plot_density_by_ancestry(sample_densities,
                      kde=False,
                      bins=20)
         ax.set_title(superpop, fontsize=20, color='black')
-        ax.set_xlabel('Density')
+        ax.set_xlabel('Number of non-reference alleles')
         ax.set_ylabel('Frequency')
 
         # add a textbox that shows mean, median, and mode densities
@@ -459,8 +459,8 @@ def plot_r2_density(good_segment_r2,
     num_superpops = len(superpops)
 
     for seg_idx in good_segments:
-        fig, axes = plt.subplots(num_superpops, 1,
-                                figsize=(6, 10),
+        fig, axes = plt.subplots(1, num_superpops,
+                                figsize=(15, 5),
                                 sharex=True, sharey=True,
                                 dpi=300)
 
