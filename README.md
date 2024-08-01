@@ -110,10 +110,10 @@ python plotting/plot_ccpm.py \
 ```
 python plotting/plot_subpop_fst.py \
     --output pub_figures/subpop_fst.png \
-    --input genosis.fst.txt kinship.fst.txt dst.fst.txt pihat.fst.txt \
+    --input data/genosis.fst.txt data/kinship.fst.txt data/dst.fst.txt data/pihat.fst.txt \
     --labels GenoSiS King-robust DST Pi-Hat \
-    --height 5 \
-    --width 5 
+    --height 4 \
+    --width 9 
 ```
 <details>
 
