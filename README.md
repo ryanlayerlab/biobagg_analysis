@@ -121,6 +121,22 @@ python plotting/plot_subpop_fst.py \
 
 </details>
 
+### Figure X: density
+```
+python plotting/plot_density.py \
+    --ancestry_file data/1kg_info/1kg_ancestry.tsv" \
+    --density_dir data/density_1kg/" \
+    --distance_dir data/distance_1kg/" \
+    --colors pub_figures/colors.txt" \
+    --out pub_figures/ \
+```
+<details>
+
+![hist](pub_figures/density_by_ancestry_chrm8.png)
+![r2](pub_figures/r2_density_chrm8_seg76.png)
+
+</details>
+
 
 ### Figure 4: Timing
 ```
