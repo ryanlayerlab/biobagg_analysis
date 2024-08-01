@@ -313,7 +313,7 @@ def main():
                                                 header=True)
     plot_heatmap_counts(kinship_subpop_counts,
                         colors,
-                        'Plink2 Kinship',
+                        'King-robust coefficient',
                         args.png + 'kinship_counts.png')
 
 
