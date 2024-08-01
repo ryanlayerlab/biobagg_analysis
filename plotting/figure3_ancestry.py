@@ -389,14 +389,14 @@ def plot_ancestry_group_distributions(genosis_scores,
         except:
             pass
         ####
-        axes[0, 3].set_title('Plink2 Kinship Coefficients', fontsize=20, fontweight='bold')
+        axes[0, 3].set_title('King-robust coefficient', fontsize=20, fontweight='bold')
         axes[i, 3].spines['top'].set_visible(False)
         axes[i, 3].spines['right'].set_visible(False)
         legend = ['subpop', 'superpop', 'outgroup']
         handles = [plt.Rectangle((0, 0), 1, 1, color=colors_list[i]) for i in range(len(legend))]
         axes[i, 3].legend(handles, legend, loc='right', frameon=False)
         # axis labels
-        axes[i, 3].set_xlabel('Plink Kinship Coefficient')
+        axes[i, 3].set_xlabel('King-robust coefficient')
         axes[i, 3].set_ylabel('Frequency')
 
     # shift plots down and to the right
@@ -502,6 +502,10 @@ def plot_ancestry_top_k(genosis_scores,
         axes[i, 0].spines['top'].set_visible(False)
         axes[i, 0].spines['right'].set_visible(False)
 
+        # # remove legend
+        # axes[i, 0].get_legend().remove()
+
+
     # Plot the genoSiS top k percents and pihat top K percents in third column
     for i, superpop in enumerate(pihat_superpop_percents.keys()):
         x = list(pihat_superpop_percents[superpop].keys())
@@ -549,6 +553,9 @@ def plot_ancestry_top_k(genosis_scores,
         axes[i, 1].spines['top'].set_visible(False)
         axes[i, 1].spines['right'].set_visible(False)
 
+        # # remove legend
+        # axes[i, 0].get_legend().remove()
+
     # Plot the genoSiS top k percents and kinship top K percents in fourth column
     for i, superpop in enumerate(kinship_superpop_percents.keys()):
         x = list(kinship_superpop_percents[superpop].keys())
@@ -574,27 +581,30 @@ def plot_ancestry_top_k(genosis_scores,
                         label='GenoSiS subpop',
                         color=sub_color)
         D_kinship_superpop = pd.DataFrame({'k': x,
-                          'Plink Kinship': list(kinship_superpop_percents[superpop].values())})
-        sns.lineplot(x='k', y='Plink Kinship',
+                          'King-robust coefficient': list(kinship_superpop_percents[superpop].values())})
+        sns.lineplot(x='k', y='King-robust coefficient',
                         data=D_kinship_superpop,
                         ax=axes[i, 2],
-                        label='Plink Kinship superpop',
+                        label='King-robust coefficient superpop',
                         color=super_color,
                         linestyle='dashed')
         D_kinship_subpop = pd.DataFrame({'k': x,
-                          'Plink Kinship': list(kinship_subpop_percents[superpop].values())})
-        sns.lineplot(x='k', y='Plink Kinship',
+                          'King-robust coefficient': list(kinship_subpop_percents[superpop].values())})
+        sns.lineplot(x='k', y='King-robust coefficient',
                         data=D_kinship_subpop,
                         ax=axes[i, 2],
-                        label='Plink Kinship',
+                        label='King-robust coefficient',
                         color=sub_color,
                         linestyle='dashed')
-        axes[0, 2].set_title('GenoSiS vs.\nPlink Kinship', fontsize=20, fontweight='bold')
+        axes[0, 2].set_title('GenoSiS vs.\nKing-robust coefficient', fontsize=20, fontweight='bold')
         axes[i, 2].set_ylabel('% in Population')
         axes[i, 2].set_xticks(range(5, 21, 5))
         axes[i, 2].set_ylim(0, 1.1)
         axes[i, 2].spines['top'].set_visible(False)
         axes[i, 2].spines['right'].set_visible(False)
+
+        # # remove legend
+        # axes[i, 0].get_legend().remove()
 
         # shift plots down and to the right
         plt.subplots_adjust(top=0.85, right=1.)
@@ -611,9 +621,36 @@ def plot_ancestry_top_k(genosis_scores,
         # add text at top
         # plt.suptitle('Super Population Cohort Structure\n1KG Data (k=20)', fontsize=30, fontweight='bold')
 
+
     # Save the figure
     plt.tight_layout()
     combined_figure.savefig(png_file)
+
+def write_genosis_scores(genosis_superpop_percents,
+                         genosis_subpop_percents,
+                         output_file):
+    '''
+    Write the genosis scores to a file
+    @param genosis_subpop_percents:
+    @param genosis_superpop_percents:
+    @param output_file:
+    @return:
+    '''
+
+    # format: k, %superpop, %subpop, %output
+    o = open(output_file, 'w')
+    o.write('pop,k,%superpop,%subpop,%outgroup,k\n')
+
+    for pop in genosis_superpop_percents.keys():
+        for k in genosis_superpop_percents[pop].keys():
+            superpop_percent = genosis_superpop_percents[pop][k]
+            subpop_percent = genosis_subpop_percents[pop][k]
+            outgroup_percent = 1 - superpop_percent
+            # write to file
+            o.write(f'{pop},{k},{superpop_percent},{subpop_percent},{outgroup_percent}\n')
+
+    return 0
+
 
 
 def main():
@@ -662,6 +699,10 @@ def main():
                                                                                  subpopulations)
     kinship_sample_percents = get_percent_in_top_k(kinship_top_k_samples, subpopulations)
 
+
+    # write_genosis_scores(genosis_superpop_percents,
+    #                      genosis_subpop_percents,
+    #                      'data/1kg_top_hits/genosis_scores.csv')
 
     plot_ancestry_top_k(genosis_group_scores,
                         genosis_superpop_percents, genosis_subpop_percents,

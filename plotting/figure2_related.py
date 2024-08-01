@@ -188,7 +188,7 @@ def plot_combined_figures(decode_ibd_data,
     decode_genosis_plt.spines['top'].set_visible(False)
     decode_genosis_plt.spines['right'].set_visible(False)
     decode_genosis_plt.set_yticks(np.arange(0, 0.15, 0.025))
-    decode_genosis_plt.set_xlabel('GenoSiS Scores')
+    decode_genosis_plt.set_xlabel('GenoSiS Score')
     decode_genosis_plt.set_ylabel('Density')
 
 
@@ -225,7 +225,7 @@ def plot_combined_figures(decode_ibd_data,
     # formatting
     tg_genosis_plt.spines['top'].set_visible(False)
     tg_genosis_plt.spines['right'].set_visible(False)
-    tg_genosis_plt.set_xlabel('GenoSiS Scores')
+    tg_genosis_plt.set_xlabel('GenoSiS Score')
     tg_genosis_plt.set_ylabel('Density')
 
 
@@ -310,7 +310,7 @@ def main():
                                            EUR_kin_scores,
                                            SAS_kin_scores)
 
-    plink_label = 'Plink2 kinship coefficients'
+    plink_label = 'King-robust coefficient'
     # plot all figures
     plot_combined_figures(decode_ibd_scores,
                           decode_genosis_scores,

@@ -133,15 +133,15 @@ def plot_super_histogram(AFR_super_scores,
 
 
     # African query is first column
-    ax[0, 0].set_title('AFR Query', fontsize=20, color=colors['AFR'], fontweight='bold')
+    ax[0, 0].set_title('AFR Query', fontsize=25, color='black', fontweight='bold')
     for i, database_population in enumerate(SUPER_SUBPOPULATIONS.keys()):
         if database_population == 'AFR':
             # plot subpop scores in black, with curve
             sns.histplot(AFR_super_scores[database_population], color=colors[database_population],
-                         ax=ax[i, 0], binwidth=60, alpha=alpha, linewidth=0.3)
+                         ax=ax[i, 0], binwidth=60, alpha=alpha, linewidth=0.0)
                          # kde=True, kde_kws={'bw_adjust': 0.5})
-            sns.histplot(AFR_super_scores['same_subpop'], color=subpop_color,
-                         ax=ax[i, 0], binwidth=60, alpha=suppop_alpha, fill=False, linewidth=0.3)
+            sns.histplot(AFR_super_scores['same_subpop'], color=colors[database_population],
+                         ax=ax[i, 0], binwidth=60, alpha=suppop_alpha, fill=True, linewidth=0.0)
                          # kde=True, kde_kws={'bw_adjust': 0.5})
 
             # sns.kdeplot(AFR_super_scores[database_population], color=colors[database_population],
@@ -150,7 +150,7 @@ def plot_super_histogram(AFR_super_scores,
             #             ax=ax[i, 0], alpha=suppop_alpha, fill=True)
         else:
             sns.histplot(AFR_super_scores[database_population], color=colors[database_population],
-                         ax=ax[i, 0], alpha=alpha, binwidth=60, linewidth=0.3)
+                         ax=ax[i, 0], alpha=alpha, binwidth=60, linewidth=0.0)
                          # kde=True, kde_kws={'bw_adjust': 0.5})
             # sns.kdeplot(AFR_super_scores[database_population], color=colors[database_population],
             #             ax=ax[i, 0], alpha=alpha, fill=True)
@@ -159,12 +159,12 @@ def plot_super_histogram(AFR_super_scores,
                             fontsize=25, color=colors[database_population],
                             fontweight='bold', labelpad=40)
         # set x-axis label
-        ax[4, i].set_xlabel('GenoSiS Score', fontsize=20, labelpad=20)
+        ax[4, i].set_xlabel('GenoSiS Score', fontsize=15, labelpad=20)
         # log scale
         ax[i, 1].set_yscale('log')
 
     # American query is second column
-    ax[0, 1].set_title('AMR Query', fontsize=20, color=colors['AMR'], fontweight='bold')
+    ax[0, 1].set_title('AMR Query', fontsize=25, color='black', fontweight='bold')
     for i, database_population in enumerate(SUPER_SUBPOPULATIONS.keys()):
         if database_population == 'AMR':
             # plot subpop scores in black
@@ -174,19 +174,19 @@ def plot_super_histogram(AFR_super_scores,
             #               bins=50, color=colors[database_population], alpha=alpha)
             sns.histplot(AMR_super_scores[database_population], color=colors[database_population],
                          ax=ax[i, 1], alpha=alpha, binwidth=60, linewidth=0.0)
-            sns.histplot(AMR_super_scores['same_subpop'], color=subpop_color,
-                            ax=ax[i, 1], alpha=suppop_alpha, binwidth=60, fill=False, linewidth=0.3)
+            sns.histplot(AMR_super_scores['same_subpop'], color=colors[database_population],
+                            ax=ax[i, 1], alpha=suppop_alpha, binwidth=60, fill=True, linewidth=0.0)
         else:
             # ax[i, 1].hist(AMR_super_scores[database_population],
             #               bins=50, color=colors[database_population], alpha=alpha)
             sns.histplot(AMR_super_scores[database_population], color=colors[database_population],
                             ax=ax[i, 1], alpha=alpha, binwidth=60, linewidth=0.0)
         # set x-axis label
-        ax[4, i].set_xlabel('GenoSiS Score', fontsize=20, labelpad=20)
+        ax[4, i].set_xlabel('GenoSiS Score', fontsize=15, labelpad=20)
 
 
     # # East Asian query is third column
-    ax[0, 2].set_title('EAS Query', fontsize=20, color=colors['EAS'], fontweight='bold')
+    ax[0, 2].set_title('EAS Query', fontsize=25, color='black', fontweight='bold')
     for i, database_population in enumerate(SUPER_SUBPOPULATIONS.keys()):
         if database_population == 'EAS':
             # plot subpop scores in black
@@ -196,18 +196,18 @@ def plot_super_histogram(AFR_super_scores,
             #               bins=50, color=colors[database_population], alpha=alpha)
             sns.histplot(EAS_super_scores[database_population], color=colors[database_population],
                          ax=ax[i, 2], alpha=alpha, binwidth=60, linewidth=0.0)
-            sns.histplot(EAS_super_scores['same_subpop'], color=subpop_color,
-                            ax=ax[i, 2], alpha=suppop_alpha, binwidth=60, fill=False, linewidth=0.3)
+            sns.histplot(EAS_super_scores['same_subpop'], color=colors[database_population],
+                            ax=ax[i, 2], alpha=suppop_alpha, binwidth=60, fill=True, linewidth=0.0)
         else:
             # ax[i, 2].hist(EAS_super_scores[database_population],
             #               bins=50, color=colors[database_population], alpha=alpha)
             sns.histplot(EAS_super_scores[database_population], color=colors[database_population],
                             ax=ax[i, 2], alpha=alpha, binwidth=60, linewidth=0.0)
         # set x-axis label
-        ax[4, i].set_xlabel('GenoSiS Score', fontsize=20, labelpad=20)
+        ax[4, i].set_xlabel('GenoSiS Score', fontsize=15, labelpad=20)
 
     # European query is fourth column
-    ax[0, 3].set_title('EUR Query', fontsize=20, color=colors['EUR'], fontweight='bold')
+    ax[0, 3].set_title('EUR Query', fontsize=25, color='black', fontweight='bold')
     for i, database_population in enumerate(SUPER_SUBPOPULATIONS.keys()):
         if database_population == 'EUR':
             # plot subpop scores in black
@@ -217,25 +217,25 @@ def plot_super_histogram(AFR_super_scores,
             #               bins=50, color=colors[database_population], alpha=alpha)
             sns.histplot(EUR_super_scores[database_population], color=colors[database_population],
                          ax=ax[i, 3], alpha=alpha, binwidth=60, linewidth=0.0)
-            sns.histplot(EUR_super_scores['same_subpop'], color=subpop_color,
-                            ax=ax[i, 3], alpha=suppop_alpha, binwidth=60, fill=False, linewidth=0.3)
+            sns.histplot(EUR_super_scores['same_subpop'], color=colors[database_population],
+                            ax=ax[i, 3], alpha=suppop_alpha, binwidth=60, fill=True, linewidth=0.0)
         else:
             # ax[i, 3].hist(EUR_super_scores[database_population],
             #               bins=50, color=colors[database_population], alpha=alpha)
             sns.histplot(EUR_super_scores[database_population], color=colors[database_population],
                             ax=ax[i, 3], alpha=alpha, binwidth=60, linewidth=0.0)
         # set x-axis label
-        ax[4, i].set_xlabel('GenoSiS Score', fontsize=20, labelpad=20)
+        ax[4, i].set_xlabel('GenoSiS Score', fontsize=15, labelpad=20)
 
     # South Asian query is fifth column
-    ax[0, 4].set_title('SAS Query', fontsize=20, color=colors['SAS'], fontweight='bold')
+    ax[0, 4].set_title('SAS Query', fontsize=25, color='black', fontweight='bold')
     for i, database_population in enumerate(SUPER_SUBPOPULATIONS.keys()):
         if database_population == 'SAS':
             # plot subpop scores in black
             sns.histplot(SAS_super_scores[database_population], color=colors[database_population],
                          ax=ax[i, 4], alpha=alpha, binwidth=60, linewidth=0.0)
-            sns.histplot(SAS_super_scores['same_subpop'], color=subpop_color,
-                            ax=ax[i, 4], alpha=suppop_alpha, binwidth=60, fill=False, linewidth=0.3)
+            sns.histplot(SAS_super_scores['same_subpop'], color=colors[database_population],
+                            ax=ax[i, 4], alpha=suppop_alpha, binwidth=60, fill=True, linewidth=0.0)
             # sns.kdeplot(SAS_super_scores['same_subpop'], color=subpop_color,
             #             ax=ax[i, 4], alpha=suppop_alpha, linewidth=0.3)
             # sns.kdeplot(SAS_super_scores[database_population], color=colors[database_population],
@@ -246,7 +246,7 @@ def plot_super_histogram(AFR_super_scores,
             # sns.kdeplot(SAS_super_scores[database_population], color=colors[database_population],
             #             ax=ax[i, 4], alpha=alpha, linewidth=0.0)
         # set x-axis label
-        ax[4, i].set_xlabel('GenoSiS\nScore', fontsize=20, labelpad=20)
+        ax[4, i].set_xlabel('GenoSiS\nScore', fontsize=15, labelpad=20)
 
 
     # formatting for all subplots
@@ -259,16 +259,18 @@ def plot_super_histogram(AFR_super_scores,
             # remove spines
             ax[i, j].spines['top'].set_visible(False)
             ax[i, j].spines['right'].set_visible(False)
+            # remove legend
+            ax[i, j].legend().set_visible(False)
 
 
-    # add text at top for figure title
-    fig.suptitle('GenoSiS Scores for Isolated\nQuery and Database Populations',
-                 fontsize=40, fontweight='bold')
+    # # add text at top for figure title
+    # fig.suptitle('GenoSiS Scores for Isolated\nQuery and Database Populations',
+    #              fontsize=40, fontweight='bold')
 
     # move subplots down to make room for title
     plt.subplots_adjust(top=0.85)
 
-    # plt.tight_layout()
+    plt.tight_layout()
     plt.savefig(png)
     plt.close()
 
@@ -306,6 +308,7 @@ def plot_sub_histogram(AFR_sub_scores,
                                         color=colors[ancestry_helpers.SUB_SUPERPOPULATIONS[score_subpop]], alpha=alpha)
             # log scale
             ax[row_idx, col_idx].set_yscale('log')
+
 
     # American queries are the second set of columns
     for col_idx, query_subpopulation in enumerate(ancestry_helpers.SUPER_SUBPOPULATIONS['AMR']):
@@ -368,7 +371,8 @@ def plot_sub_histogram(AFR_sub_scores,
                             verticalalignment='center',
                             transform=ax[0, middle].transAxes,
                             fontsize=30, fontweight='bold',
-                            color=colors[superpop])
+                            color='black')
+                            # color=colors[superpop])
 
     # Add textbox at left for "AFR Databases", "AMR Databases", etc.
     for i, superpop in enumerate(ancestry_helpers.SUPER_SUBPOPULATIONS.keys()):
@@ -393,10 +397,12 @@ def plot_sub_histogram(AFR_sub_scores,
             # remove spines
             ax[i, j].spines['top'].set_visible(False)
             ax[i, j].spines['right'].set_visible(False)
+            # remove legend
+            ax[i, j].legend().set_visible(False)
 
-    # add text at top for figure title
-    fig.suptitle('GenoSiS Scores for Isolated\nQuery and Database Populations\n(by subpopulation)',
-                 fontsize=50, fontweight='bold')
+    # # add text at top for figure title
+    # fig.suptitle('GenoSiS Scores for Isolated\nQuery and Database Populations\n(by subpopulation)',
+    #              fontsize=50, fontweight='bold')
 
     # move subplots down to make room for title
     plt.subplots_adjust(top=0.85)

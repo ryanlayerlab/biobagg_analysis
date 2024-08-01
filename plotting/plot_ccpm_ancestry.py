@@ -1,6 +1,7 @@
 import argparse
 from collections import defaultdict
 import matplotlib.pyplot as plt
+from matplotlib.patches import Rectangle
 import numpy as np
 import os
 import pandas as pd
@@ -169,6 +170,17 @@ def plot_data(ancestry_counts, png_file, num_chrom):
     ax.set_xticklabels(ordered_ancestry_labels, fontsize=20)
     ax.set_yticklabels(ordered_ancestry_labels, fontsize=20)
 
+    # add rectangles around the diagonal colors
+    color_CCPM = {'Africa': 'deepskyblue',
+                  'America': 'gold',
+                  'East Asian': 'crimson',
+                  'Europe': 'yellowgreen',
+                  'Middle East': 'chocolate',
+                  'Central South Asian': 'mediumpurple'}
+
+    for i, a in enumerate(ordered_ancestry):
+        ax.add_patch(Rectangle((i, i), 1, 1,
+                               fill=False, edgecolor=color_CCPM[a], lw=8))
 
     plt.tight_layout()
     plt.savefig(png_file)
@@ -191,16 +203,21 @@ def plot_scores(ancestry_scores, png_file):
             # kde plot
             # sns.kdeplot(ancestry_scores[a][b], ax=ax[i, j], color='black')
 
-            ax[j, i].set_xlabel('Genosis Score', fontsize=15)
             # remove background grid
             ax[j, i].grid(False)
             # ax[j, i].set_ylabel('Count', fontsize=10)
             # log scale
             ax[j, i].set_yscale('log')
 
+            # remove spines
+            ax[j, i].spines['top'].set_visible(False)
+            ax[j, i].spines['right'].set_visible(False)
+
+
     # add labels along the left side and bottom
     for i, a in enumerate(ordered_ancestry_labels):
         ax[i, 0].set_ylabel(a, fontsize=20)
+        ax[5, i].set_xlabel(a, fontsize=20, labelpad=20)
         # ax[5, i].set_xlabel(a, fontsize=10)
 
     # add text box at bottom "Cohort Population"
@@ -209,6 +226,8 @@ def plot_scores(ancestry_scores, png_file):
     fig.text(0.04, 0.5, 'Query Population', va='center', rotation='vertical', fontsize=30)
 
     # fig.suptitle('Genosis Score Distribution\nCCPM (chrm 1-22)', fontsize=40)
+
+    # add custom legend
 
 
     # plt.tight_layout()
@@ -406,16 +425,17 @@ def main():
                                              ccpm_ancestry,
                                              ccpm_ancestry_labels)
 
-    ancestry_scores = organize_genosis_data(ccpm_genosis_scores,
-                                             ccpm_ancestry,
-                                             ccpm_ancestry_labels)
+    # ancestry_scores = organize_genosis_data(ccpm_genosis_scores,
+    #                                          ccpm_ancestry,
+    #                                          ccpm_ancestry_labels)
 
     # Plot the data
     heatmap_png = png_dir + 'ccpm_ancestry.png'
-    distribution_png = png_dir + 'ccpm_genosis_scores.png'
+    # distribution_png = png_dir + 'ccpm_genosis_scores.png'
     # scatter_png = png_dir + 'ccpm_rank_scores_scatter.png'
+
     plot_data(ancestry_counts, heatmap_png, num_chrom)
-    plot_scores(ancestry_scores, distribution_png)
+    # plot_scores(ancestry_scores, distribution_png)
     # plot_with_rank(ccpm_ancestry_data, ccpm_genosis_scores, ccpm_ancestry, scatter_png)
 
 
