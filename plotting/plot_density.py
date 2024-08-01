@@ -94,11 +94,10 @@ def plot_density_by_ancestry(sample_densities,
 
     # title = ('Density by Ancestry'
     #          '\nChromosome ' + chrm + ', segments (0,' + str(len(sample_densities['HG00096_0'])) + ')')
-    title = ('Density by Ancestry'
-             '\nChromosome ' + chrm)
+    # title = ('Chromosome ' + chrm + ' segments 1-' + str(len(sample_densities['HG00096_0'])+1))
 
     fig, axes = plt.subplots(num_superpops, 1,
-                             figsize=(6, 10),
+                             figsize=(6, 12),
                              sharex=True, sharey=True,
                              dpi=300)
 
@@ -122,17 +121,30 @@ def plot_density_by_ancestry(sample_densities,
                      color=color,
                      kde=False,
                      bins=20)
-        ax.set_title(superpop, fontsize=15, color=color, fontweight='bold')
+        ax.set_title(superpop, fontsize=20, color='black')
         ax.set_xlabel('Density')
         ax.set_ylabel('Frequency')
-        # # log y-axis
-        # ax.set_yscale('log')
+
+        # add a textbox that shows mean, median, and mode densities
+        mean_density = statistics.mean(pop_densities)
+        median_density = statistics.median(pop_densities)
+        mode_density = statistics.mode(pop_densities)
+
+        ax.text(0.1, 0.95, 'Mean: ' + str(round(mean_density, 2)) + '\n'
+                            'Median: ' + str(round(median_density, 2)) + '\n'
+                            'Mode: ' + str(round(mode_density, 2)),
+                horizontalalignment='left',
+                verticalalignment='top',
+                transform=ax.transAxes,
+                fontsize=12,
+                color='black')
+
 
         # remove spines
         ax.spines['top'].set_visible(False)
         ax.spines['right'].set_visible(False)
 
-    fig.suptitle(title, fontsize=20, fontweight='bold')
+    # fig.suptitle(title, fontsize=20, fontweight='bold')
 
     plt.tight_layout()
     fig_name = out + 'density_by_ancestry_chrm' + chrm + '.png'
@@ -289,12 +301,12 @@ def plot_encoding_embedding(good_segment_enc, good_segment_emb,
     superpops = sorted(set(sub_to_super.values()))
     num_superpops = len(superpops)
 
-    fig, axes = plt.subplots(num_superpops, 1,
-                                figsize=(6, 10),
-                                sharex=True, sharey=True,
-                                dpi=300)
     # separate plot per segment
     for seg_idx in good_segments:
+        fig, axes = plt.subplots(num_superpops, 1,
+                                 figsize=(6, 10),
+                                 sharex=True, sharey=True,
+                                 dpi=300)
         for superpop in superpops:
             # get sample IDs for this superpopulation
             samples = [sample for sample, subpop in sample_subpopulations.items() if sub_to_super[subpop] == superpop]
@@ -333,17 +345,17 @@ def plot_encoding_embedding(good_segment_enc, good_segment_emb,
             ax.set_xlabel('Encoding Distance')
             ax.set_ylabel('Embedding Distance')
 
-            # get r^2 values
-            r2 = np.corrcoef(encoding_distances, embedding_distances)[0, 1]
-            ax.text(0.2, 0.9, 'r^2 = ' + str(round(r2, 2)),
+            # get r^2 and correlation coefficient
+            r2 = stats.pearsonr(encoding_distances, embedding_distances)[0] ** 2
+            cc = np.corrcoef(encoding_distances, embedding_distances)[0, 1]
+            ax.text(0.2, 0.9,
+                    'R^2: ' + str(round(r2, 2)) + '\n'
+                    'Corr. Coeff.: ' + str(round(cc, 2)),
                     horizontalalignment='center',
                     verticalalignment='center',
                     transform=ax.transAxes,
                     fontsize=10,
-                    fontweight='bold',
-                    color='black',
-                    bbox=dict(facecolor=colors[superpop], edgecolor='black', boxstyle='round,pad=0.5'))
-
+                    color='black')
 
             ax.spines['top'].set_visible(False)
             ax.spines['right'].set_visible(False)
@@ -353,6 +365,8 @@ def plot_encoding_embedding(good_segment_enc, good_segment_emb,
         fig_name = out + 'encoding_embedding_chrm' + chrm + '_seg' + str(seg_idx) + '.png'
         plt.tight_layout()
         plt.savefig(fig_name)
+        plt.close()
+
 
 def plot_eur_afr_density(sample_densities,
                          sample_subpopulations,
@@ -479,7 +493,7 @@ def plot_r2_density(good_segment_r2,
             ax.set_ylabel('r^2')
 
             # y scale 0-1
-            ax.set_ylim(0, 1)
+            ax.set_ylim(-0.2, 1.0)
 
             ax.spines['top'].set_visible(False)
             ax.spines['right'].set_visible(False)
@@ -490,6 +504,7 @@ def plot_r2_density(good_segment_r2,
         fig_name = out + 'r2_density_chrm' + chrm + '_seg' + str(seg_idx) + '.png'
         plt.tight_layout()
         plt.savefig(fig_name)
+        plt.close()
 
 
 def read_colors(color_file):
@@ -515,7 +530,7 @@ def main():
 
     # read density files
     chroms = [str(i) for i in range(8, 9)]
-    good_segments = [81, 97]
+    good_segments = [76, 81, 97, 108, 136]
 
     num_samples = 6406
 
@@ -557,8 +572,8 @@ def main():
 
         # resize sample densities to be length of num_segments
         for sample, densities in sample_densities.items():
-            sample_densities[sample] = densities[:num_segments]
-            # sample_densities[sample] = [densities[136]]
+            # sample_densities[sample] = densities[:num_segments]
+            sample_densities[sample] = [densities[76]]
 
         # resize segment densities to be length of num_segments
         for segment, densities in segment_densities.items():
@@ -566,13 +581,13 @@ def main():
 
         # plot densities
 
-        # print('Plotting densities by ancestry...', chrm)
-        # plot_density_by_ancestry(sample_densities,
-        #                          sample_subpopulations,
-        #                          sub_to_super,
-        #                          colors,
-        #                          chrm,
-        #                          out)
+        print('Plotting densities by ancestry...', chrm)
+        plot_density_by_ancestry(sample_densities,
+                                 sample_subpopulations,
+                                 sub_to_super,
+                                 colors,
+                                 chrm,
+                                 out)
 
         # print('Plotting densities by segment...', chrm)
         # plot_density_by_segment(segment_densities,
@@ -599,15 +614,15 @@ def main():
         #                      chrm,
         #                      out)
 
-        print('Plotting r2 by density...', chrm)
-        plot_r2_density(good_segment_r2,
-                        sample_densities,
-                        good_segments,
-                        sample_subpopulations,
-                        sub_to_super,
-                        colors,
-                        chrm,
-                        out)
+        # print('Plotting r2 by density...', chrm)
+        # plot_r2_density(good_segment_r2,
+        #                 sample_densities,
+        #                 good_segments,
+        #                 sample_subpopulations,
+        #                 sub_to_super,
+        #                 colors,
+        #                 chrm,
+        #                 out)
 
 
 
