@@ -114,10 +114,16 @@ python plotting/plot_subpop_fst.py \
     --labels GenoSiS King-robust DST Pi-Hat \
     --height 4 \
     --width 9 
+    
+python plottying/plot_ccpm_fst.py \    
+    --ccpm_fst data/ccpm_data/plink_fst_my_fst.txt.fst.summary
+    --out_dir pub_figures/
 ```
 <details>
 
 ![fst](pub_figures/subpop_fst.png)
+![ccpm_fst](pub_figures/ccpm_fst.png)
+
 
 </details>
 
