@@ -1,0 +1,16 @@
+#POP1	POP2	HUDSON_FST
+Africa	America	0.0724363
+Africa	Central	0.0726179
+Africa	East	0.11305
+Africa	Europe	0.0847194
+Africa	Middle	0.0472598
+America	Central	0.0115365
+America	East	0.0598081
+America	Europe	0.014721
+America	Middle	0.020368
+Central	East	0.0396547
+Central	Europe	0.0173008
+Central	Middle	0.019494
+East	Europe	0.0912294
+East	Middle	0.0825388
+Europe	Middle	0.0172631
