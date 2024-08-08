@@ -148,7 +148,14 @@ def plot_data(ancestry_counts, png_file, num_chrom):
     @param png_file: path to the output png file
     '''
     ordered_ancestry = ['Africa', 'America', 'East Asian', 'Europe', 'Middle East', 'Central South Asian']
-    ordered_ancestry_labels = ['Africa', 'America', 'East\nAsian', 'Europe', 'Middle\nEast', 'Central\nSouth Asian']
+    # ordered_ancestry_labels = ['Africa', 'America', 'East\nAsian', 'Europe', 'Middle\nEast', 'Central\nSouth Asian']
+    ordered_ancestry_labels = ['TGP+HGP-\nAFR-like',
+                               'TGP+HGP-\nAMR-like',
+                               'TGP+HGP-\nEAS-like',
+                               'TGP+HGP-\nEUR-like',
+                               'TGP+HGP-\nMLE-like',
+                               'TGP+HGP-\nSAS-like']
+
     # Plot with heatmap ancestry labels as x and y in order
     fig, ax = plt.subplots(figsize=(18, 15), dpi=300)
     # get average counts for each ancestry in order
@@ -193,7 +200,13 @@ def plot_scores(ancestry_scores, png_file):
     @return: None
     '''
     ordered_ancestry = ['Africa', 'America', 'East Asian', 'Europe', 'Middle East', 'Central South Asian']
-    ordered_ancestry_labels = ['Africa', 'America', 'East\nAsian', 'Europe', 'Middle\nEast', 'Central\nSouth Asian']
+    # ordered_ancestry_labels = ['Africa', 'America', 'East\nAsian', 'Europe', 'Middle\nEast', 'Central\nSouth Asian']
+    ordered_ancestry_labels = ['TGP+HGP-\nAFR-like',
+                               'TGP+HGP-\nAMR-like',
+                               'TGP+HGP-\nEAS-like',
+                               'TGP+HGP-\nEUR-like',
+                               'TGP+HGP-\nMLE-like',
+                               'TGP+HGP-\nSAS-like']
 
     # 6 by 6
     fig, ax = plt.subplots(6, 6, figsize=(18, 15), dpi=300, sharex=True, sharey=True)
@@ -203,8 +216,9 @@ def plot_scores(ancestry_scores, png_file):
             # kde plot
             # sns.kdeplot(ancestry_scores[a][b], ax=ax[i, j], color='black')
 
-            # remove background grid
+            # remove background grid and color
             ax[j, i].grid(False)
+            ax[j, i].set_facecolor('white')
             # ax[j, i].set_ylabel('Count', fontsize=10)
             # log scale
             ax[j, i].set_yscale('log')
@@ -216,14 +230,21 @@ def plot_scores(ancestry_scores, png_file):
 
     # add labels along the left side and bottom
     for i, a in enumerate(ordered_ancestry_labels):
-        ax[i, 0].set_ylabel(a, fontsize=20)
+        # ax[i, 0].set_ylabel(a, fontsize=20)
+        # ax[5, i].set_xlabel(a, fontsize=20, labelpad=20)
         ax[5, i].set_xlabel(a, fontsize=20, labelpad=20)
+        ax[i, 0].set_ylabel(a, fontsize=20, labelpad=20)
+        # ax[i, 0].set_xticklabels(ordered_ancestry_labels, fontsize=20)
+        # ax.set_yticklabels(ordered_ancestry_labels, fontsize=20)
         # ax[5, i].set_xlabel(a, fontsize=10)
 
+    # shift whole plot up
+    plt.subplots_adjust(top=0.99)
+
     # add text box at bottom "Cohort Population"
-    fig.text(0.5, 0.04, 'Cohort Population', ha='center', fontsize=30)
+    fig.text(0.5, 0.01, 'Cohort Population', ha='center', fontsize=30)
     # add text box at left "Query Population"
-    fig.text(0.04, 0.5, 'Query Population', va='center', rotation='vertical', fontsize=30)
+    fig.text(0.03, 0.5, 'Query Population', va='center', rotation='vertical', fontsize=30)
 
     # fig.suptitle('Genosis Score Distribution\nCCPM (chrm 1-22)', fontsize=40)
 
@@ -421,21 +442,21 @@ def main():
             ccpm_genosis_scores = read_ccpm_genosis_scores(chrm_genosis_file,
                                                 ccpm_genosis_scores)
 
-    ancestry_counts = organize_ancestry_data(ccpm_ancestry_data,
-                                             ccpm_ancestry,
-                                             ccpm_ancestry_labels)
-
-    # ancestry_scores = organize_genosis_data(ccpm_genosis_scores,
+    # ancestry_counts = organize_ancestry_data(ccpm_ancestry_data,
     #                                          ccpm_ancestry,
     #                                          ccpm_ancestry_labels)
 
+    ancestry_scores = organize_genosis_data(ccpm_genosis_scores,
+                                             ccpm_ancestry,
+                                             ccpm_ancestry_labels)
+
     # Plot the data
     heatmap_png = png_dir + 'ccpm_ancestry.png'
-    # distribution_png = png_dir + 'ccpm_genosis_scores.png'
+    distribution_png = png_dir + 'ccpm_genosis_scores.png'
     # scatter_png = png_dir + 'ccpm_rank_scores_scatter.png'
 
-    plot_data(ancestry_counts, heatmap_png, num_chrom)
-    # plot_scores(ancestry_scores, distribution_png)
+    # plot_data(ancestry_counts, heatmap_png, num_chrom)
+    plot_scores(ancestry_scores, distribution_png)
     # plot_with_rank(ccpm_ancestry_data, ccpm_genosis_scores, ccpm_ancestry, scatter_png)
 
 
