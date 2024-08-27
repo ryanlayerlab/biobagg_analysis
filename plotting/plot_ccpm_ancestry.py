@@ -166,23 +166,24 @@ def plot_data(ancestry_counts, png_file, num_chrom):
     # Plot the heatmap transposed with range 0 to 20
     sns.heatmap(df.T, cmap='Greys', ax=ax,
                 square=True,
-                annot=True, fmt='.2f', annot_kws={'size': 20},
+                annot=True, fmt='.3f', annot_kws = {'size': 35, 'weight': 'bold'},
                 vmin=0, vmax=20)
     cbar = ax.collections[0].colorbar
+    cbar.ax.tick_params(labelsize=25, pad=10)
     cbar.set_ticks([0, 5, 10, 15, 20])
     cbar.set_label('Average counts in cohort', fontsize=25, labelpad=20)
     # ax.set_title('Average cohort counts by ancestry\nCCPM (chrm 1-22)', fontsize=40, pad=20)
-    ax.set_xlabel('Cohort Population', fontsize=30, labelpad=20)
-    ax.set_ylabel('Query Population', fontsize=30, labelpad=20)
-    ax.set_xticklabels(ordered_ancestry_labels, fontsize=20)
-    ax.set_yticklabels(ordered_ancestry_labels, fontsize=20)
+    ax.set_xlabel('Cohort Population', fontsize=30, labelpad=20, fontweight='bold')
+    ax.set_ylabel('Query Population', fontsize=30, labelpad=20, fontweight='bold')
+    ax.set_xticklabels(ordered_ancestry_labels, fontsize=25)
+    ax.set_yticklabels(ordered_ancestry_labels, fontsize=25)
 
     # add rectangles around the diagonal colors
     color_CCPM = {'Africa': 'deepskyblue',
-                  'America': 'gold',
+                  'America': 'goldenrod',
                   'East Asian': 'crimson',
                   'Europe': 'yellowgreen',
-                  'Middle East': 'chocolate',
+                  'Middle East': 'darkorange',
                   'Central South Asian': 'mediumpurple'}
 
     for i, a in enumerate(ordered_ancestry):
@@ -208,16 +209,23 @@ def plot_scores(ancestry_scores, png_file):
                                'TGP+HGP-\nMLE-like',
                                'TGP+HGP-\nSAS-like']
 
+    color_CCPM = {'Africa': 'deepskyblue',
+                  'America': 'goldenrod',
+                  'East Asian': 'crimson',
+                  'Europe': 'yellowgreen',
+                  'Middle East': 'darkorange',
+                  'Central South Asian': 'mediumpurple'}
+
     # 6 by 6
     fig, ax = plt.subplots(6, 6, figsize=(18, 15), dpi=300, sharex=True, sharey=True)
     for i, a in enumerate(ordered_ancestry):
         for j, b in enumerate(ordered_ancestry):
-            sns.histplot(ancestry_scores[a][b], ax=ax[i, j], bins=20, color='black')
+            sns.histplot(ancestry_scores[a][b], ax=ax[i, j], bins=20, color=color_CCPM[a])
             # kde plot
             # sns.kdeplot(ancestry_scores[a][b], ax=ax[i, j], color='black')
 
             # remove background grid and color
-            ax[j, i].grid(False)
+            # ax[j, i].grid(False)
             ax[j, i].set_facecolor('white')
             # ax[j, i].set_ylabel('Count', fontsize=10)
             # log scale
@@ -232,8 +240,8 @@ def plot_scores(ancestry_scores, png_file):
     for i, a in enumerate(ordered_ancestry_labels):
         # ax[i, 0].set_ylabel(a, fontsize=20)
         # ax[5, i].set_xlabel(a, fontsize=20, labelpad=20)
-        ax[5, i].set_xlabel(a, fontsize=20, labelpad=20)
-        ax[i, 0].set_ylabel(a, fontsize=20, labelpad=20)
+        ax[5, i].set_xlabel(a, fontsize=20, labelpad=10)
+        ax[i, 0].set_ylabel(a, fontsize=20, labelpad=10)
         # ax[i, 0].set_xticklabels(ordered_ancestry_labels, fontsize=20)
         # ax.set_yticklabels(ordered_ancestry_labels, fontsize=20)
         # ax[5, i].set_xlabel(a, fontsize=10)
@@ -242,9 +250,9 @@ def plot_scores(ancestry_scores, png_file):
     plt.subplots_adjust(top=0.99)
 
     # add text box at bottom "Cohort Population"
-    fig.text(0.5, 0.01, 'Cohort Population', ha='center', fontsize=30)
+    fig.text(0.5, 0.01, 'Cohort Population', ha='center', fontsize=30, fontweight='bold')
     # add text box at left "Query Population"
-    fig.text(0.03, 0.5, 'Query Population', va='center', rotation='vertical', fontsize=30)
+    fig.text(0.03, 0.5, 'Query Population', va='center', rotation='vertical', fontsize=30, fontweight='bold')
 
     # fig.suptitle('Genosis Score Distribution\nCCPM (chrm 1-22)', fontsize=40)
 
@@ -442,9 +450,9 @@ def main():
             ccpm_genosis_scores = read_ccpm_genosis_scores(chrm_genosis_file,
                                                 ccpm_genosis_scores)
 
-    # ancestry_counts = organize_ancestry_data(ccpm_ancestry_data,
-    #                                          ccpm_ancestry,
-    #                                          ccpm_ancestry_labels)
+    ancestry_counts = organize_ancestry_data(ccpm_ancestry_data,
+                                             ccpm_ancestry,
+                                             ccpm_ancestry_labels)
 
     ancestry_scores = organize_genosis_data(ccpm_genosis_scores,
                                              ccpm_ancestry,

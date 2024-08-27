@@ -428,7 +428,7 @@ def plot_ancestry_top_k(genosis_scores,
 
     # Create the combined figure
     combined_figure, axes = plt.subplots(5, 3, figsize=(15, 15), dpi=300)
-    alpha_value = 0.5
+    alpha_value = 0.7
     genosis_x_max = 1500
 
     # # Plot the GenoSiS scores in first column
@@ -471,14 +471,16 @@ def plot_ancestry_top_k(genosis_scores,
                      data=D_genosis_superpop,
                      ax=axes[i, 0],
                      label='GenoSiS superpop',
-                     color=super_color)
+                     color=super_color, linewidth=5,
+                        legend=False, alpha=alpha_value)
         D_genosis_subpop = pd.DataFrame({'k': x,
                           'GenoSiS': genosis_y[1]})
         sns.lineplot(x='k', y='GenoSiS',
                         data=D_genosis_subpop,
                         ax=axes[i, 0],
                         label='GenosSiS subpop',
-                        color=sub_color)
+                        color=sub_color, linewidth=5,
+                        legend=False, alpha=alpha_value)
         D_dst_superpop = pd.DataFrame({'k': x,
                           'Plink DST': list(dst_superpop_percents[superpop].values())})
         sns.lineplot(x='k', y='Plink DST',
@@ -486,7 +488,8 @@ def plot_ancestry_top_k(genosis_scores,
                         ax=axes[i, 0],
                         label='Plink DST superpop',
                         color=super_color,
-                        linestyle='dashed')
+                        linestyle='dashed', linewidth=5,
+                        legend=False, alpha=alpha_value)
         D_dst_subpop = pd.DataFrame({'k': x,
                           'Plink DST': list(dst_subpop_percents[superpop].values())})
         sns.lineplot(x='k', y='Plink DST',
@@ -494,9 +497,21 @@ def plot_ancestry_top_k(genosis_scores,
                         ax=axes[i, 0],
                         label='Plink DST subpop',
                         color=sub_color,
-                        linestyle='dashed')
+                        linestyle='dashed', linewidth=5,
+                        legend=False, alpha=alpha_value)
+
+        # add legend
+        legend = ['GenoSiS', 'Plink DST', 'superpop', 'subpop']
+        handles = [plt.Line2D([0], [0], color='black', linewidth=4),
+                   plt.Line2D([0], [0], color='black', linewidth=4, linestyle='dashed'),
+                   plt.Line2D([0], [0], color=super_color, linewidth=4),
+                   plt.Line2D([0], [0], color=sub_color, linewidth=4)]
+        axes[i, 0].legend(handles, legend, frameon=False, ncol=2, handlelength=6)
+
         axes[0, 0].set_title('GenoSiS vs.\nPlink DST', fontsize=20, fontweight='bold')
-        axes[i, 0].set_ylabel('% in Population')
+        axes[i, 0].set_ylabel('% in Population', fontsize=18)
+        axes[i, 0].set_xlabel('')
+        axes[4, 0].set_xlabel('k', fontsize=18)
         axes[i, 0].set_xticks(range(5, 21, 5))
         axes[i, 0].set_ylim(0, 1.1)
         axes[i, 0].spines['top'].set_visible(False)
@@ -522,14 +537,16 @@ def plot_ancestry_top_k(genosis_scores,
                      data=D_genosis_superpop,
                      ax=axes[i, 1],
                      label='GenoSiS superpop',
-                     color=super_color)
+                     color=super_color, linewidth=5,
+                        legend=False, alpha=alpha_value)
         D_genosis_subpop = pd.DataFrame({'k': x,
                           'GenoSiS': genosis_y[1]})
         sns.lineplot(x='k', y='GenoSiS',
                         data=D_genosis_subpop,
                         ax=axes[i, 1],
                         label='GenoSiS subpop',
-                        color=sub_color)
+                        color=sub_color, linewidth=5,
+                        legend=False, alpha=alpha_value)
         D_pihat_superpop = pd.DataFrame({'k': x,
                           'Plink Pi-hat': list(pihat_superpop_percents[superpop].values())})
         sns.lineplot(x='k', y='Plink Pi-hat',
@@ -537,7 +554,8 @@ def plot_ancestry_top_k(genosis_scores,
                         ax=axes[i, 1],
                         label='Plink Pi-hat superpop',
                         color=super_color,
-                        linestyle='dashed')
+                        linestyle='dashed', linewidth=5,
+                        legend=False, alpha=alpha_value)
         D_pihat_subpop = pd.DataFrame({'k': x,
                           'Plink Pi-hat': list(pihat_subpop_percents[superpop].values())})
         sns.lineplot(x='k', y='Plink Pi-hat',
@@ -545,16 +563,30 @@ def plot_ancestry_top_k(genosis_scores,
                         ax=axes[i, 1],
                         label='Plink Pi-hat subpop',
                         color=sub_color,
-                        linestyle='dashed')
+                        linestyle='dashed', linewidth=5,
+                        legend=False, alpha=alpha_value)
+
+        # add legend
+        legend = ['GenoSiS', 'Plink Pi-hat', 'superpop', 'subpop']
+        handles = [plt.Line2D([0], [0], color='black', linewidth=4),
+                   plt.Line2D([0], [0], color='black', linewidth=4, linestyle='dashed'),
+                   plt.Line2D([0], [0], color=super_color, linewidth=4),
+                   plt.Line2D([0], [0], color=sub_color, linewidth=4)]
+        if i == 0:
+            axes[i, 1].legend(handles, legend, frameon=False, ncol=1, handlelength=6, loc=[0.4, 0.2])
+        else:
+            axes[i, 1].legend(handles, legend, frameon=False, ncol=2, handlelength=6, loc='lower left')
+
         axes[0, 1].set_title('GenoSiS vs.\nPlink Pi-hat', fontsize=20, fontweight='bold')
-        axes[i, 1].set_ylabel('% in Population')
+        # axes[i, 1].set_ylabel('% in Population', fontsize=18)
+        axes[i, 1].set_ylabel('', fontsize=18)
+        axes[i, 1].set_xlabel('')
+        axes[4, 1].set_xlabel('k', fontsize=18)
         axes[i, 1].set_xticks(range(5, 21, 5))
         axes[i, 1].set_ylim(0, 1.1)
         axes[i, 1].spines['top'].set_visible(False)
         axes[i, 1].spines['right'].set_visible(False)
 
-        # # remove legend
-        # axes[i, 0].get_legend().remove()
 
     # Plot the genoSiS top k percents and kinship top K percents in fourth column
     for i, superpop in enumerate(kinship_superpop_percents.keys()):
@@ -572,14 +604,17 @@ def plot_ancestry_top_k(genosis_scores,
                      data=D_genosis_superpop,
                      ax=axes[i, 2],
                      label='GenoSiS superpop',
-                     color=super_color)
+                     color=super_color, linewidth=5,
+                        legend=False, alpha=alpha_value)
         D_genosis_subpop = pd.DataFrame({'k': x,
                           'GenoSiS': genosis_y[1]})
         sns.lineplot(x='k', y='GenoSiS',
                         data=D_genosis_subpop,
                         ax=axes[i, 2],
                         label='GenoSiS subpop',
-                        color=sub_color)
+                        color=sub_color, linewidth=5,
+                        legend=False, alpha=alpha_value)
+
         D_kinship_superpop = pd.DataFrame({'k': x,
                           'King-robust coefficient': list(kinship_superpop_percents[superpop].values())})
         sns.lineplot(x='k', y='King-robust coefficient',
@@ -587,24 +622,34 @@ def plot_ancestry_top_k(genosis_scores,
                         ax=axes[i, 2],
                         label='King-robust coefficient superpop',
                         color=super_color,
-                        linestyle='dashed')
+                        linestyle='dashed', linewidth=5,
+                        legend=False, alpha=alpha_value)
         D_kinship_subpop = pd.DataFrame({'k': x,
                           'King-robust coefficient': list(kinship_subpop_percents[superpop].values())})
+        # no legend
         sns.lineplot(x='k', y='King-robust coefficient',
                         data=D_kinship_subpop,
                         ax=axes[i, 2],
                         label='King-robust coefficient',
                         color=sub_color,
-                        linestyle='dashed')
+                        linestyle='dashed', linewidth=5,
+                        legend=False, alpha=alpha_value)
+        # add legend
+        legend = ['GenoSiS', 'KRC', 'superpop', 'subpop']
+        handles = [plt.Line2D([0], [0], color='black', linewidth=4),
+                   plt.Line2D([0], [0], color='black', linewidth=4, linestyle='dashed'),
+                   plt.Line2D([0], [0], color=super_color, linewidth=4),
+                   plt.Line2D([0], [0], color=sub_color, linewidth=4)]
+        axes[i, 2].legend(handles, legend, frameon=False, ncol=2, handlelength=6)
+
         axes[0, 2].set_title('GenoSiS vs.\nKing-robust coefficient', fontsize=20, fontweight='bold')
-        axes[i, 2].set_ylabel('% in Population')
+        axes[i, 2].set_ylabel('% in Population', fontsize=18)
+        axes[i, 2].set_xlabel('')
+        axes[4, 2].set_xlabel('k', fontsize=18)
         axes[i, 2].set_xticks(range(5, 21, 5))
         axes[i, 2].set_ylim(0, 1.1)
         axes[i, 2].spines['top'].set_visible(False)
         axes[i, 2].spines['right'].set_visible(False)
-
-        # # remove legend
-        # axes[i, 0].get_legend().remove()
 
         # shift plots down and to the right
         plt.subplots_adjust(top=0.85, right=1.)
@@ -620,6 +665,32 @@ def plot_ancestry_top_k(genosis_scores,
 
         # add text at top
         # plt.suptitle('Super Population Cohort Structure\n1KG Data (k=20)', fontsize=30, fontweight='bold')
+
+    # # for all legends, make two columns and remove frame
+    # for col_j in range(3):
+    #     axes[5, col_j].legend(ncol=2, frameon=False)
+
+    # # add one legend for each column underneath the plots
+    # col1_legend = ['GenoSiS', 'Plink DST']
+    # handles = [plt.Line2D([0], [0], color='black', linewidth=5),
+    #            plt.Line2D([0], [0], color='black', linewidth=5, linestyle='dashed')]
+    # axes[5, 0].legend(handles, col1_legend, loc='upper center', frameon=False,
+    #                   fontsize=25, handlelength=5)
+    # axes[5, 0].axis('off')
+    #
+    # col2_legend = ['GenoSiS', 'Plink Pi-hat']
+    # handles = [plt.Line2D([0], [0], color='black', linewidth=5),
+    #             plt.Line2D([0], [0], color='black', linewidth=5, linestyle='dashed')]
+    # axes[5, 1].legend(handles, col2_legend, loc='upper center', frameon=False,
+    #                     fontsize=25, handlelength=5)
+    # axes[5, 1].axis('off')
+    #
+    # col3_legend = ['GenoSiS', 'King-robust\ncoefficient']
+    # handles = [plt.Line2D([0], [0], color='black', linewidth=5),
+    #             plt.Line2D([0], [0], color='black', linewidth=5, linestyle='dashed')]
+    # axes[5, 2].legend(handles, col3_legend, loc='upper center', frameon=False,
+    #                     fontsize=25, handlelength=5)
+    # axes[5, 2].axis('off')
 
 
     # Save the figure
