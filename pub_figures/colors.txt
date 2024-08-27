@@ -7,7 +7,7 @@
 6,mediumpurple
 10,black
 AFR,deepskyblue
-AMR,gold
+AMR,goldenrod
 EAS,crimson
 EUR,yellowgreen
 SAS,mediumpurple
