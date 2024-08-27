@@ -1,5 +1,13 @@
 # This is the old readme. Keeping for reference.
 
+#### Other (not in paper)
+
+<Figure>
+
+![figure5_cohort_quality_sub_hist](pub_figures/figure5_sub_histogram.png)<br>
+![figure5_cohort_quality_heatmap](pub_figures/figure5_heatmap.png)<br>
+</Figure>
+
 ## 1KG population distributions
 Plot 1KG population density plots
 ```
