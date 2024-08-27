@@ -154,7 +154,7 @@ def plot_search_times(loading_index_times,
     # combine searching and scoring times
     full_times = [x + y + z for x, y, z in zip(searching_index_times, scoring_times, loading_index_times)]
     # plot histogram of full times
-    fig, ax = plt.subplots(figsize=(8, 4), dpi=300)
+    fig, ax = plt.subplots(figsize=(8, 2), dpi=300)
     # title = DATA + '-chrm ' + chrm + '\nTIMING BY SEGMENT\n' + SYSTEM
     title = 'GenoSiS Search\n' + DATA + ', chrm ' + chrm
     # ax.set_title(title, fontsize=20, fontweight='bold')
@@ -172,17 +172,16 @@ def plot_search_times(loading_index_times,
         # ax.set_title(title, fontsize=20, fontweight='bold')
         out_file = out + 'chrm' + chrm + '_sample_full_timing.png'
 
-    sns.histplot(full_times, kde=True, ax=ax, color='darkorange')
-    ax.set_xlabel('Time\n(seconds)')
-    ax.set_ylabel('Frequency')
+    sns.histplot(full_times, kde=True, ax=ax, color='slategrey')
+    ax.set_xlabel('Time (seconds)', fontsize=8)
+    ax.set_ylabel('Frequency', fontsize=8)
     ax.spines['top'].set_visible(False)
     ax.spines['right'].set_visible(False)
 
-    textstr = 'Number of Queries: ' + str(num_queries) + '\nNumber of Segments: ' + str(num_segments)
-    props = dict(boxstyle='round', alpha=0.5, facecolor='white')
-    ax.text(0.55, 0.95, textstr, transform=ax.transAxes, fontsize=14,
-
-            verticalalignment='top', bbox=props)
+    # textstr = 'Number of Queries: ' + str(num_queries) + '\nNumber of Segments: ' + str(num_segments)
+    # props = dict(boxstyle='round', alpha=0.5, facecolor='white')
+    # ax.text(0.55, 0.95, textstr, transform=ax.transAxes, fontsize=14,
+    #         verticalalignment='top', bbox=props)
 
     plt.tight_layout()
     plt.savefig(out_file)

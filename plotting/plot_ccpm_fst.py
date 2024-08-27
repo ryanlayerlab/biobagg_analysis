@@ -68,18 +68,18 @@ def plot_fst(all_fst,
     # plot heatmap with gray
     sns.heatmap(fst_values, cmap='gray', ax=ax,
                 square = True,
-                annot = True, fmt = '.4f', annot_kws = {'size': 20},
+                annot = True, fmt = '.4f', annot_kws = {'size': 35, 'weight': 'bold'},
                 vmin = 0, vmax = .115)
     sns.set(font_scale=1.5)
 
     cbar = ax.collections[0].colorbar
     # cbar.set_ticks([0, 0.02, 0.04, 0.06, 0.08, 0.10, 0.12])
-    # set font size of colorbar
-    cbar.ax.tick_params(labelsize=15)
+    # set font size of colorbar and bold the label
+    cbar.ax.tick_params(labelsize=25, pad=10)
     cbar.set_label('FST Value', fontsize=25, labelpad=20)
 
-    ax.set_xticklabels(ordered_ancestry_labels, fontsize=20)
-    ax.set_yticklabels(ordered_ancestry_labels, fontsize=20)
+    ax.set_xticklabels(ordered_ancestry_labels, fontsize=25)
+    ax.set_yticklabels(ordered_ancestry_labels, fontsize=25)
 
     # add rectangles around the diagonal colors
     for i, a in enumerate(ordered_ancestry):
@@ -107,10 +107,10 @@ def main():
 
     # add rectangles around the diagonal colors
     color_CCPM = {'Africa': 'deepskyblue',
-                  'America': 'gold',
+                  'America': 'goldenrod',
                   'East': 'crimson',
                   'Europe': 'yellowgreen',
-                  'Middle': 'chocolate',
+                  'Middle': 'darkorange',
                   'Central': 'mediumpurple'}
 
     all_fst = read_ccpm_fst(ccpm_fst)

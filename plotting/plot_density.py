@@ -476,8 +476,8 @@ def plot_r2_density(good_segment_r2,
                 try:
                     r2_values.append(good_segment_r2[seg_idx][sample_1])
                     r2_values.append(good_segment_r2[seg_idx][sample_0])
-                    densities.append(sample_densities[sample_1][seg_idx])
-                    densities.append(sample_densities[sample_0][seg_idx])
+                    densities.append(sample_densities[sample_1][0])
+                    densities.append(sample_densities[sample_0][0])
                 except KeyError:
                     continue
 
@@ -529,9 +529,9 @@ def main():
     colors = read_colors(color_files)
 
     # read density files
-    chroms = [str(i) for i in range(8, 9)]
-    good_segments = [76, 81, 97, 108, 136]
-
+    chroms = [str(i) for i in range(8,9)]
+    # good_segments = [76, 81, 97, 108, 136]
+    good_segments = [76]
     num_samples = 6406
 
     for chrm in chroms:
@@ -559,6 +559,8 @@ def main():
         for distance_file in os.listdir(dist_chrm_dir):
             if 'segment' in distance_file:
                 seg_idx = int(distance_file.split('.')[1].replace('segment', ''))
+                if seg_idx not in good_segments:
+                    continue
                 enc_distances, emb_distances = get_sample_distances(dist_chrm_dir + distance_file)
                 sample_r2 = get_single_r2(enc_distances, emb_distances)
                 good_segment_enc[seg_idx] = enc_distances
@@ -614,15 +616,15 @@ def main():
         #                      chrm,
         #                      out)
 
-        # print('Plotting r2 by density...', chrm)
-        # plot_r2_density(good_segment_r2,
-        #                 sample_densities,
-        #                 good_segments,
-        #                 sample_subpopulations,
-        #                 sub_to_super,
-        #                 colors,
-        #                 chrm,
-        #                 out)
+        print('Plotting r2 by density...', chrm)
+        plot_r2_density(good_segment_r2,
+                        sample_densities,
+                        good_segments,
+                        sample_subpopulations,
+                        sub_to_super,
+                        colors,
+                        chrm,
+                        out)
 
 
 

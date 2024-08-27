@@ -244,7 +244,7 @@ def plot_heatmap_counts(subpop_counts,
         x_i += num_subpops
         tick_offset += num_subpops
     plt.xticks(xtick_positions, xtick_labels,
-               rotation=90, fontsize=25, ha='right')
+               rotation=90, fontsize=25, ha='right', fontweight='bold')
     for tick in plt.gca().get_xticklabels():
         tick.set_color(colors[ancestry_helpers.SUB_SUPERPOPULATIONS[tick.get_text()]])
 
@@ -265,8 +265,8 @@ def plot_heatmap_counts(subpop_counts,
         line_offset += num_subpops
 
 
-    plt.xlabel('Cohort Population', fontsize=30)
-    plt.ylabel('Query Population', fontsize=30)
+    plt.xlabel('Cohort Population', fontsize=30, labelpad=20, fontweight='bold')
+    plt.ylabel('Query Population', fontsize=30, labelpad=20, fontweight='bold')
     figure_title = (title)
 
     # set colorbar font and label

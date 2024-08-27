@@ -239,7 +239,7 @@ def plot_combined_figures(decode_ibd_data,
                           ncol=2)
 
     # title and legend used for right plots
-    tg_plink_plt.set_title('1KG Trio Data', fontsize=14, fontweight='bold')
+    tg_plink_plt.set_title('TGP Trio Data', fontsize=14, fontweight='bold')
     tg_plink_plt.legend(title='Number of Meiosis',
                               fontsize=8,
                               title_fontsize=8,
