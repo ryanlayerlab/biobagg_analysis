@@ -193,6 +193,104 @@ def plot_data(ancestry_counts, png_file, num_chrom):
     plt.tight_layout()
     plt.savefig(png_file)
 
+def plot_scores_new(ancestry_scores, png_file):
+    '''
+    plot distribution of genosis scores, one column for each ancestry
+    @param ancestry_scores:
+    @param png_file:
+    @return:
+    '''
+    ordered_ancestry = ['Africa', 'America', 'East Asian', 'Europe', 'Middle East', 'Central South Asian']
+    # ordered_ancestry_labels = ['Africa', 'America', 'East\nAsian', 'Europe', 'Middle\nEast', 'Central\nSouth Asian']
+    ordered_ancestry_labels = ['TGP+HGP-\nAFR-like',
+                               'TGP+HGP-\nAMR-like',
+                               'TGP+HGP-\nEAS-like',
+                               'TGP+HGP-\nEUR-like',
+                               'TGP+HGP-\nMLE-like',
+                               'TGP+HGP-\nSAS-like']
+
+    color_CCPM = {'Africa': 'deepskyblue',
+                  'America': 'goldenrod',
+                  'East Asian': 'crimson',
+                  'Europe': 'yellowgreen',
+                  'Middle East': 'darkorange',
+                  'Central South Asian': 'mediumpurple'}
+
+    # 6 by 1
+    fig, ax = plt.subplots(2, 3, figsize=(15, 6), dpi=300, sharex=True, sharey=True)
+
+    # for i, a in enumerate(ordered_ancestry):
+    #     all_scores = []
+    #     for b in ordered_ancestry:
+    #         all_scores.extend(ancestry_scores[a][b])
+    #     sns.histplot(all_scores, ax=ax[i//3, i%3], bins=20, color=color_CCPM[a])
+    #     # sns.histplot(ancestry_scores[a][a], ax=ax[i], bins=20, color=color_CCPM[a])
+    #     # kde plot
+    #     # sns.kdeplot(ancestry_scores[a][a], ax=ax[i], color='black')
+    #
+    #     # remove background grid and color
+    #     # ax[j, i].grid(False)
+    #     ax[i//3, i%3].set_facecolor('white')
+    #     # ax[j, i].set_ylabel('Count', fontsize=10)
+    #     # log scale
+    #     ax[i//3, i%3].set_yscale('log')
+    #
+    #     # remove spines
+    #     ax[i//3, i%3].spines['top'].set_visible(False)
+    #     ax[i//3, i%3].spines['right'].set_visible(False)
+    #
+    #     # add title to be the ancestry
+    #     ax[i//3, i%3].set_title(ordered_ancestry_labels[i],
+    #                             fontsize=15, fontweight='bold', color=color_CCPM[a])
+    #     # only label the x-axis for the bottom row
+    #     if i//3 == 1:
+    #         ax[i//3, i%3].set_xlabel('GenoSiS Score', fontsize=10)
+    #     # only label the y-axis for the left column
+    #     if i%3 == 0:
+    #         ax[i//3, i%3].set_ylabel('Count', fontsize=10)
+
+    for i, a in enumerate(ordered_ancestry):
+        all_scores = []
+        for b in ordered_ancestry:
+            all_scores.extend(ancestry_scores[a][b])
+        sns.histplot(all_scores, ax=ax[i], bins=20, color=color_CCPM[a])
+        # sns.histplot(ancestry_scores[a][a], ax=ax[i], bins=20, color=color_CCPM[a])
+        # kde plot
+        # sns.kdeplot(ancestry_scores[a][a], ax=ax[i], color='black')
+
+        # remove background grid and color
+        ax[i].grid(False)
+        ax[i].set_facecolor('white')
+        ax[i].set_ylabel('Count', fontsize=10)
+        # log scale
+        ax[i].set_yscale('log')
+
+        # remove spines
+        ax[i].spines['top'].set_visible(False)
+        ax[i].spines['right'].set_visible(False)
+
+        # add labels along the left side and bottom
+        # add title to be the ancestry
+        # ax[i].set_title(ordered_ancestry_labels[i], fontsize=10, fontweight='bold', color=color_CCPM[a])
+        # ax[i].set_ylabel('Count', fontsize=10)
+        # ax[i].set_xlabel('GenoSiS Score', fontsize=10)
+        # ax[i].set_xticklabels(ordered_ancestry_labels, fontsize=20)
+        # ax[i].set_yticklabels(ordered_ancestry_labels, fontsize=20)
+
+    # add text box at bottom "Cohort Population"
+    # fig.text(0.5, 0.01, 'Cohort Population', ha='center', fontsize=30, fontweight='bold')
+    # add text box at left "Query Population"
+    # fig.text(0.03, 0.5, 'Query Population', va='center', rotation='vertical', fontsize=30, fontweight='bold')
+
+    # fig.suptitle('Genosis Score Distribution\nCCPM (chrm 1-22)', fontsize=40)
+
+    # add custom legend
+
+    plt.tight_layout()
+    plt.savefig(png_file)
+
+
+
 def plot_scores(ancestry_scores, png_file):
     '''
     plot distribution of genosis scores
@@ -461,11 +559,13 @@ def main():
     # Plot the data
     heatmap_png = png_dir + 'ccpm_ancestry.png'
     distribution_png = png_dir + 'ccpm_genosis_scores.png'
+    new_png = png_dir + 'ccpm_genosis_scores_new.png'
     # scatter_png = png_dir + 'ccpm_rank_scores_scatter.png'
 
     # plot_data(ancestry_counts, heatmap_png, num_chrom)
-    plot_scores(ancestry_scores, distribution_png)
+    # plot_scores(ancestry_scores, distribution_png)
     # plot_with_rank(ccpm_ancestry_data, ccpm_genosis_scores, ccpm_ancestry, scatter_png)
+    plot_scores_new(ancestry_scores, new_png)
 
 
 

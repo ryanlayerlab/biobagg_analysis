@@ -154,7 +154,7 @@ def plot_search_times(loading_index_times,
     # combine searching and scoring times
     full_times = [x + y + z for x, y, z in zip(searching_index_times, scoring_times, loading_index_times)]
     # plot histogram of full times
-    fig, ax = plt.subplots(figsize=(8, 2), dpi=300)
+    fig, ax = plt.subplots(figsize=(15, 3), dpi=300)
     # title = DATA + '-chrm ' + chrm + '\nTIMING BY SEGMENT\n' + SYSTEM
     title = 'GenoSiS Search\n' + DATA + ', chrm ' + chrm
     # ax.set_title(title, fontsize=20, fontweight='bold')
