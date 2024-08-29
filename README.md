@@ -156,7 +156,7 @@ python plotting/plot_ccpm_fst.py \
 
 #### Figure 6C: CCPM Scores
 ```
-python plottying/plot_timing.py \
+python plotting/plot_ccpm_ancestry.py \
     --ancestry data/ccpm_data/R168_ccpm_f3_PCs_genetic_similarity_19Jun2024.txt
     --ancestry_dir data/ccpm_data/ccpm_results/
     --png pub_figures/
@@ -170,7 +170,7 @@ python plottying/plot_timing.py \
 
 #### Figure 6D: CCPM timing
 ```
-python plottying/plot_timing.py \    
+python plotting/plot_timing.py \    
     --times data/ccpm_times/
     --out pub_figures/
 ```
