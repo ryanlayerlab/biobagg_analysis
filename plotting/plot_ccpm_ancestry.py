@@ -217,7 +217,7 @@ def plot_scores_new(ancestry_scores, png_file):
                   'Central South Asian': 'mediumpurple'}
 
     # 6 by 1
-    fig, ax = plt.subplots(2, 3, figsize=(15, 6), dpi=300, sharex=True, sharey=True)
+    fig, ax = plt.subplots(1, 6, figsize=(15, 3), dpi=300, sharex=True, sharey=True)
 
     # for i, a in enumerate(ordered_ancestry):
     #     all_scores = []
@@ -271,7 +271,14 @@ def plot_scores_new(ancestry_scores, png_file):
 
         # add labels along the left side and bottom
         # add title to be the ancestry
-        # ax[i].set_title(ordered_ancestry_labels[i], fontsize=10, fontweight='bold', color=color_CCPM[a])
+        ax[i].set_title(ordered_ancestry_labels[i], fontsize=10, fontweight='bold', color=color_CCPM[a])
+        # only label y-axis for the left column
+        if i == 0:
+            ax[i].set_ylabel('Count', fontsize=10)
+        # label x-axis
+        ax[i].set_xlabel('GenoSiS Score', fontsize=10)
+
+
         # ax[i].set_ylabel('Count', fontsize=10)
         # ax[i].set_xlabel('GenoSiS Score', fontsize=10)
         # ax[i].set_xticklabels(ordered_ancestry_labels, fontsize=20)
