@@ -164,7 +164,7 @@ python plottying/plot_timing.py \
 <Figure>
 
 ![ccpm_timing](pub_figures/ccpm_genosis_scores_new.png)
-*FIgure 4C. GenoSiS search and aggregation times for CCPM’s 73,346 biobank samples.*
+*FIgure 4C. GenoSiS scores by grouping for CCPM’s 73,346 biobank samples.*
 </Figure>
 
 
@@ -177,7 +177,7 @@ python plottying/plot_timing.py \
 <Figure>
 
 ![ccpm_timing](pub_figures/chrm1-22_sample_full_timing.png)
-*FIgure 4C. GenoSiS search and aggregation times for CCPM’s 73,346 biobank samples.*
+*FIgure 4D. GenoSiS search and aggregation times for CCPM’s 73,346 biobank samples.*
 </Figure>
 
 ### SUPPLEMENTAL (not included above)
