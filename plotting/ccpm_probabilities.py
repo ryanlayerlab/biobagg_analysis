@@ -52,11 +52,19 @@ rows = int(len(R) / 2)
 cols = 2
 fig, axs = plt.subplots(rows, cols, figsize=(18, 15), sharex=True, sharey=False)
 
-for i, (long_name, values) in enumerate(R.items()):
+color_CCPM = {'African': 'deepskyblue',
+                  'Admixed American': 'goldenrod',
+                  'East Asian': 'crimson',
+                  'European': 'yellowgreen',
+                  'Middle Eastern': 'darkorange',
+                  'South-Central Asian': 'mediumpurple'}
+
+for i, (long_name, values) in enumerate(sorted(R.items())):
     ax = axs[i // cols, i % cols]
-    ax.hist(values, bins=20, color='gray')
+    # ax.hist(values, bins=20, color='slategrey', alpha=0.7, edgecolor='black', linewidth=1.2)
+    ax.hist(values, bins=20, color=color_CCPM[long_name], alpha=0.7, edgecolor='black', linewidth=1.2)
     ax.set_title(pretty_name_map[long_name], fontsize=20, fontweight='bold')
-    ax.set_ylabel('Frequency', fontsize=12)
+    ax.set_ylabel('Frequency', fontsize=18)
 
     # spine removal
     ax.spines['top'].set_visible(False)
@@ -65,7 +73,7 @@ for i, (long_name, values) in enumerate(R.items()):
 # add x-axis label and tick labels for only the bottom row
 for ax in axs.flat:
     if ax in axs[rows - 1]:
-        ax.set_xlabel('Ancestry inference probability', fontsize=12)
+        ax.set_xlabel('Ancestry inference probability', fontsize=18)
 
 
 plt.tight_layout()
