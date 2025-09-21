@@ -643,7 +643,7 @@ def plot_ancestry_top_k(genosis_scores,
         axes[i, 2].legend(handles, legend, frameon=False, ncol=2, handlelength=6)
 
         axes[0, 2].set_title('GenoSiS vs.\nKing-robust coefficient', fontsize=20, fontweight='bold')
-        axes[i, 2].set_ylabel('% in Population', fontsize=18)
+        # axes[i, 2].set_ylabel('% in Population', fontsize=18)
         axes[i, 2].set_xlabel('')
         axes[4, 2].set_xlabel('k', fontsize=18)
         axes[i, 2].set_xticks(range(5, 21, 5))

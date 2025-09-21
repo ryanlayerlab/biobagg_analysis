@@ -36,13 +36,14 @@ def read_ccpm_ancestry(ccpm_ancestry_file):
     return ccpm_ancestry
 
 def read_ccpm_ancestries(chrm_ancestry_file,
-                   ccpm_data):
+                   ccpm_data, k):
     '''
     Read the ccpm ancestry file and return a dictionary with ccpm id as key and match ids as values
     @param ccpm_ancestry_file: path to the ccpm single chrm ancestry file
     @return: dictionary with ccpm_id, as key and match ids as values
     '''
 
+    k_i = 0
     with open(chrm_ancestry_file, 'r') as f:
         # Skip header
         f.readline()
@@ -50,6 +51,9 @@ def read_ccpm_ancestries(chrm_ancestry_file,
             line = line.strip().split('\t')
             query_id = line[0].strip().split(',')[0]
             for match_id_anc in line[1:]:
+                if k_i == k:
+                    break
+                k_i += 1
                 match_id = match_id_anc.split(',')[0]
                 try:
                     ccpm_data[query_id][match_id] += 1
@@ -58,6 +62,8 @@ def read_ccpm_ancestries(chrm_ancestry_file,
                         ccpm_data[query_id][match_id] = 1
                     except KeyError:
                         ccpm_data[query_id] = {match_id: 1}
+
+            k_i = 0
 
     return ccpm_data
 
@@ -167,10 +173,10 @@ def plot_data(ancestry_counts, png_file, num_chrom):
     sns.heatmap(df.T, cmap='Greys', ax=ax,
                 square=True,
                 annot=True, fmt='.3f', annot_kws = {'size': 35, 'weight': 'bold'},
-                vmin=0, vmax=20)
+                vmin=0, vmax=100)
     cbar = ax.collections[0].colorbar
     cbar.ax.tick_params(labelsize=25, pad=10)
-    cbar.set_ticks([0, 5, 10, 15, 20])
+    cbar.set_ticks([0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100])
     cbar.set_label('Average counts in cohort', fontsize=25, labelpad=20)
     # ax.set_title('Average cohort counts by ancestry\nCCPM (chrm 1-22)', fontsize=40, pad=20)
     ax.set_xlabel('Cohort Population', fontsize=30, labelpad=20, fontweight='bold')
@@ -253,7 +259,7 @@ def plot_scores_new(ancestry_scores, png_file):
         all_scores = []
         for b in ordered_ancestry:
             all_scores.extend(ancestry_scores[a][b])
-        sns.histplot(all_scores, ax=ax[i], bins=20, color=color_CCPM[a])
+        sns.histplot(all_scores, ax=ax[i], bins=50, color=color_CCPM[a])
         # sns.histplot(ancestry_scores[a][a], ax=ax[i], bins=20, color=color_CCPM[a])
         # kde plot
         # sns.kdeplot(ancestry_scores[a][a], ax=ax[i], color='black')
@@ -325,7 +331,7 @@ def plot_scores(ancestry_scores, png_file):
     fig, ax = plt.subplots(6, 6, figsize=(18, 15), dpi=300, sharex=True, sharey=True)
     for i, a in enumerate(ordered_ancestry):
         for j, b in enumerate(ordered_ancestry):
-            sns.histplot(ancestry_scores[a][b], ax=ax[i, j], bins=20, color=color_CCPM[a])
+            sns.histplot(ancestry_scores[a][b], ax=ax[i, j], bins=50, color=color_CCPM[a])
             # kde plot
             # sns.kdeplot(ancestry_scores[a][b], ax=ax[i, j], color='black')
 
@@ -529,7 +535,8 @@ def main():
     ancestry_dir = args.ancestry_dir
     png_dir = args.png
 
-    num_chrom = 18
+    k = 100
+    num_chrom = 22
 
     print('Reading ccpm ancestry file')
     ccpm_ancestry = read_ccpm_ancestry(ccpm_ancestry_file)
@@ -548,7 +555,8 @@ def main():
             print('Reading ccpm ancestries for {}'.format(chrm_file))
             chrm_ancestry_file = os.path.join(ancestry_dir, chrm_file)
             ccpm_ancestry_data = read_ccpm_ancestries(chrm_ancestry_file,
-                                                ccpm_ancestry_data)
+                                                ccpm_ancestry_data,
+                                                      k)
         elif chrm_file.endswith('_scores.txt'):
             print('Reading ccpm scores for {}'.format(chrm_file))
             chrm_genosis_file = os.path.join(ancestry_dir, chrm_file)
@@ -564,15 +572,15 @@ def main():
                                              ccpm_ancestry_labels)
 
     # Plot the data
-    heatmap_png = png_dir + 'ccpm_ancestry.png'
-    distribution_png = png_dir + 'ccpm_genosis_scores.png'
-    new_png = png_dir + 'ccpm_genosis_scores_new.png'
-    # scatter_png = png_dir + 'ccpm_rank_scores_scatter.png'
+    heatmap_png = png_dir + 'ccpm_ancestry_' + str(k) + '_.png'
+    distribution_png = png_dir + 'ccpm_genosis_scores_' + str(k) + '_.png'
+    new_png = png_dir + 'ccpm_genosis_scores_new_' + str(k) + '_.png'
+    # scatter_png = png_dir + 'ccpm_rank_scores_scatter_' + str(k) + '_.png'
 
-    # plot_data(ancestry_counts, heatmap_png, num_chrom)
+    plot_data(ancestry_counts, heatmap_png, num_chrom)
     # plot_scores(ancestry_scores, distribution_png)
     # plot_with_rank(ccpm_ancestry_data, ccpm_genosis_scores, ccpm_ancestry, scatter_png)
-    plot_scores_new(ancestry_scores, new_png)
+    # plot_scores_new(ancestry_scores, new_png)
 
 
 
